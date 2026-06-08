@@ -1,0 +1,1680 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Tiketes — POS sin comisiones para tu negocio</title>
+  <meta name="description" content="Sistema de inventario, tickets y comandas para PyMEs mexicanas. Cero comisión por venta. Plan Free para siempre." />
+  <meta name="theme-color" content="#050617" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Tiketes — POS sin comisiones" />
+  <meta property="og:description" content="Sistema de inventario y tickets para tu negocio. Plan Free para siempre. Sin comisión por venta." />
+  <meta property="og:url" content="https://tiketes.app" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://tiketes.app/icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/png" href="./icon.png" />
+
+  <style>
+    /* ════════════════════════════════════════════════════════════════════ */
+    /*  DESIGN TOKENS (semantic, matches app)                                */
+    /* ════════════════════════════════════════════════════════════════════ */
+    :root {
+      --bg: #050617;
+      --surface: rgba(20,21,42,0.62);
+      --surface-2: rgba(255,255,255,0.04);
+      --surface-hover: rgba(168,142,255,0.07);
+      --border: rgba(255,255,255,0.08);
+      --border-active: rgba(168,142,255,0.40);
+      --violet-100: #C4B5FD;
+      --violet-300: #A88EFF;
+      --violet-500: #8B70FF;
+      --violet-700: #6B4BFF;
+      --violet-900: #4524D6;
+      --gold: #F5C518;
+      --gold-glow: rgba(245,197,24,0.14);
+      --success: #34D399;
+      --danger: #FCA5A5;
+      --fg: #ffffff;
+      --fg-2: rgba(255,255,255,0.72);
+      --fg-3: rgba(255,255,255,0.55);
+      --fg-4: rgba(255,255,255,0.32);
+      --radius-sm: 10px;
+      --radius: 14px;
+      --radius-lg: 22px;
+      --radius-xl: 28px;
+      --shadow-violet: 0 12px 32px rgba(107,75,255,0.30);
+      --shadow-deep: 0 30px 60px -20px rgba(0,0,0,0.70);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ── Reset ─────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      line-height: 1.55;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    img, svg { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { background: none; border: 0; cursor: pointer; font: inherit; color: inherit; }
+
+    .display { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; }
+    .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+
+    /* ════════════════════════════════════════════════════════════════════ */
+    /*  ATMOSPHERE — orbs + sparks (replica del LoginScreen)                 */
+    /* ════════════════════════════════════════════════════════════════════ */
+    .atmosphere {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(60px);
+      will-change: transform;
+    }
+    .orb-violet-1 {
+      top: -120px; left: -80px;
+      width: 460px; height: 460px;
+      background: radial-gradient(circle, rgba(107,75,255,0.65) 0%, rgba(107,75,255,0) 70%);
+      animation: floatA 16s ease-in-out infinite;
+    }
+    .orb-violet-2 {
+      top: 320px; right: -140px;
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(167,142,255,0.45) 0%, rgba(167,142,255,0) 70%);
+      animation: floatB 22s ease-in-out infinite;
+    }
+    .orb-gold {
+      bottom: -180px; left: 50%;
+      transform: translateX(-50%);
+      width: 580px; height: 580px;
+      background: radial-gradient(circle, rgba(245,197,24,0.18) 0%, rgba(245,197,24,0) 70%);
+      animation: floatC 28s ease-in-out infinite;
+    }
+    @keyframes floatA { 0%,100% { transform: translate(0,0); } 50% { transform: translate(30px,-40px); } }
+    @keyframes floatB { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-30px,30px); } }
+    @keyframes floatC { 0%,100% { transform: translate(-50%,0); } 50% { transform: translate(-50%,-30px); } }
+
+    /* Sparks — verticales como el login */
+    .spark {
+      position: absolute;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: rise 5s linear infinite;
+      will-change: transform, opacity;
+    }
+    @keyframes rise {
+      0%   { transform: translateY(0) scale(0.3); opacity: 0; }
+      15%  { opacity: 1; }
+      85%  { opacity: 1; }
+      100% { transform: translateY(-420px) scale(0.8); opacity: 0; }
+    }
+
+    /* Cursor glow (subtle, follows mouse) */
+    .cursor-glow {
+      position: fixed;
+      top: 0; left: 0;
+      width: 360px; height: 360px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      background: radial-gradient(circle, rgba(168,142,255,0.10) 0%, transparent 60%);
+      transform: translate(-50%, -50%);
+      transition: opacity 0.4s;
+      opacity: 0;
+      will-change: transform;
+    }
+    @media (hover: hover) {
+      body:hover .cursor-glow { opacity: 1; }
+    }
+
+    /* ════════════════════════════════════════════════════════════════════ */
+    /*  LAYOUT                                                                */
+    /* ════════════════════════════════════════════════════════════════════ */
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+
+    /* ── Nav ──────────────────────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0;
+      z-index: 100;
+      background: rgba(5,6,23,0.72);
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 19px;
+      letter-spacing: -0.02em;
+    }
+    .brand-mark {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #A88EFF 0%, #6B4BFF 100%);
+      display: grid; place-items: center;
+      box-shadow: 0 4px 14px rgba(107,75,255,0.45), inset 0 1px 0 rgba(255,255,255,0.20);
+      position: relative;
+    }
+    .brand-mark::after {
+      content: '';
+      position: absolute; inset: 4px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, transparent, rgba(255,255,255,0.15));
+    }
+    .nav-links { display: flex; gap: 30px; align-items: center; }
+    .nav-link {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--fg-2);
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 2px;
+      background: var(--violet-300);
+      transition: width 0.25s var(--ease-out);
+    }
+    .nav-link:hover { color: var(--fg); }
+    .nav-link:hover::after { width: 18px; }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: linear-gradient(135deg, var(--violet-500), var(--violet-900));
+      padding: 9px 16px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 13px;
+      box-shadow: var(--shadow-violet), inset 0 1px 0 rgba(255,255,255,0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 16px 36px rgba(107,75,255,0.40), inset 0 1px 0 rgba(255,255,255,0.15); }
+    @media (max-width: 720px) {
+      .nav-links { gap: 14px; }
+      .nav-links .nav-link { display: none; }
+    }
+
+    /* ════════════════════════════════════════════════════════════════════ */
+    /*  HERO                                                                  */
+    /* ════════════════════════════════════════════════════════════════════ */
+    .hero { padding: 80px 0 110px; position: relative; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 70px;
+      align-items: center;
+    }
+    @media (max-width: 920px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .hero-grid .phone-col { order: -1; }
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(168,142,255,0.10);
+      border: 1px solid rgba(168,142,255,0.30);
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--violet-100);
+      margin-bottom: 24px;
+      letter-spacing: 0.02em;
+    }
+    .badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px var(--success);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    h1.hero-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(38px, 6.2vw, 64px);
+      font-weight: 800;
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      margin-bottom: 24px;
+      max-width: 640px;
+    }
+    .accent {
+      background: linear-gradient(135deg, var(--violet-300) 0%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+    }
+    .hero-lead {
+      font-size: clamp(15px, 1.5vw, 17.5px);
+      color: var(--fg-2);
+      max-width: 540px;
+      margin-bottom: 32px;
+      line-height: 1.65;
+    }
+    .hero-lead strong { color: var(--fg); font-weight: 700; }
+
+    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 14.5px;
+      transition: transform 0.18s var(--ease-out), box-shadow 0.18s, background 0.18s;
+      will-change: transform;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--violet-500), var(--violet-900));
+      box-shadow: 0 12px 30px rgba(107,75,255,0.40), inset 0 1px 0 rgba(255,255,255,0.15);
+      color: #fff;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(107,75,255,0.50), inset 0 1px 0 rgba(255,255,255,0.15); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-secondary {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--fg);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.20); }
+
+    .hero-trust {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12.5px; color: var(--fg-3);
+      margin-top: 22px;
+      flex-wrap: wrap;
+    }
+    .hero-trust svg { flex-shrink: 0; }
+    .hero-trust-divider { color: var(--fg-4); }
+
+    /* ── Hero stats strip ─────────────────────────────────────────────── */
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin-top: 56px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      max-width: 540px;
+    }
+    .stat { padding-right: 12px; }
+    .stat + .stat { padding-left: 24px; border-left: 1px solid var(--border); }
+    .stat-num {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: clamp(22px, 3vw, 30px);
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 0%, var(--violet-300) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-label {
+      font-size: 11.5px;
+      color: var(--fg-3);
+      margin-top: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ════════════════════════════════════════════════════════════════════ */
+    /*  PHONE MOCKUP — Replica EXACTA del LoginScreen                       */
+    /* ════════════════════════════════════════════════════════════════════ */
+    .phone-col { display: flex; justify-content: center; }
+    .phone {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      aspect-ratio: 9 / 19.5;
+      background: linear-gradient(160deg, #1A1A3E 0%, #050617 100%);
+      border-radius: 46px;
+      padding: 9px;
+      box-shadow:
+        0 80px 140px -40px rgba(107,75,255,0.55),
+        var(--shadow-deep),
+        inset 0 1px 0 rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform 0.5s var(--ease-out);
+    }
+    .phone:hover { transform: translateY(-6px) rotateY(-2deg); }
+
+    .phone::before {
+      content: '';
+      position: absolute;
+      top: 9px; left: 50%;
+      transform: translateX(-50%);
+      width: 84px; height: 22px;
+      background: #050617;
+      border-radius: 0 0 16px 16px;
+      z-index: 10;
+    }
+    .phone-screen {
+      width: 100%; height: 100%;
+      border-radius: 38px;
+      background: #050617;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    /* Inner orbs (matches login atmosphere) */
+    .phone-orb-1, .phone-orb-2, .phone-orb-3 {
+      position: absolute; border-radius: 999px; filter: blur(45px); pointer-events: none;
+    }
+    .phone-orb-1 {
+      top: -40px; left: -30px;
+      width: 180px; height: 180px;
+      background: rgba(107,75,255,0.55);
+    }
+    .phone-orb-2 {
+      top: 130px; right: -50px;
+      width: 160px; height: 160px;
+      background: rgba(167,142,255,0.40);
+    }
+    .phone-orb-3 {
+      bottom: -50px; left: 30%;
+      width: 200px; height: 200px;
+      background: rgba(245,197,24,0.14);
+    }
+
+    /* Sparks in phone */
+    .phone-spark {
+      position: absolute;
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      bottom: 40%;
+      animation: phoneRise 4s linear infinite;
+    }
+    @keyframes phoneRise {
+      0%   { transform: translateY(0); opacity: 0; }
+      20%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(-200px); opacity: 0; }
+    }
+
+    .phone-content {
+      position: relative; z-index: 2;
+      padding: 50px 18px 24px;
+      display: flex; flex-direction: column;
+      height: 100%;
+    }
+
+    /* Top pill */
+    .phone-pill {
+      display: inline-flex;
+      align-self: center;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 9.5px;
+      color: #fff;
+      margin-top: 4px;
+      margin-bottom: 22px;
+    }
+    .phone-pill-accent { color: var(--violet-300); font-weight: 600; }
+
+    /* Wordmark */
+    .phone-wordmark-wrap {
+      display: flex; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .phone-wordmark {
+      width: 175px;
+      filter: drop-shadow(0 8px 24px rgba(167,142,255,0.45));
+    }
+
+    /* Heading */
+    .phone-heading {
+      text-align: center;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      color: #fff;
+      letter-spacing: -0.3px;
+      margin-bottom: 1px;
+    }
+    .phone-subtitle {
+      text-align: center;
+      font-size: 10.5px;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 14px;
+    }
+
+    /* Glass form card */
+    .phone-card {
+      background: rgba(20,21,42,0.62);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 14px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.30);
+    }
+
+    /* Google button */
+    .phone-google {
+      background: #fff;
+      border-radius: 11px;
+      padding: 10px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px;
+    }
+    .phone-google-icon {
+      width: 14px; height: 14px;
+      flex-shrink: 0;
+    }
+    .phone-google-text {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #1F1F1F;
+    }
+
+    /* Divider */
+    .phone-divider {
+      display: flex; align-items: center; gap: 8px;
+      margin: 2px 0;
+    }
+    .phone-divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .phone-divider-text { font-size: 9px; color: rgba(255,255,255,0.45); text-transform: lowercase; }
+
+    /* Fields */
+    .phone-field-label {
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 4px;
+    }
+    .phone-input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 10px;
+      padding: 9px 11px;
+      font-size: 10.5px;
+      color: rgba(255,255,255,0.55);
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .phone-input-with-icon { display: flex; align-items: center; justify-content: space-between; }
+    .phone-eye { width: 11px; height: 11px; opacity: 0.5; }
+
+    .phone-forgot {
+      align-self: flex-end;
+      font-size: 9.5px;
+      color: var(--violet-300);
+      font-weight: 500;
+      margin-top: -4px;
+    }
+
+    /* Primary login button */
+    .phone-login-btn {
+      background: linear-gradient(135deg, #8B70FF, #4524D6);
+      border-radius: 11px;
+      padding: 11px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      box-shadow: 0 10px 22px rgba(107,75,255,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
+      margin-top: 4px;
+    }
+
+    /* Bottom CTA */
+    .phone-bottom {
+      margin-top: 12px;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(168,142,255,0.08);
+      border: 1px solid rgba(168,142,255,0.30);
+      border-radius: 11px;
+      padding: 8px 10px;
+    }
+    .phone-bottom-icon {
+      width: 22px; height: 22px;
+      background: rgba(168,142,255,0.20);
+      border-radius: 7px;
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .phone-bottom-text { flex: 1; }
+    .phone-bottom-title { font-size: 9.5px; font-weight: 600; color: #fff; line-height: 1.2; }
+    .phone-bottom-sub { font-size: 8px; color: rgba(255,255,255,0.55); margin-top: 1px; }
+
+    /* ════════════════════════════════════════════════════════════════════ */
+    /*  SECTIONS                                                              */
+    /* ════════════════════════════════════════════════════════════════════ */
+    section { position: relative; z-index: 2; padding: 100px 0; }
+
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(168,142,255,0.08);
+      border: 1px solid rgba(168,142,255,0.25);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--violet-100);
+      letter-spacing: 1.4px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+    .section-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--violet-300);
+    }
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(30px, 4.5vw, 46px);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.08;
+      margin-bottom: 18px;
+      max-width: 760px;
+    }
+    .section-sub {
+      font-size: 16px;
+      color: var(--fg-3);
+      max-width: 580px;
+      margin-bottom: 56px;
+      line-height: 1.65;
+    }
+
+    /* ── Giros ────────────────────────────────────────────────────────── */
+    .giros-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    .giro-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 16px;
+      text-align: center;
+      transition: transform 0.3s var(--ease-out), border-color 0.3s, background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .giro-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(168,142,255,0.05), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .giro-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-active);
+      background: var(--surface-hover);
+    }
+    .giro-card:hover::before { opacity: 1; }
+    .giro-icon {
+      width: 38px; height: 38px;
+      margin: 0 auto 10px;
+      color: var(--violet-300);
+      position: relative;
+      z-index: 1;
+    }
+    .giro-name { font-size: 13px; font-weight: 600; color: var(--fg); position: relative; z-index: 1; }
+
+    /* ── Features ─────────────────────────────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .feature {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 30px 26px;
+      transition: transform 0.3s var(--ease-out), border-color 0.3s, background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(168,142,255,0.20) 0%, transparent 70%);
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .feature:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-active);
+    }
+    .feature:hover::after { opacity: 1; }
+    .feature-icon-box {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(168,142,255,0.25), rgba(107,75,255,0.10));
+      border: 1px solid rgba(168,142,255,0.35);
+      display: grid; place-items: center;
+      margin-bottom: 20px;
+      color: var(--violet-300);
+      position: relative; z-index: 1;
+    }
+    .feature h3 {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: var(--fg);
+      position: relative; z-index: 1;
+    }
+    .feature p {
+      color: var(--fg-3);
+      font-size: 14px;
+      line-height: 1.65;
+      position: relative; z-index: 1;
+    }
+
+    /* ── Pricing ──────────────────────────────────────────────────────── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+    .price {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px 26px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s var(--ease-out), border-color 0.3s;
+    }
+    .price:hover { transform: translateY(-4px); }
+    .price.popular {
+      border-color: rgba(168,142,255,0.50);
+      background: linear-gradient(180deg, rgba(168,142,255,0.10), rgba(107,75,255,0.03));
+      box-shadow: 0 24px 50px -10px rgba(107,75,255,0.35);
+    }
+    .price-tag {
+      position: absolute;
+      top: -13px; left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--gold), #DAA520);
+      color: #050617;
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 1.3px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      box-shadow: 0 6px 16px rgba(245,197,24,0.30);
+    }
+    .price-name {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 19px;
+      margin-bottom: 4px;
+    }
+    .price-desc {
+      font-size: 12.5px;
+      color: var(--fg-3);
+      margin-bottom: 18px;
+      min-height: 32px;
+    }
+    .price-amount-wrap { display: flex; align-items: baseline; gap: 6px; }
+    .price-currency { font-size: 14px; color: var(--fg-3); }
+    .price-amount {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 42px;
+      letter-spacing: -0.03em;
+    }
+    .price-period { font-size: 13px; color: var(--fg-3); margin-bottom: 22px; }
+    .price-features { list-style: none; margin-bottom: 24px; flex: 1; }
+    .price-features li {
+      font-size: 13.5px;
+      color: var(--fg-2);
+      padding: 9px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .price-features li:last-child { border-bottom: none; }
+    .price-features svg { flex-shrink: 0; margin-top: 2px; color: var(--success); }
+    .price-cta {
+      display: block;
+      text-align: center;
+      padding: 13px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .price-cta:hover { transform: translateY(-1px); }
+    .price-cta.primary {
+      background: linear-gradient(135deg, var(--violet-500), var(--violet-900));
+      box-shadow: 0 10px 24px rgba(107,75,255,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
+      color: #fff;
+    }
+    .price-cta.outline {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--fg);
+    }
+
+    /* ── Comparison ───────────────────────────────────────────────────── */
+    .comp-card {
+      background: linear-gradient(160deg, rgba(168,142,255,0.08) 0%, rgba(245,197,24,0.04) 100%);
+      border: 1px solid rgba(168,142,255,0.25);
+      border-radius: var(--radius-xl);
+      padding: 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .comp-card::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, rgba(245,197,24,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .comp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      position: relative; z-index: 1;
+    }
+    @media (max-width: 720px) {
+      .comp-card { padding: 28px; }
+      .comp-grid { grid-template-columns: 1fr; }
+    }
+    .comp-side h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      display: flex; align-items: center; gap: 9px;
+    }
+    .comp-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 11px 0;
+      font-size: 14px;
+      color: var(--fg-2);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .comp-row:last-child { border-bottom: none; }
+    .comp-row svg { flex-shrink: 0; margin-top: 2px; }
+
+    /* ── FAQ ──────────────────────────────────────────────────────────── */
+    .faq-grid { display: flex; flex-direction: column; gap: 10px; }
+    .faq-item {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      list-style: none;
+    }
+    .faq-item::-webkit-details-marker { display: none; }
+    .faq-item:hover { border-color: var(--border-active); }
+    .faq-item[open] { background: rgba(168,142,255,0.06); border-color: var(--border-active); }
+    .faq-q {
+      font-family: 'Sora', sans-serif;
+      font-weight: 600;
+      font-size: 15.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .faq-q-icon {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: rgba(168,142,255,0.15);
+      display: grid; place-items: center;
+      color: var(--violet-300);
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+    .faq-item[open] .faq-q-icon { transform: rotate(45deg); }
+    .faq-a {
+      color: var(--fg-2);
+      font-size: 14px;
+      line-height: 1.7;
+      padding-top: 14px;
+      margin-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* ── CTA Final ────────────────────────────────────────────────────── */
+    .cta-final {
+      background: linear-gradient(160deg, rgba(107,75,255,0.20) 0%, rgba(245,197,24,0.08) 100%);
+      border: 1px solid rgba(168,142,255,0.35);
+      border-radius: var(--radius-xl);
+      padding: 64px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-final::before {
+      content: '';
+      position: absolute;
+      top: -120px; left: 10%;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(107,75,255,0.30) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .cta-final::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; right: 10%;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(245,197,24,0.18) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .cta-final > * { position: relative; z-index: 1; }
+    .cta-final h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 14px;
+    }
+    .cta-final p {
+      color: var(--fg-2);
+      max-width: 480px;
+      margin: 0 auto 28px;
+      font-size: 16px;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 60px 0 36px;
+      position: relative;
+      z-index: 2;
+      margin-top: 60px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 50px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 720px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; } }
+    .footer-brand { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 18px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .footer-tag { color: var(--fg-3); font-size: 13.5px; line-height: 1.7; max-width: 320px; }
+    .footer-social { display: flex; gap: 10px; margin-top: 16px; }
+    .social-btn {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      display: grid; place-items: center;
+      color: var(--fg-3);
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .social-btn:hover { color: var(--violet-300); border-color: var(--border-active); background: rgba(168,142,255,0.10); }
+    .footer-col h4 {
+      font-size: 11px;
+      letter-spacing: 1.6px;
+      color: var(--fg-3);
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 13.5px;
+      color: var(--fg-2);
+      padding: 6px 0;
+      transition: color 0.15s;
+    }
+    .footer-col a:hover { color: var(--fg); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px;
+      color: var(--fg-4);
+    }
+    @media (max-width: 600px) {
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
+
+    /* ── Reveal on scroll ─────────────────────────────────────────────── */
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ════ Atmosphere (orbs + sparks + cursor glow) ════ -->
+  <div class="atmosphere" aria-hidden="true">
+    <div class="orb orb-violet-1"></div>
+    <div class="orb orb-violet-2"></div>
+    <div class="orb orb-gold"></div>
+    <div class="spark" style="left: 12%; background: #A88EFF; animation-delay: 0s;"></div>
+    <div class="spark" style="left: 28%; background: #F5C518; animation-delay: 1.2s;"></div>
+    <div class="spark" style="left: 52%; background: #A88EFF; animation-delay: 2.4s;"></div>
+    <div class="spark" style="left: 74%; background: #F5C518; animation-delay: 3.1s;"></div>
+    <div class="spark" style="left: 88%; background: #A88EFF; animation-delay: 0.8s;"></div>
+  </div>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!--  NAV                                                                  -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <nav>
+    <div class="wrap nav-inner">
+      <a href="#" class="brand">
+        <span class="brand-mark"></span>
+        <span>Tiketes</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-link" href="#caracteristicas">Características</a>
+        <a class="nav-link" href="#precios">Precios</a>
+        <a class="nav-link" href="#faq">Preguntas</a>
+        <a class="nav-cta" href="#descargar">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+          Descargar gratis
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!--  HERO                                                                  -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-content reveal">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          Hecho en México · Próximo lanzamiento
+        </div>
+
+        <h1 class="hero-title display">
+          El POS de tu negocio,<br/>
+          <span class="accent">sin comisiones.</span>
+        </h1>
+
+        <p class="hero-lead">
+          Inventario, tickets y comandas — todo desde tu celular.
+          Cobras como quieras y <strong>te quedas con el 100%</strong> de cada venta.
+          Sin sorpresas, sin comisiones por transacción.
+        </p>
+
+        <div class="hero-ctas">
+          <a href="#descargar" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 01-.61-.92V2.734c0-.388.241-.72.61-.92zm10.89 10.893l2.302 2.302-10.391 5.881 8.089-8.183zm3.682-3.694l-2.69 1.522-2.812-2.812 2.812-2.812 2.69 1.522c.788.466.788 1.114 0 1.58zM5.41.59L15.79 6.404l-2.302 2.302L5.41.59z"/></svg>
+            Descargar Android
+          </a>
+          <a href="#caracteristicas" class="btn btn-secondary">
+            Ver demo
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <div class="hero-trust">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Plan gratis para siempre</span>
+          <span class="hero-trust-divider">·</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Sin tarjeta de crédito</span>
+          <span class="hero-trust-divider">·</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>5 min de setup</span>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-num mono">0%</div>
+            <div class="stat-label">Comisión por venta</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num mono">11</div>
+            <div class="stat-label">Giros soportados</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num mono">100%</div>
+            <div class="stat-label">Hecho en México</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ Phone Mockup — replica EXACTA del LoginScreen ═══ -->
+      <div class="phone-col reveal">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-orb-1"></div>
+            <div class="phone-orb-2"></div>
+            <div class="phone-orb-3"></div>
+            <span class="phone-spark" style="left: 30%; background: #A88EFF; animation-delay: 0s;"></span>
+            <span class="phone-spark" style="left: 60%; background: #F5C518; animation-delay: 1.5s;"></span>
+            <span class="phone-spark" style="left: 80%; background: #A88EFF; animation-delay: 2.8s;"></span>
+
+            <div class="phone-content">
+              <!-- Top pill -->
+              <div class="phone-pill">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#A88EFF" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                ¿Aún no tienes cuenta? <span class="phone-pill-accent">Crear cuenta</span>
+              </div>
+
+              <!-- Wordmark -->
+              <div class="phone-wordmark-wrap">
+                <img src="./wordmark.png" alt="Tiketes" class="phone-wordmark" />
+              </div>
+
+              <!-- Heading -->
+              <div class="phone-heading">Inicia sesión</div>
+              <div class="phone-subtitle">Vuelve a tu mostrador en segundos.</div>
+
+              <!-- Glass form card -->
+              <div class="phone-card">
+                <!-- Google button -->
+                <div class="phone-google">
+                  <svg class="phone-google-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                  </svg>
+                  <span class="phone-google-text">Continuar con Google</span>
+                </div>
+
+                <!-- Divider -->
+                <div class="phone-divider">
+                  <div class="phone-divider-line"></div>
+                  <span class="phone-divider-text">o con correo</span>
+                  <div class="phone-divider-line"></div>
+                </div>
+
+                <!-- Email -->
+                <div>
+                  <div class="phone-field-label">CORREO</div>
+                  <div class="phone-input">tu@correo.com</div>
+                </div>
+
+                <!-- Password -->
+                <div>
+                  <div class="phone-field-label">CONTRASEÑA</div>
+                  <div class="phone-input phone-input-with-icon">
+                    <span>••••••••</span>
+                    <svg class="phone-eye" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </div>
+                </div>
+
+                <div class="phone-forgot">¿Olvidaste?</div>
+
+                <!-- Login button -->
+                <div class="phone-login-btn">Iniciar sesión</div>
+
+                <!-- Employee CTA -->
+                <div class="phone-bottom">
+                  <div class="phone-bottom-icon">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#A88EFF" stroke-width="2.4"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h7v7h-7z"/></svg>
+                  </div>
+                  <div class="phone-bottom-text">
+                    <div class="phone-bottom-title">Soy empleado</div>
+                    <div class="phone-bottom-sub">Escanear código QR</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!--  GIROS                                                                -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <section id="giros">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="section-eyebrow">Para tu giro</span>
+        <h2 class="section-title display">Tu negocio,<br/>tu manera de vender</h2>
+        <p class="section-sub">
+          Tiketes se adapta a 11 tipos de negocio mexicanos.
+          Cada uno ve sus categorías y herramientas justas — sin features de más que estorben.
+        </p>
+      </div>
+
+      <div class="giros-grid reveal">
+        <div class="giro-card">
+          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l1.5-5h15L21 9M3 9v11a1 1 0 001 1h16a1 1 0 001-1V9M3 9h18M8 13h.01M12 13h.01M16 13h.01"/></svg>
+          <div class="giro-name">Tienda</div>
+        </div>
+        <div class="giro-card">
+          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11h18l-2 9H5l-2-9zM6 6h12M9 3h6"/></svg>
+          <div class="giro-name">Restaurante</div>
+        </div>
+        <div class="giro-card">
+          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 8h1a4 4 0 010 8h-1M3 8h14v9a4 4 0 01-4 4H7a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+          <div class="giro-name">Cafetería</div>
+        </div>
+        <div class="giro-card">
+          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V7M4 7l8-4 8 4M4 7l8 4 8-4M12 11v8"/></svg>
+          <div class="giro-name">Panadería</div>
+        </div>
+        <div class="giro-card">
+          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11V7a3 3 0 016 0v4M5 11h14l-1 9H6l-1-9zM12 15v3"/></svg>
+          <div class="giro-name">Farmacia</div>
+        </div>
+        <div class="giro-card">
+          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg>
+          <div class="giro-name">Carnicería</div>
+        </div>
+        <div class="giro-card">
+          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>
+          <div class="giro-name">Belleza</div>
+        </div>
+        <div class="giro-card">
+          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+          <div class="giro-name">Ferretería</div>
+        </div>
+        <div class="giro-card">
+          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.38 3.46L16 2a4 4 0 00-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg>
+          <div class="giro-name">Ropa</div>
+        </div>
+        <div class="giro-card">
+          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          <div class="giro-name">Servicios</div>
+        </div>
+        <div class="giro-card">
+          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16zM3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
+          <div class="giro-name">Otro giro</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!--  FEATURES                                                              -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <section id="caracteristicas">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="section-eyebrow">Características</span>
+        <h2 class="section-title display">Todo lo que necesita<br/>tu negocio en un lugar</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature reveal">
+          <div class="feature-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.4L7.55 4.24M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16zM3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
+          </div>
+          <h3>Inventario en tiempo real</h3>
+          <p>Carga tu catálogo escaneando códigos de barras. El stock baja solo con cada venta. Alertas cuando se acerca a cero.</p>
+        </div>
+
+        <div class="feature reveal">
+          <div class="feature-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M9 16h6M9 8h6M5 22h14a2 2 0 002-2V4a2 2 0 00-2-2H5a2 2 0 00-2 2v16a2 2 0 002 2z"/></svg>
+          </div>
+          <h3>Tickets profesionales</h3>
+          <p>Imprime, manda por WhatsApp o exporta a PDF. Con tu logo y datos. Sin marca de Tiketes — pareces empresa grande.</p>
+        </div>
+
+        <div class="feature reveal">
+          <div class="feature-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18l-2 9H5l-2-9zM6 6h12M9 3h6"/></svg>
+          </div>
+          <h3>Comandas a cocina</h3>
+          <p>Para restaurantes y cafeterías. El mesero toma la orden y llega a la pantalla del cocinero al instante. En tiempo real.</p>
+        </div>
+
+        <div class="feature reveal">
+          <div class="feature-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <h3>Multi-empleado con QR</h3>
+          <p>Invita a tus empleados con un código QR. Cada uno con su rol: cajero, mesero, cocinero, gerente.</p>
+        </div>
+
+        <div class="feature reveal">
+          <div class="feature-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          </div>
+          <h3>Reportes claros</h3>
+          <p>Ventas del día, semana o mes. Top productos, métodos de pago, propinas. Exportable a PDF o Excel.</p>
+        </div>
+
+        <div class="feature reveal">
+          <div class="feature-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <h3>Cobra como quieras</h3>
+          <p>Efectivo, tarjeta (tu terminal) o transferencia. Tiketes solo registra — <strong style="color: var(--fg)">nunca tocamos tu dinero</strong>.</p>
+        </div>
+
+        <div class="feature reveal">
+          <div class="feature-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </div>
+          <h3>Funciona en celular</h3>
+          <p>No necesitas computadora ni terminal cara. Solo tu Android. Funciona offline para no perder ventas.</p>
+        </div>
+
+        <div class="feature reveal">
+          <div class="feature-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.91 11.12L12 16l-8.91-4.88M12 22V16M22 7l-10 5L2 7l10-5 10 5z"/></svg>
+          </div>
+          <h3>Clientes y fiados</h3>
+          <p>Control de quién te debe y desde cuándo. Un toque para llamar o recordar por WhatsApp. Nunca olvides un cobro.</p>
+        </div>
+
+        <div class="feature reveal">
+          <div class="feature-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <h3>Delivery integrado</h3>
+          <p>Sincroniza con Uber Eats, Rappi y DiDi Food. Los pedidos llegan directo a tu cocina <em>(Plan Premium)</em>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!--  COMPARISON                                                            -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <section id="vs">
+    <div class="wrap reveal">
+      <span class="section-eyebrow">Diferencia honesta</span>
+      <h2 class="section-title display">Tú vendes,<br/>tú te quedas el dinero</h2>
+      <p class="section-sub">
+        La mayoría de POS te cobran 2-3% por cada venta con tarjeta.
+        En 1 año, eso puede ser <strong>más caro que un sueldo entero</strong>.
+        Tiketes nunca toca tu dinero — solo cobra tu suscripción fija.
+      </p>
+
+      <div class="comp-card">
+        <div class="comp-grid">
+          <div class="comp-side">
+            <h3>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              Otros sistemas
+            </h3>
+            <div class="comp-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>Cobran 2-3% de comisión por venta con tarjeta</span>
+            </div>
+            <div class="comp-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>Suscripción mensual + comisiones encima</span>
+            </div>
+            <div class="comp-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>Terminal propia obligatoria con renta mensual</span>
+            </div>
+            <div class="comp-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>Interfaz en inglés o mala traducción</span>
+            </div>
+            <div class="comp-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>Soporte por chatbot, no humano</span>
+            </div>
+          </div>
+
+          <div class="comp-side">
+            <h3>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
+              Tiketes
+            </h3>
+            <div class="comp-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.6" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span><strong style="color: var(--fg)">CERO comisión por venta</strong> — el 100% es tuyo</span>
+            </div>
+            <div class="comp-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.6" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Suscripción única fija — sin sorpresas</span>
+            </div>
+            <div class="comp-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.6" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Usa la terminal que ya tienes (Clip, Mercado Pago, BBVA…)</span>
+            </div>
+            <div class="comp-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.6" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Diseñado en México, para PyMEs mexicanas</span>
+            </div>
+            <div class="comp-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.6" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Soporte por WhatsApp en español</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!--  PRICING                                                               -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <section id="precios">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="section-eyebrow">Precios honestos</span>
+        <h2 class="section-title display">Paga solo lo que uses</h2>
+        <p class="section-sub">
+          Empieza gratis. Sube cuando tu negocio crezca.
+          Cancela cuando quieras — tu plan sigue activo hasta que termine el periodo pagado.
+        </p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price reveal">
+          <div class="price-name">Free</div>
+          <div class="price-desc">Para empezar a vender hoy mismo</div>
+          <div class="price-amount-wrap">
+            <span class="price-currency">$</span>
+            <span class="price-amount mono">0</span>
+          </div>
+          <div class="price-period">MXN para siempre</div>
+          <ul class="price-features">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Hasta 100 productos</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Tickets digitales</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 1 sucursal</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Cierre de caja</li>
+          </ul>
+          <a href="#descargar" class="price-cta outline">Comenzar gratis</a>
+        </div>
+
+        <div class="price reveal">
+          <div class="price-name">Essential</div>
+          <div class="price-desc">Para tiendas que ya crecen</div>
+          <div class="price-amount-wrap">
+            <span class="price-currency">$</span>
+            <span class="price-amount mono">179</span>
+          </div>
+          <div class="price-period">MXN / mes</div>
+          <ul class="price-features">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Hasta 800 productos</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Empleados ilimitados</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Reportes en PDF</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Sin anuncios</li>
+          </ul>
+          <a href="#descargar" class="price-cta outline">Probar Essential</a>
+        </div>
+
+        <div class="price popular reveal">
+          <div class="price-tag">MÁS POPULAR</div>
+          <div class="price-name">Pro</div>
+          <div class="price-desc">Para restaurantes y multi-sucursal</div>
+          <div class="price-amount-wrap">
+            <span class="price-currency">$</span>
+            <span class="price-amount mono">350</span>
+          </div>
+          <div class="price-period">MXN / mes</div>
+          <ul class="price-features">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Hasta 2,500 productos</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Comandas a cocina</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Multi-sucursal</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Mesas y propinas</li>
+          </ul>
+          <a href="#descargar" class="price-cta primary">Probar Pro</a>
+        </div>
+
+        <div class="price reveal">
+          <div class="price-name">Premium</div>
+          <div class="price-desc">Para los que venden mucho</div>
+          <div class="price-amount-wrap">
+            <span class="price-currency">$</span>
+            <span class="price-amount mono">750</span>
+          </div>
+          <div class="price-period">MXN / mes</div>
+          <ul class="price-features">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Hasta 20,000 productos</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Delivery integrado</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Sugerencias IA</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Soporte prioritario</li>
+          </ul>
+          <a href="#descargar" class="price-cta outline">Probar Premium</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!--  FAQ                                                                   -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="section-eyebrow">Preguntas</span>
+        <h2 class="section-title display">Lo que más nos preguntan</h2>
+      </div>
+
+      <div class="faq-grid reveal">
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>¿Cobran comisión por cada venta?</span>
+            <span class="faq-q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <p class="faq-a">No. Tiketes solo cobra tu suscripción mensual fija. El 100% del dinero que te cobra el cliente queda contigo. Otros POS cobran 2-3% por cada venta con tarjeta — eso lo pagas en TU terminal externa (Clip, BBVA, etc.), no a nosotros.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>¿Necesito una terminal de tarjeta?</span>
+            <span class="faq-q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <p class="faq-a">Solo si quieres cobrar con tarjeta. Tiketes funciona perfecto con efectivo y transferencia. Si ya tienes terminal (Clip, Mercado Pago, BBVA), úsala. Tiketes solo registra la venta — el cobro pasa por tu terminal.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>¿Funciona sin internet?</span>
+            <span class="faq-q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <p class="faq-a">Sí. Puedes seguir vendiendo aunque se caiga el WiFi. Las ventas se guardan en tu celular y se sincronizan automáticamente cuando vuelve la conexión.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>¿Cuánto tarda en estar listo?</span>
+            <span class="faq-q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <p class="faq-a">5 minutos. Te registras con tu correo, escoges el tipo de negocio (Tiketes te pre-configura categorías) y ya puedes vender. La primera venta es gratis sin necesidad de tarjeta.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>¿Puedo invitar a mis empleados?</span>
+            <span class="faq-q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <p class="faq-a">Sí, desde el plan Essential. Generas un código QR, ellos lo escanean y entran con su propio usuario. Tú ves todas sus ventas y puedes asignarles roles (cajero, mesero, cocinero, gerente).</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>¿Puedo cancelar cuando quiera?</span>
+            <span class="faq-q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <p class="faq-a">Sí, sin penalización. Cuando cancelas, tu plan sigue activo hasta el final del periodo que ya pagaste. Después pasas a Free automáticamente. Tus datos no se borran nunca — solo regresas a los límites del plan gratis.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!--  CTA FINAL                                                             -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <section id="descargar">
+    <div class="wrap">
+      <div class="cta-final reveal">
+        <h2 class="display">Empieza a vender hoy mismo</h2>
+        <p>Descarga gratis en tu celular Android. Primera venta en 5 minutos.</p>
+        <a href="#" class="btn btn-primary" style="font-size: 16px; padding: 17px 30px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 01-.61-.92V2.734c0-.388.241-.72.61-.92zm10.89 10.893l2.302 2.302-10.391 5.881 8.089-8.183zm3.682-3.694l-2.69 1.522-2.812-2.812 2.812-2.812 2.69 1.522c.788.466.788 1.114 0 1.58zM5.41.59L15.79 6.404l-2.302 2.302L5.41.59z"/></svg>
+          Descargar en Google Play
+        </a>
+        <div style="margin-top: 20px; font-size: 12.5px; color: var(--fg-3);">
+          Pronto disponible · Hecho con 💜 en México
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!--  FOOTER                                                                -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <span class="brand-mark" style="width: 26px; height: 26px;"></span>
+            <span>Tiketes</span>
+          </div>
+          <p class="footer-tag">
+            POS sin comisiones para PyMEs mexicanas. Inventario, tickets,
+            comandas y reportes — todo desde tu celular.
+          </p>
+          <div class="footer-social">
+            <a class="social-btn" href="https://www.instagram.com/tiketes.oficial/" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01"/></svg>
+            </a>
+            <a class="social-btn" href="mailto:soporte@tiketes.app" aria-label="Correo">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </a>
+            <a class="social-btn" href="https://github.com/UrielGarcia12/tiketes" target="_blank" rel="noopener" aria-label="GitHub">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.01-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.23 1.84 1.23 1.07 1.83 2.81 1.3 3.49.99.11-.77.42-1.3.76-1.6-2.66-.3-5.46-1.33-5.46-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1-.32 3.3 1.23.96-.27 1.98-.4 3-.4s2.04.13 3 .4c2.3-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.29 0 .32.22.69.83.57C20.56 21.79 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Producto</h4>
+          <a href="#caracteristicas">Características</a>
+          <a href="#precios">Precios</a>
+          <a href="#faq">Preguntas</a>
+        </div>
+        <div class="footer-col">
+          <h4>Empresa</h4>
+          <a href="#descargar">Descargar</a>
+          <a href="mailto:soporte@tiketes.app">Soporte</a>
+          <a href="https://www.instagram.com/tiketes.oficial/" target="_blank" rel="noopener">Instagram</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="./privacy.html">Privacidad</a>
+          <a href="./terms.html">Términos</a>
+          <a href="mailto:legal@tiketes.app">Contacto legal</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 Tiketes · Hecho con 💜 en México</div>
+        <div class="mono">v1.0.0 · soporte@tiketes.app</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!--  Behavior — cursor follow + reveal on scroll                          -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <script>
+    // Cursor glow follows mouse (desktop only)
+    if (window.matchMedia('(hover: hover)').matches) {
+      const glow = document.getElementById('cursorGlow');
+      let raf;
+      window.addEventListener('mousemove', (e) => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          glow.style.transform = `translate(${e.clientX - 180}px, ${e.clientY - 180}px)`;
+        });
+      });
+    }
+
+    // Reveal on scroll (IntersectionObserver)
+    const reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && reveals.length) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+      reveals.forEach((el) => io.observe(el));
+    } else {
+      reveals.forEach((el) => el.classList.add('visible'));
+    }
+  </script>
+</body>
+</html>
