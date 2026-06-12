@@ -311,27 +311,44 @@ body {
 .product-section .s-eyebrow { color: rgba(255,255,255,.32); }
 .product-section .s-lead    { color: rgba(255,255,255,.40); }
 
-/* Phone frames */
+/* Phone frames with iframe screens */
 .phones-wrap {
-  display: flex; justify-content: center; align-items: flex-start;
-  gap: clamp(16px, 2.5vw, 40px);
+  display: flex; justify-content: center; align-items: flex-end;
+  gap: clamp(12px, 2vw, 32px);
   margin-top: 80px;
+  perspective: 1200px;
 }
 .p-phone {
-  width: clamp(175px, 22vw, 248px);
-  border-radius: 32px; overflow: hidden;
-  border: 1.5px solid rgba(255,255,255,.09);
-  box-shadow: 0 44px 88px rgba(0,0,0,.64), 0 0 0 1px rgba(255,255,255,.04);
-  flex-shrink: 0;
-}
-.p-phone-main { aspect-ratio: 390/844; }
-.p-phone-side {
+  position: relative;
+  width: clamp(155px, 19vw, 230px);
   aspect-ratio: 390/844;
-  opacity: .68; transform: scale(.93) translateY(32px);
+  border-radius: clamp(22px, 2.8vw, 34px);
+  overflow: hidden;
+  border: 1.5px solid rgba(255,255,255,.10);
+  box-shadow: 0 48px 96px rgba(0,0,0,.72), 0 0 0 1px rgba(255,255,255,.05);
+  flex-shrink: 0;
+  background: #07070F;
 }
-@media (max-width: 580px) {
+.p-phone iframe {
+  position: absolute; inset: 0;
+  width: 390px; height: 844px;
+  border: none; pointer-events: none;
+  transform-origin: top left;
+}
+.p-phone-main { z-index: 2; }
+.p-phone-side {
+  opacity: .72; transform: scale(.92) translateY(28px);
+}
+.p-phone-back {
+  opacity: .48; transform: scale(.85) translateY(52px);
+}
+@media (max-width: 700px) {
+  .p-phone-back { display: none; }
+  .p-phone { width: clamp(140px, 40vw, 200px); }
+}
+@media (max-width: 480px) {
   .p-phone-side { display: none; }
-  .p-phone { width: clamp(150px, 55vw, 220px); }
+  .p-phone { width: clamp(150px, 55vw, 210px); }
 }
 
 
@@ -734,9 +751,26 @@ footer {
       <p class="s-lead">Diseñada para que tus manos hagan el trabajo, no tu cabeza.</p>
     </div>
 
-    <div class="phones-wrap">
+    <div class="phones-wrap" id="phones-wrap">
 
-      <!-- Inventario -->
+      <!-- Inventario / Productos -->
+      <div class="p-phone p-phone-back" id="phone-back">
+        <iframe src="screens/24-products-screen.html" title="Pantalla de productos" scrolling="no" id="iframe-back"></iframe>
+      </div>
+
+      <!-- Nueva venta (principal) -->
+      <div class="p-phone p-phone-main" id="phone-main">
+        <iframe src="screens/25-new-sale-screen.html" title="Nueva venta" scrolling="no" id="iframe-main"></iframe>
+      </div>
+
+      <!-- Ticket / Recibo -->
+      <div class="p-phone p-phone-side" id="phone-side">
+        <iframe src="screens/33-ticket-editor.html" title="Ticket de venta" scrolling="no" id="iframe-side"></iframe>
+      </div>
+
+      <!-- ELIMINAR: viejo código inline comienza abajo → -->
+      <div style="display:none" aria-hidden="true">
+      <!-- Inventario (código anterior, oculto) -->
       <div class="p-phone p-phone-main" style="background:#fff">
         <div style="padding:14px;height:100%;display:flex;flex-direction:column">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
@@ -845,6 +879,7 @@ footer {
           </div>
         </div>
       </div>
+      </div><!-- /display:none old phones -->
 
     </div>
 
@@ -1103,6 +1138,21 @@ footer {
 
 
 <script>
+// ── Scale iframes to fit phone frames ────────────────────────────
+function scalePhoneIframes() {
+  document.querySelectorAll('.p-phone').forEach(phone => {
+    const iframe = phone.querySelector('iframe');
+    if (!iframe) return;
+    const scaleX = phone.offsetWidth / 390;
+    const scaleY = phone.offsetHeight / 844;
+    const scale  = Math.min(scaleX, scaleY);
+    iframe.style.transform = `scale(${scale})`;
+  });
+}
+window.addEventListener('resize', scalePhoneIframes, { passive: true });
+document.addEventListener('DOMContentLoaded', scalePhoneIframes);
+setTimeout(scalePhoneIframes, 100);
+
 // ── Nav ──────────────────────────────────────────────────────────
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {

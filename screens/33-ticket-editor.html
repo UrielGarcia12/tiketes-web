@@ -1,0 +1,331 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+.stage{ background: linear-gradient(180deg, #EEEEF5 0%, #F7F7FB 100%);padding:24px;border-radius:18px;display:flex;justify-content:center;align-items:flex-start }
+.phone{ position:relative;width:340px;height:730px;border-radius:32px;overflow:hidden;background:#0A0B1F;box-shadow:0 28px 64px rgba(15,15,40,.18),0 8px 18px rgba(15,15,40,.06) }
+.scroll{ position:absolute;inset:0;overflow-y:auto;padding-bottom:96px;scrollbar-width:none }
+.scroll::-webkit-scrollbar{ display:none }
+@keyframes fadeUp { 0%{opacity:0;transform:translateY(16px)} 100%{opacity:1;transform:translateY(0)} }
+@keyframes pop { 0%{transform:scale(.92);opacity:0} 100%{transform:scale(1);opacity:1} }
+@keyframes slideUp { 0%{transform:translateY(100%)} 100%{transform:translateY(0)} }
+.sec{ animation: fadeUp 460ms cubic-bezier(0.22,1,0.36,1) both }
+
+/* HEADER */
+.header{ display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px }
+.header .back,.header .save{ border:0;cursor:pointer;outline:none;display:inline-flex;align-items:center;gap:5px }
+.header .back{ width:36px;height:36px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;justify-content:center }
+.header .htitle{ display:flex;flex-direction:column;align-items:center;line-height:1.1 }
+.header .htitle .t{ font-family:var(--font-display);font-weight:700;font-size:15px;color:#fff;letter-spacing:-.01em;display:inline-flex;align-items:center;gap:6px }
+.header .htitle .pro{ font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:linear-gradient(135deg,#FDE68A,#F5C518);color:#15152A;padding:2px 6px;border-radius:99px }
+.header .htitle .s{ font-size:9.5px;color:rgba(255,255,255,.45);margin-top:2px;font-family:var(--font-mono) }
+.header .save{ background:linear-gradient(135deg,#22C55E,#15803D);color:#fff;border-radius:12px;padding:9px 13px;font-family:var(--font-body);font-weight:700;font-size:12px;box-shadow:0 6px 14px rgba(34,197,94,.35) }
+
+/* CANVAS */
+.canvasWrap{ padding:6px 16px 0;display:flex;justify-content:center }
+.canvas{ position:relative;width:236px;min-height:340px;background:#fff;border-radius:8px;padding:16px 16px 22px;box-shadow:0 18px 40px rgba(0,0,0,.4);overflow:hidden;color:#15152A }
+.canvas::after{ content:'';position:absolute;left:0;right:0;bottom:0;height:7px;background:radial-gradient(circle at 5px -2px,transparent 4px,#fff 4px) repeat-x;background-size:10px 7px;z-index:8 }
+
+/* WATERMARK layers */
+.wmLayer{ position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden }
+.wmLayer.off{ display:none }
+.wmLayer.single{ display:flex;align-items:center;justify-content:center }
+.wmLayer.single span{ font-family:var(--font-display);font-weight:800;white-space:pre-line;text-align:center;color:#15152A;line-height:1.05 }
+.wmLayer.triple{ display:flex;flex-direction:column;justify-content:space-around;padding:30px 0 }
+.wmLayer.triple span{ font-family:var(--font-display);font-weight:800;text-align:center;color:#15152A;white-space:nowrap }
+.wmLayer.tiled{ display:grid;grid-template-columns:repeat(3,1fr);place-items:center;gap:30px;transform:rotate(-20deg) scale(1.4) }
+.wmLayer.tiled span{ font-family:var(--font-display);font-weight:700;font-size:13px;color:#15152A }
+
+.canvas > *:not(.wmLayer){ position:relative;z-index:2 }
+
+/* elements */
+.el{ padding:2px 4px;border-radius:5px;cursor:grab;border:1px solid transparent;transition:border-color 160ms,background 160ms;-webkit-user-select:none;user-select:none }
+.el:hover{ border-color:rgba(107,75,255,.4);background:rgba(107,75,255,.04) }
+.el.sel{ border-color:#6B4BFF;background:rgba(107,75,255,.07);box-shadow:0 0 0 3px rgba(107,75,255,.13) }
+.el.dragging{ cursor:grabbing;opacity:.92;z-index:20 }
+.elLogo{ font-family:var(--font-display);font-weight:800;font-size:15px;letter-spacing:-.02em;text-align:center }
+.elStore{ font-family:var(--font-mono);font-size:8.5px;color:#666;text-align:center }
+.elInfo{ font-family:var(--font-mono);font-size:8px;color:#888;text-align:center;line-height:1.5 }
+.divider{ border-top:1px dashed #ccc;margin:6px 0;z-index:1;position:relative }
+.elRows{ font-family:var(--font-mono);font-size:9.5px;line-height:1.7 }
+.elRow{ display:flex;justify-content:space-between }
+.elRow .q{ color:#999;min-width:24px } .elRow .nm{ flex:1;padding-right:5px }
+.elSub{ font-family:var(--font-mono);font-size:9px;color:#555;display:flex;justify-content:space-between }
+.elTotal{ font-family:var(--font-display);font-weight:800;font-size:13px;display:flex;justify-content:space-between }
+.elChange{ font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:#137333;display:flex;justify-content:space-between;background:#F0FDF4;padding:2px 5px;border-radius:4px }
+.elFoot{ font-family:var(--font-mono);font-size:8px;color:#999;text-align:center;line-height:1.5 }
+.elText{ font-family:var(--font-mono);font-size:9px;color:#333;text-align:center }
+.elQR{ width:42px;height:42px;margin:4px auto;background:repeating-linear-gradient(0deg,#15152A 0 2px,transparent 2px 4px),repeating-linear-gradient(90deg,#15152A 0 2px,transparent 2px 4px);opacity:.85;border-radius:3px }
+.elBarcode{ height:26px;margin:4px auto;width:80%;background:repeating-linear-gradient(90deg,#15152A 0 1px,transparent 1px 2px,#15152A 2px 4px,transparent 4px 5px) }
+
+/* INSPECTOR */
+.inspector{ position:absolute;z-index:50;width:228px;background:#15152A;border:1px solid rgba(167,142,255,.3);border-radius:16px;padding:12px;box-shadow:0 24px 48px rgba(0,0,0,.55);animation:pop 220ms cubic-bezier(0.34,1.56,0.64,1);display:none }
+.inspector.show{ display:block }
+.iHead{ display:flex;align-items:center;justify-content:space-between;margin-bottom:10px }
+.iTitle{ font-family:var(--font-display);font-weight:700;font-size:12px;color:#fff;display:flex;align-items:center;gap:6px }
+.iTitle .ic{ width:22px;height:22px;border-radius:7px;background:rgba(139,112,255,.2);color:#A88EFF;display:flex;align-items:center;justify-content:center }
+.ix{ width:22px;height:22px;border-radius:99px;background:rgba(255,255,255,.08);border:0;color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;outline:none }
+.iField{ margin-bottom:9px }
+.iLabel{ font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:5px;display:block }
+.iInput{ width:100%;box-sizing:border-box;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:8px 10px;font-family:var(--font-body);font-size:12px;color:#fff;outline:none }
+.iInput:focus{ border-color:#A88EFF;box-shadow:0 0 0 3px rgba(107,75,255,.2) }
+textarea.iInput{ resize:none;height:44px;font-family:var(--font-mono) }
+.iSeg{ display:flex;background:rgba(255,255,255,.05);border-radius:9px;padding:2px;gap:2px }
+.iSeg button{ flex:1;border:0;background:transparent;color:rgba(255,255,255,.55);font-size:10.5px;font-weight:600;padding:6px 4px;border-radius:7px;cursor:pointer;outline:none;display:flex;align-items:center;justify-content:center;gap:3px }
+.iSeg button.on{ background:#6B4BFF;color:#fff }
+.iSeg.fonts button[data-font="display"]{ font-family:var(--font-display);font-weight:800 }
+.iSeg.fonts button[data-font="mono"]{ font-family:var(--font-mono) }
+.iSeg.fonts button[data-font="body"]{ font-family:var(--font-body);font-weight:600 }
+.iRow2{ display:flex;gap:8px } .iRow2 .iField{ flex:1 }
+.stepper{ display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;overflow:hidden }
+.stepper button{ width:26px;height:32px;border:0;background:transparent;color:#fff;font-size:15px;cursor:pointer;outline:none }
+.stepper .val{ flex:1;text-align:center;font-family:var(--font-mono);font-size:12px;color:#fff;font-weight:600 }
+.delBtn{ width:100%;margin-top:4px;background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.3);color:#FCA5A5;border-radius:9px;padding:8px;font-size:11px;font-weight:600;cursor:pointer;outline:none;display:flex;align-items:center;justify-content:center;gap:6px;font-family:var(--font-body) }
+
+/* SHEET (add + watermark) */
+.sheet{ position:absolute;left:0;right:0;bottom:0;z-index:45;background:#15152A;border-top:1px solid rgba(255,255,255,.1);border-radius:22px 22px 0 0;padding:14px 16px 22px;transform:translateY(100%);transition:transform 360ms cubic-bezier(0.22,1,0.36,1);box-shadow:0 -18px 40px rgba(0,0,0,.4);max-height:62%;overflow-y:auto;scrollbar-width:none }
+.sheet::-webkit-scrollbar{ display:none }
+.sheet.show{ transform:translateY(0) }
+.grab{ width:40px;height:4px;border-radius:99px;background:rgba(255,255,255,.2);margin:0 auto 12px }
+.spTitle{ font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff;display:flex;align-items:center;gap:8px;margin-bottom:12px }
+.spTitle .ix{ margin-left:auto }
+.addGrid{ display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px }
+.addItem{ background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;outline:none;transition:all 180ms cubic-bezier(0.34,1.56,0.64,1) }
+.addItem:hover{ transform:translateY(-2px);border-color:rgba(167,142,255,.5);background:rgba(107,75,255,.12) }
+.addItem .ai{ width:34px;height:34px;border-radius:10px;background:rgba(139,112,255,.18);color:#A88EFF;display:flex;align-items:center;justify-content:center }
+.addItem .al{ font-size:9.5px;font-weight:600;color:#fff;text-align:center;line-height:1.2 }
+
+/* watermark styles */
+.wpField{ margin-bottom:11px }
+.wpLabel{ font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between }
+.wpLabel .pv{ font-family:var(--font-mono);color:#A88EFF;font-weight:700 }
+.wpInput{ width:100%;box-sizing:border-box;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:9px 11px;font-family:var(--font-body);font-size:12px;color:#fff;outline:none }
+textarea.wpInput{ resize:none;height:42px }
+.wmStyles{ display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:11px }
+.wmStyle{ aspect-ratio:1;border-radius:10px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);cursor:pointer;outline:none;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;transition:all 180ms }
+.wmStyle.on{ border-color:#A88EFF;background:rgba(107,75,255,.18) }
+.wmStyle span{ font-family:var(--font-display);font-weight:800;color:rgba(255,255,255,.5);font-size:7px }
+.wmStyle.s-off span{ color:rgba(255,255,255,.3);font-family:var(--font-body);font-size:8px }
+.wmStyle.s-single span{ transform:rotate(-20deg) }
+.wmStyle.s-triple{ flex-direction:column;gap:3px } .wmStyle.s-triple span{ font-size:5px }
+.wmStyle.s-tiled{ display:grid;grid-template-columns:1fr 1fr;gap:2px;transform:rotate(-15deg) } .wmStyle.s-tiled span{ font-size:4px }
+.wmStyle.on span{ color:#A88EFF }
+.slider{ height:6px;border-radius:99px;background:rgba(255,255,255,.12);position:relative;cursor:pointer }
+.slider .fill{ position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,#8B70FF,#A88EFF) }
+.slider .knob{ position:absolute;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:99px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.4);cursor:grab }
+
+/* TOOLBAR */
+.toolbar{ position:absolute;left:12px;right:12px;bottom:14px;z-index:30;background:rgba(20,21,42,.94);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:8px;display:flex;gap:4px;box-shadow:0 18px 36px rgba(0,0,0,.4) }
+.tbtn{ flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:transparent;border:0;color:rgba(255,255,255,.6);cursor:pointer;outline:none;padding:6px 2px;border-radius:11px;transition:all 180ms cubic-bezier(0.34,1.56,0.64,1) }
+.tbtn:hover{ color:#fff;background:rgba(255,255,255,.06) }
+.tbtn.active{ color:#A88EFF }
+.tbtn .ti{ width:30px;height:30px;border-radius:10px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;transition:all 180ms }
+.tbtn.active .ti{ background:linear-gradient(135deg,#8B70FF,#4524D6);color:#fff }
+.tbtn .tl{ font-size:8.5px;font-weight:600 }
+.scrim{ position:absolute;inset:0;z-index:44;background:rgba(5,6,23,.4);opacity:0;pointer-events:none;transition:opacity 320ms }
+.scrim.show{ opacity:1;pointer-events:auto }
+</style></head>
+<body><div class="card" style="padding:0;background:transparent;border:0">
+  <div class="stage">
+    <div class="phone">
+      <div class="scroll">
+        <div class="sec header">
+          <button class="back" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></button>
+          <div class="htitle"><span class="t">Diseñar ticket <span class="pro">Premium</span></span><span class="s">Doble toque para editar</span></div>
+          <button class="save" type="button"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>
+        </div>
+
+        <div class="sec canvasWrap">
+          <div class="canvas" id="canvas">
+            <div class="wmLayer single" id="wmLayer"><span id="wmSpan" style="font-size:34px;opacity:.05;transform:rotate(-20deg)">TIKETES</span></div>
+
+            <div class="el sel" data-type="logo" data-font="display"><div class="elLogo">Abarrotes El Sol</div></div>
+            <div class="el" data-type="store" data-font="mono"><div class="elStore">Tu tienda de confianza</div></div>
+            <div class="el" data-type="info" data-font="mono"><div class="elInfo">Av. Juárez 124, Centro, Monterrey<br/>Tel. 81 2244 1180 · RFC: AES920101</div></div>
+            <div class="divider"></div>
+            <div class="el" data-type="meta" data-font="mono"><div class="elInfo" style="display:flex;justify-content:space-between;text-align:left"><span>Folio: A-1250</span><span>08/06/2026 10:45</span></div></div>
+            <div class="el" data-type="cashier" data-font="mono"><div class="elInfo" style="text-align:left">Atendió: María R. · Caja 1</div></div>
+            <div class="divider"></div>
+            <div class="el" data-type="rows" data-font="mono"><div class="elRows">
+              <div class="elRow"><span class="q">1×</span><span class="nm">Café Molido 500g</span><span class="pr">$80.00</span></div>
+              <div class="elRow"><span class="q">2×</span><span class="nm">Leche Entera 1L</span><span class="pr">$56.00</span></div>
+              <div class="elRow"><span class="q">1×</span><span class="nm">Pan Bolillo</span><span class="pr">$4.50</span></div>
+            </div></div>
+            <div class="divider"></div>
+            <div class="el" data-type="sub" data-font="mono"><div class="elSub"><span>Subtotal (3 art.)</span><span>$140.50</span></div></div>
+            <div class="el" data-type="total" data-font="display"><div class="elTotal"><span>TOTAL</span><span>$140.50</span></div></div>
+            <div class="el" data-type="pay" data-font="mono"><div class="elSub"><span>Efectivo</span><span>$200.00</span></div></div>
+            <div class="el" data-type="change" data-font="mono"><div class="elChange"><span>Su cambio</span><span>$59.50</span></div></div>
+            <div class="el" data-type="foot" data-font="mono"><div class="elFoot">¡Gracias por su compra! Vuelva pronto 😊</div></div>
+          </div>
+        </div>
+        <div style="text-align:center;color:rgba(255,255,255,.4);font-size:10px;font-family:var(--font-mono);padding:10px 0 0">Selecciona y arrastra · doble toque para <span style="color:#A88EFF">editar</span></div>
+      </div>
+
+      <div class="scrim" id="scrim"></div>
+
+      <!-- INSPECTOR -->
+      <div class="inspector" id="inspector">
+        <div class="iHead"><span class="iTitle"><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><span id="iName">Texto</span></span><button class="ix" id="iClose" type="button"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
+        <div class="iField" id="iTextField"><label class="iLabel">Texto</label><textarea class="iInput" id="iText"></textarea></div>
+        <div class="iField"><label class="iLabel">Tipografía</label><div class="iSeg fonts" id="iFont"><button data-font="display" class="on" type="button">Aa</button><button data-font="body" type="button">Aa</button><button data-font="mono" type="button">Aa</button></div></div>
+        <div class="iRow2"><div class="iField"><label class="iLabel">Tamaño</label><div class="stepper"><button id="szDown" type="button">−</button><span class="val" id="szVal">15</span><button id="szUp" type="button">+</button></div></div>
+          <div class="iField"><label class="iLabel">Alinear</label><div class="iSeg" id="iAlign"><button data-al="left" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="13" y2="12"/><line x1="3" y1="18" x2="17" y2="18"/></svg></button><button data-al="center" class="on" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button><button data-al="right" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="11" y1="12" x2="21" y2="12"/><line x1="7" y1="18" x2="21" y2="18"/></svg></button></div></div>
+        </div>
+        <button class="delBtn" id="iDel" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>Quitar elemento</button>
+      </div>
+
+      <!-- ADD SHEET -->
+      <div class="sheet" id="addSheet">
+        <div class="grab"></div>
+        <div class="spTitle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A88EFF" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Agregar al ticket<button class="ix" id="addClose" type="button" style="margin-left:auto"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
+        <div class="addGrid" id="addGrid">
+          <button class="addItem" data-add="text" type="button"><span class="ai"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></span><span class="al">Texto libre</span></button>
+          <button class="addItem" data-add="divider" type="button"><span class="ai"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12" stroke-dasharray="3 3"/></svg></span><span class="al">Separador</span></button>
+          <button class="addItem" data-add="qr" type="button"><span class="ai"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></span><span class="al">Código QR</span></button>
+          <button class="addItem" data-add="barcode" type="button"><span class="ai"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="5" x2="4" y2="19"/><line x1="8" y1="5" x2="8" y2="19"/><line x1="12" y1="5" x2="12" y2="19"/><line x1="16" y1="5" x2="16" y2="19"/><line x1="20" y1="5" x2="20" y2="19"/></svg></span><span class="al">Código de barras</span></button>
+          <button class="addItem" data-add="whatsapp" type="button"><span class="ai"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg></span><span class="al">WhatsApp</span></button>
+          <button class="addItem" data-add="social" type="button"><span class="ai"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg></span><span class="al">Redes sociales</span></button>
+          <button class="addItem" data-add="rfc" type="button"><span class="ai"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span><span class="al">Datos fiscales</span></button>
+          <button class="addItem" data-add="thanks" type="button"><span class="ai"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></span><span class="al">Mensaje gracias</span></button>
+          <button class="addItem" data-add="promo" type="button"><span class="ai"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0l-7.18-7.18a2 2 0 0 1 0-2.83l7.18-7.18a2 2 0 0 1 2.83 0l7.18 7.18a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg></span><span class="al">Cupón / promo</span></button>
+        </div>
+      </div>
+
+      <!-- WATERMARK SHEET -->
+      <div class="sheet" id="wmSheet">
+        <div class="grab"></div>
+        <div class="spTitle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A88EFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Marca de agua<button class="ix" id="wmClose" type="button" style="margin-left:auto"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
+        <label class="wpLabel">Estilo</label>
+        <div class="wmStyles" id="wmStyles">
+          <button class="wmStyle s-off" data-style="off" type="button"><span>Sin marca</span></button>
+          <button class="wmStyle s-single on" data-style="single" type="button"><span>TIKETES</span></button>
+          <button class="wmStyle s-triple" data-style="triple" type="button"><span>TIK</span><span>TIK</span><span>TIK</span></button>
+          <button class="wmStyle s-tiled" data-style="tiled" type="button"><span>TK</span><span>TK</span><span>TK</span><span>TK</span></button>
+        </div>
+        <div class="wpField"><label class="wpLabel">Texto (multilínea)</label><textarea class="wpInput" id="wpText">TIKETES</textarea></div>
+        <div class="wpField"><label class="wpLabel">Inclinación <span class="pv" id="rotVal">−20°</span></label><div class="slider" id="rotSlider"><div class="fill" style="width:28%"></div><div class="knob" style="left:28%"></div></div></div>
+        <div class="wpField"><label class="wpLabel">Opacidad <span class="pv" id="opVal">5%</span></label><div class="slider" id="opSlider"><div class="fill" style="width:17%"></div><div class="knob" style="left:17%"></div></div></div>
+        <div class="wpField"><label class="wpLabel">Tamaño <span class="pv" id="wszVal">34</span></label><div class="slider" id="wszSlider"><div class="fill" style="width:40%"></div><div class="knob" style="left:40%"></div></div></div>
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar" id="toolbar">
+        <button class="tbtn active" data-tool="select" type="button"><span class="ti"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51z"/></svg></span><span class="tl">Mover</span></button>
+        <button class="tbtn" data-tool="text" type="button"><span class="ti"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></span><span class="tl">Editar</span></button>
+        <button class="tbtn" data-tool="wm" type="button"><span class="ti"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span class="tl">Marca</span></button>
+        <button class="tbtn" data-tool="add" type="button"><span class="ti"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span><span class="tl">Agregar</span></button>
+        <button class="tbtn" data-tool="reset" type="button"><span class="ti"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></span><span class="tl">Reiniciar</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const canvas=document.getElementById('canvas'), inspector=document.getElementById('inspector');
+  const addSheet=document.getElementById('addSheet'), wmSheet=document.getElementById('wmSheet'), scrim=document.getElementById('scrim');
+  const wmLayer=document.getElementById('wmLayer'), wmSpan=document.getElementById('wmSpan');
+  const FONTS={ display:"Sora, sans-serif", body:"Inter, sans-serif", mono:"'JetBrains Mono', monospace" };
+  let sel=null, drag=null;
+
+  function wireEl(el){
+    el.style.position='relative';
+    el.addEventListener('pointerdown', e=>{
+      if(e.target.closest('.inspector')) return;
+      selectEl(el);
+      drag={el,sx:e.clientX,sy:e.clientY,ox:parseFloat(el.dataset.tx||0),oy:parseFloat(el.dataset.ty||0)};
+      el.classList.add('dragging'); el.setPointerCapture(e.pointerId);
+    });
+    el.addEventListener('pointermove', e=>{
+      if(!drag||drag.el!==el) return;
+      const tx=drag.ox+(e.clientX-drag.sx), ty=drag.oy+(e.clientY-drag.sy);
+      el.dataset.tx=tx; el.dataset.ty=ty; el.style.transform=`translate(${tx}px,${ty}px)`;
+    });
+    el.addEventListener('pointerup', ()=>{ if(drag){drag.el.classList.remove('dragging');drag=null;} });
+    el.addEventListener('dblclick', ()=>{ selectEl(el); openInspector(el); });
+  }
+  canvas.querySelectorAll('.el').forEach(wireEl);
+
+  function selectEl(el){ canvas.querySelectorAll('.el').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); sel=el; }
+
+  function openInspector(el){
+    const txt=el.querySelector('.elLogo,.elStore,.elInfo,.elFoot,.elText');
+    document.getElementById('iName').textContent=({logo:'Encabezado',store:'Subtítulo',info:'Datos',meta:'Folio/Fecha',cashier:'Cajero',rows:'Productos',sub:'Subtotal',total:'Total',pay:'Pago',change:'Cambio',foot:'Mensaje',text:'Texto libre'})[el.dataset.type]||'Texto';
+    const tf=document.getElementById('iTextField');
+    if(txt){ tf.style.display='block'; document.getElementById('iText').value=txt.innerHTML.replace(/<br\\s*\\/?>/g,'\\n'); }
+    else tf.style.display='none';
+    document.querySelectorAll('#iFont button').forEach(b=>b.classList.toggle('on',b.dataset.font===el.dataset.font));
+    const ref=txt||el.firstElementChild; document.getElementById('szVal').textContent=Math.round(parseFloat(getComputedStyle(ref).fontSize));
+    inspector.classList.add('show');
+    const pr=inspector.parentElement.getBoundingClientRect(), er=el.getBoundingClientRect();
+    let top=er.bottom-pr.top+8; if(top+250>pr.height) top=er.top-pr.top-256;
+    inspector.style.top=Math.max(8,top)+'px'; inspector.style.left='50%'; inspector.style.transform='translateX(-50%)';
+    inspector._el=el; inspector._txt=txt;
+  }
+  document.getElementById('iClose').onclick=()=>inspector.classList.remove('show');
+  document.getElementById('iText').addEventListener('input',e=>{ if(inspector._txt) inspector._txt.innerHTML=e.target.value.replace(/\\n/g,'<br/>'); });
+  document.querySelectorAll('#iFont button').forEach(b=>b.onclick=()=>{ document.querySelectorAll('#iFont button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); if(inspector._el){inspector._el.dataset.font=b.dataset.font; inspector._el.style.fontFamily=FONTS[b.dataset.font];} });
+  document.querySelectorAll('#iAlign button').forEach(b=>b.onclick=()=>{ document.querySelectorAll('#iAlign button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); if(inspector._txt) inspector._txt.style.textAlign=b.dataset.al; });
+  function bump(d){ const v=document.getElementById('szVal'); let n=Math.max(7,Math.min(40,parseInt(v.textContent)+d)); v.textContent=n; if(inspector._txt) inspector._txt.style.fontSize=n+'px'; }
+  document.getElementById('szUp').onclick=()=>bump(1); document.getElementById('szDown').onclick=()=>bump(-1);
+  document.getElementById('iDel').onclick=()=>{ if(inspector._el){inspector._el.remove(); inspector.classList.remove('show');} };
+
+  // toolbar
+  function closeSheets(){ addSheet.classList.remove('show'); wmSheet.classList.remove('show'); scrim.classList.remove('show'); }
+  document.querySelectorAll('.tbtn').forEach(b=>b.onclick=()=>{
+    const t=b.dataset.tool;
+    document.querySelectorAll('.tbtn').forEach(x=>x.classList.toggle('active',x.dataset.tool===t));
+    if(t==='text'){ closeSheets(); if(sel) openInspector(sel); return; }
+    if(t==='wm'){ inspector.classList.remove('show'); addSheet.classList.remove('show'); wmSheet.classList.add('show'); scrim.classList.add('show'); return; }
+    if(t==='add'){ inspector.classList.remove('show'); wmSheet.classList.remove('show'); addSheet.classList.add('show'); scrim.classList.add('show'); return; }
+    if(t==='reset'){ location.reload(); return; }
+    if(t==='select'){ inspector.classList.remove('show'); closeSheets(); return; }
+  });
+  scrim.onclick=()=>{ closeSheets(); document.querySelector('.tbtn[data-tool="select"]').classList.add('active'); document.querySelectorAll('.tbtn').forEach(x=>{if(x.dataset.tool!=='select')x.classList.remove('active')}); };
+  document.getElementById('addClose').onclick=scrim.onclick; document.getElementById('wmClose').onclick=scrim.onclick;
+
+  // ADD elements
+  const TPL={
+    text:'<div class="elText">Texto personalizado</div>',
+    divider:'<div class="divider" style="margin:2px 0"></div>',
+    qr:'<div class="elQR"></div>',
+    barcode:'<div class="elBarcode"></div><div class="elInfo">7 501234 567890</div>',
+    whatsapp:'<div class="elInfo">📱 WhatsApp: 81 2244 1180<br/>Pide a domicilio</div>',
+    social:'<div class="elInfo">@AbarrotesElSol<br/>Síguenos en redes</div>',
+    rfc:'<div class="elInfo" style="text-align:left">RFC: AES920101AB3<br/>Régimen: 626 · Uso: G03</div>',
+    thanks:'<div class="elFoot">¡Gracias por tu preferencia!<br/>Tu compra apoya al comercio local 💜</div>',
+    promo:'<div class="elText" style="border:1px dashed #6B4BFF;padding:4px;border-radius:4px;color:#4524D6;font-weight:700">CUPÓN: 10% en tu próxima compra</div>'
+  };
+  document.querySelectorAll('#addGrid .addItem').forEach(b=>b.onclick=()=>{
+    const type=b.dataset.add; const el=document.createElement('div');
+    el.className='el'; el.dataset.type=type==='divider'?'div':'text'; el.dataset.font='mono';
+    el.style.fontFamily=FONTS.mono; el.innerHTML=TPL[type];
+    canvas.appendChild(el); wireEl(el); selectEl(el);
+    scrim.onclick();
+    el.scrollIntoView&&0;
+  });
+
+  // WATERMARK
+  const wpText=document.getElementById('wpText');
+  function applyWm(){
+    const style=document.querySelector('.wmStyle.on').dataset.style;
+    wmLayer.className='wmLayer '+style;
+    const txt=wpText.value||'TIKETES';
+    const op=(parseFloat(document.getElementById('opVal').textContent)/100)||.05;
+    const rot=parseInt(document.getElementById('rotVal').textContent)||-20;
+    const sz=parseInt(document.getElementById('wszVal').textContent)||34;
+    if(style==='off'){ return; }
+    if(style==='single'){ wmLayer.innerHTML=`<span style="font-size:${sz}px;opacity:${op};transform:rotate(${rot}deg)">${txt}</span>`; }
+    if(style==='triple'){ wmLayer.innerHTML=[0,1,2].map(()=>`<span style="font-size:${sz*0.7}px;opacity:${op};transform:rotate(${rot}deg)">${txt}</span>`).join(''); }
+    if(style==='tiled'){ let s=''; for(let i=0;i<9;i++) s+=`<span style="opacity:${op}">${txt}</span>`; wmLayer.innerHTML=s; }
+  }
+  document.querySelectorAll('.wmStyle').forEach(b=>b.onclick=()=>{ document.querySelectorAll('.wmStyle').forEach(x=>x.classList.remove('on')); b.classList.add('on'); applyWm(); });
+  wpText.addEventListener('input',applyWm);
+  function mkSlider(id,min,max,fmt){ const s=document.getElementById(id),f=s.querySelector('.fill'),k=s.querySelector('.knob');let d=false;
+    function set(cx){ const r=s.getBoundingClientRect();let p=Math.max(0,Math.min(1,(cx-r.left)/r.width));f.style.width=(p*100)+'%';k.style.left=(p*100)+'%';fmt(min+(max-min)*p);applyWm(); }
+    k.addEventListener('pointerdown',e=>{d=true;k.setPointerCapture(e.pointerId);});k.addEventListener('pointermove',e=>{if(d)set(e.clientX);});k.addEventListener('pointerup',()=>d=false);s.addEventListener('click',e=>set(e.clientX)); }
+  mkSlider('rotSlider',-45,45,v=>document.getElementById('rotVal').textContent=Math.round(v)+'°');
+  mkSlider('opSlider',0,30,v=>document.getElementById('opVal').textContent=Math.round(v)+'%');
+  mkSlider('wszSlider',16,64,v=>document.getElementById('wszVal').textContent=Math.round(v));
+})();
+</script>
+</body></html>

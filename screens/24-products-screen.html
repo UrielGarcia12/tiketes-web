@@ -1,0 +1,387 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+.stage{ background: linear-gradient(180deg, #EEEEF5 0%, #F7F7FB 100%);padding:24px;border-radius:18px;display:flex;justify-content:center;align-items:flex-start }
+.phone{
+  position:relative;width:340px;height:720px;border-radius:32px;background:#F7F7FB;overflow:hidden;
+  box-shadow: 0 28px 64px rgba(15,15,40,.18), 0 8px 18px rgba(15,15,40,.06);
+}
+
+/* ── HEADER ── */
+.appHead{
+  display:flex;align-items:center;justify-content:space-between;padding:16px 18px 6px;background:transparent;
+}
+.appHead .back{ width:36px;height:36px;border-radius:12px;border:0;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--ink-900);cursor:pointer;outline:none;box-shadow:0 1px 2px rgba(15,15,40,.04) }
+.appHead .title{ display:flex;flex-direction:column;align-items:center;line-height:1.1 }
+.appHead .title .t{ font-family:var(--font-display);font-weight:700;font-size:16px;color:var(--ink-900);letter-spacing:-.01em }
+.appHead .title .s{ font-size:10.5px;color:var(--fg-muted);margin-top:2px;font-family:var(--font-mono);letter-spacing:.04em }
+.appHead .add{ width:36px;height:36px;border-radius:12px;border:0;background:var(--violet-500);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;outline:none;box-shadow:0 6px 16px rgba(107,75,255,.32);transition: all 220ms var(--ease-spring) }
+.appHead .add:hover{ transform:scale(1.06);box-shadow:0 10px 22px rgba(107,75,255,.42) }
+
+/* Search */
+.searchWrap{ position:relative;padding:8px 18px 10px }
+.searchWrap svg.lens{ position:absolute;left:32px;top:50%;transform:translateY(-50%);color:var(--fg-subtle);pointer-events:none }
+.searchWrap input{
+  width:100%;border:1px solid var(--border);border-radius:14px;background:#fff;
+  padding:11px 40px 11px 38px;font-family:var(--font-body);font-size:13px;color:var(--ink-900);
+  outline:none;box-sizing:border-box;transition: all 220ms var(--ease-out);
+  box-shadow:0 1px 2px rgba(15,15,40,.04);
+}
+.searchWrap input:focus{ border-color:var(--violet-500);box-shadow:0 0 0 3px rgba(107,75,255,.16) }
+.searchWrap .voice{ position:absolute;right:30px;top:50%;transform:translateY(-50%);background:transparent;border:0;color:var(--fg-subtle);cursor:pointer;outline:none;display:flex }
+
+/* Restock CTA — between search and categories */
+.restockRow{ padding:0 18px 12px }
+.restock{
+  width:100%;background: linear-gradient(135deg, #FFF3E0 0%, #FFF7E6 100%);
+  border:1.5px solid #F5C518;border-radius:14px;padding:11px 14px;
+  display:flex;align-items:center;gap:10px;cursor:pointer;outline:none;text-align:left;
+  transition: all 220ms var(--ease-out);
+}
+.restock:hover{ background: linear-gradient(135deg, #FFEFCD 0%, #FFF7E6 100%);transform:translateY(-1px);box-shadow:0 8px 18px rgba(245,197,24,.22) }
+.restock .ic{ width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#FDE68A,#F5C518);color:#7A5500;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation: rsPulse 2.4s ease-in-out infinite }
+@keyframes rsPulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+.restock .info{ flex:1 }
+.restock .lbl{ font-family:var(--font-display);font-weight:700;font-size:12.5px;color:var(--ink-900);letter-spacing:-.01em }
+.restock .sub{ font-size:10.5px;color:#A07300;margin-top:2px;font-weight:600 }
+.restock .chev{ color:#A07300 }
+
+/* Section pattern (reuse from Home) */
+.section{ padding:0 18px;margin-top:14px }
+.sectionHead{ display:flex;justify-content:space-between;align-items:center;margin-bottom:10px }
+.sectionHead .t{ font-family:var(--font-display);font-weight:700;font-size:13px;color:var(--ink-900);letter-spacing:-.005em;display:inline-flex;align-items:center;gap:8px }
+.sectionHead .t::before{ content:'';width:3px;height:12px;background:var(--violet-500);border-radius:3px }
+.sectionHead .see{ background:transparent;border:0;color:var(--violet-700);font-size:11px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:3px;outline:none }
+
+/* Categories grid */
+.catGrid{ display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px }
+.cat{
+  background:#fff;border:1px solid #EEEEF5;border-radius:14px;padding:10px 6px;cursor:pointer;outline:none;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  transition: all 220ms var(--ease-spring);box-shadow:0 1px 2px rgba(15,15,40,.04);
+  -webkit-tap-highlight-color: transparent;
+}
+.cat:hover{ transform:translateY(-2px); box-shadow: 0 8px 18px rgba(15,15,40,.08); border-color:var(--violet-200) }
+.cat.active{ border-color:var(--violet-500); background:linear-gradient(180deg,#FAFAFE 0%, #fff 100%); box-shadow: 0 6px 16px rgba(107,75,255,.14) }
+.cat .ic{ width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;transition: transform 320ms var(--ease-spring) }
+.cat:hover .ic{ transform: rotate(-6deg) scale(1.08) }
+.cat.abarrotes .ic{ background:#FFF7E6;color:#A07300 }
+.cat.bebidas   .ic{ background:#E6F0FF;color:#1E5BB8 }
+.cat.lacteos   .ic{ background:#F2EEFF;color:#4524D6 }
+.cat.snacks    .ic{ background:#FFE6E6;color:#B8252B }
+.cat .lbl{ font-size:10px;font-weight:600;color:var(--ink-900) }
+.cat.active .lbl{ color:var(--violet-700) }
+.cat .num{ font-family:var(--font-mono);font-size:9px;color:var(--fg-muted);font-weight:500 }
+
+/* Inventory list */
+.listWrap{ padding:0 18px 10px }
+.pTitle{ display:flex;justify-content:space-between;align-items:center;margin:14px 0 10px }
+.pTitle .t{ font-family:var(--font-display);font-weight:700;font-size:13px;color:var(--ink-900);letter-spacing:-.005em;display:inline-flex;align-items:center;gap:8px }
+.pTitle .t::before{ content:'';width:3px;height:12px;background:var(--violet-500);border-radius:3px }
+.pTitle .count{ font-family:var(--font-mono);font-size:10.5px;color:var(--fg-muted);font-weight:600;background:#EEEEF5;padding:3px 8px;border-radius:99px;letter-spacing:.04em }
+
+.pList{ display:flex;flex-direction:column;gap:8px }
+@keyframes pCardIn{ 0%{opacity:0;transform:translateY(10px) scale(.97)} 100%{opacity:1;transform:translateY(0) scale(1)} }
+.p{
+  position:relative;display:flex;align-items:center;gap:11px;padding:12px;background:#fff;border:1px solid #EEEEF5;border-radius:14px;
+  transition: all 240ms var(--ease-spring);cursor:pointer;
+  animation: pCardIn 520ms var(--ease-spring) both;
+  overflow:hidden;
+}
+.p:nth-child(1){ animation-delay: 0ms }
+.p:nth-child(2){ animation-delay: 80ms }
+.p:nth-child(3){ animation-delay: 160ms }
+.p:nth-child(4){ animation-delay: 240ms }
+.p:hover{ border-color:var(--violet-200);transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,15,40,.08) }
+.p .thumb{ width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:16px;flex-shrink:0;transition: transform 320ms var(--ease-spring);position:relative }
+.p:hover .thumb{ transform: rotate(-6deg) scale(1.05) }
+.p .thumb.coffee{ background:#3A2417;color:#E9D7BB }
+.p .thumb.sugar{ background:#FFF7E6;color:#A07300 }
+.p .thumb.milk{ background:#E6F0FF;color:#1E5BB8 }
+.p .thumb.bread{ background:#F2EEFF;color:#4524D6 }
+.p .info{ flex:1;min-width:0;display:flex;flex-direction:column;gap:5px }
+.p .topLine{ display:flex;align-items:center;gap:6px;flex-wrap:wrap }
+.p .name{ font-size:13px;font-weight:600;color:var(--ink-900);font-family:var(--font-display);letter-spacing:-.005em;line-height:1.1 }
+.p .meta{ display:flex;align-items:center;gap:6px;font-size:10px;color:var(--fg-muted) }
+.p .meta .sku{ font-family:var(--font-mono);background:var(--ink-100);color:var(--ink-700);padding:1px 5px;border-radius:4px;font-weight:600;letter-spacing:.04em }
+.p .right{ text-align:right;flex-shrink:0 }
+.p .price{ font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--ink-900);font-variant-numeric:tabular-nums;letter-spacing:-.01em }
+.p .stock{ display:inline-flex;align-items:center;gap:4px;margin-top:3px;font-family:var(--font-mono);font-size:9.5px;font-weight:600;padding:1.5px 5px;border-radius:5px }
+.p .stock.hi{ background:#DCFCE7;color:#137333 }
+.p .stock.mid{ background:#FEF3C7;color:#7A5500 }
+.p .stock.low{ background:#FEE2E2;color:#A02020 }
+
+/* ── Status insignias on products ── */
+.pin{
+  display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  padding:3px 7px 3px 6px;border-radius:99px;line-height:1;
+}
+.pin.best{
+  background: linear-gradient(135deg,#FF7A18 0%, #EF4444 50%, #DC2626 100%);
+  background-size: 200% 200%;color:#fff;
+  animation: shimmerPin 3s ease-in-out infinite;
+  box-shadow: 0 3px 10px rgba(239,68,68,.32);
+}
+@keyframes shimmerPin{ 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+.pin.best svg{ animation: flickerPin 1.4s ease-in-out infinite }
+@keyframes flickerPin{ 0%,100%{transform:scale(1) rotate(0)} 25%{transform:scale(1.12) rotate(-3deg)} 50%{transform:scale(.96) rotate(2deg)} 75%{transform:scale(1.10) rotate(-2deg)} }
+.pin.rising{ background:#DCFCE7;color:#137333;box-shadow: inset 0 0 0 1px rgba(34,197,94,.22) }
+.pin.rising svg{ animation: bobUpPin 1.6s ease-in-out infinite }
+@keyframes bobUpPin{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+.pin.fresh{ background:#F2EEFF;color:#4524D6;box-shadow: inset 0 0 0 1px rgba(107,75,255,.22) }
+.pin.fresh svg{ animation: sparklePin 1.8s ease-in-out infinite }
+@keyframes sparklePin{ 0%,100%{transform:scale(1);opacity:1} 25%{transform:scale(.85);opacity:.55} 50%{transform:scale(1.15);opacity:1} 75%{transform:scale(.95);opacity:.8} }
+.pin.slow{ background:var(--ink-100);color:var(--ink-600);box-shadow: inset 0 0 0 1px var(--border) }
+.pin.slow svg{ animation: slowTickPin 4s linear infinite;transform-origin:center }
+@keyframes slowTickPin{ to{ transform: rotate(360deg) } }
+.pin.restock{ background:#FEF3C7;color:#7A5500;box-shadow: inset 0 0 0 1px rgba(245,197,24,.30) }
+.pin.restock svg{ animation: spinPin 1.4s var(--ease-out) infinite }
+@keyframes spinPin{ 0%{transform:rotate(0)} 50%,100%{transform:rotate(360deg)} }
+
+/* Subtle accent stripe on cards with active badges */
+.p.has-best::before{ content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#FF7A18,#EF4444);border-radius:3px 0 0 3px }
+.p.has-fresh::before{ content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#A88EFF,#6B4BFF);border-radius:3px 0 0 3px }
+.p.has-rising::before{ content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#4ADE80,#22C55E);border-radius:3px 0 0 3px }
+
+/* Scroll wrapper to keep bottom nav fixed */
+.scroll{ position:absolute;inset:0;overflow-y:auto;padding-bottom:118px }
+
+/* ── BOTTOM NAV (unchanged) ── */
+.barWrap{ position:absolute;left:14px;right:14px;bottom:14px;z-index:5 }
+.bar{
+  position:relative;background:rgba(255,255,255,.94);backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border:1px solid rgba(255,255,255,.6);border-radius:22px;padding:8px 10px;
+  display:grid;grid-template-columns:1fr 1fr 64px 1fr 1fr;align-items:center;justify-items:center;
+  height:72px;gap:4px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 18px 36px rgba(15,15,40,.10), 0 4px 12px rgba(15,15,40,.04);
+}
+.pill{
+  position:absolute;top:6px;left:0;height:50px;width:60px;border-radius:16px;
+  background: linear-gradient(180deg, rgba(107,75,255,.12) 0%, rgba(107,75,255,.04) 100%);
+  border:1px solid rgba(107,75,255,.22);z-index:0;
+  box-shadow: 0 4px 12px rgba(107,75,255,.10), inset 0 1px 0 rgba(255,255,255,.4);
+  transform: translateX(calc(100% + 32px));
+}
+.item{
+  position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  background:transparent;border:0;cursor:pointer;padding:6px 2px;outline:none;
+  color:var(--ink-400);font-family:var(--font-body);font-size:10px;font-weight:500;
+  -webkit-tap-highlight-color: transparent;width:100%;
+}
+.item.active{ color:var(--violet-700) }
+.item.active .lbl{ font-weight:600 }
+.item .badge{
+  position:absolute;top:0;right:8px;min-width:14px;height:14px;border-radius:99px;
+  background:linear-gradient(135deg, #EF4444, #DC2626);color:#fff;font-family:var(--font-display);font-weight:700;font-size:8.5px;
+  display:inline-flex;align-items:center;justify-content:center;padding:0 4px;
+  box-shadow: 0 0 0 2px #fff, 0 4px 10px rgba(239,68,68,.42);
+}
+.fab{
+  position:relative;width:54px;height:54px;border-radius:999px;border:0;cursor:pointer;outline:none;
+  background: linear-gradient(135deg, #A88EFF 0%, #6B4BFF 45%, #4524D6 100%);
+  color:#fff;display:flex;align-items:center;justify-content:center;margin-top:-26px;
+  box-shadow: 0 12px 28px rgba(107,75,255,.55), inset 0 1px 0 rgba(255,255,255,.30), inset 0 -8px 16px rgba(0,0,0,.10);
+  -webkit-tap-highlight-color: transparent;z-index:2;
+}
+.fab::after{ content:'';position:absolute;inset:-2px;border-radius:999px;box-shadow:0 0 0 0 rgba(107,75,255,.45);animation: fabPulse 2.4s ease-out infinite;pointer-events:none }
+@keyframes fabPulse{ 0%{box-shadow:0 0 0 0 rgba(107,75,255,.42)} 70%{box-shadow:0 0 0 18px rgba(107,75,255,0)} 100%{box-shadow:0 0 0 0 rgba(107,75,255,0)} }
+</style></head>
+<body><div class="card" style="padding:0;background:transparent;border:0">
+  <div class="stage">
+    <div class="phone">
+      <div class="scroll">
+
+        <!-- HEADER -->
+        <div class="appHead">
+          <button class="back" type="button" aria-label="Atrás">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </button>
+          <div class="title">
+            <span class="t">Productos</span>
+            <span class="s">142 en stock · 8 bajos</span>
+          </div>
+          <button class="add" type="button" aria-label="Agregar producto">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="12" y1="6" x2="12" y2="18"/><line x1="6" y1="12" x2="18" y2="12"/></svg>
+          </button>
+        </div>
+
+        <!-- SEARCH -->
+        <div class="searchWrap">
+          <svg class="lens" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input type="text" placeholder="Buscar producto o SKU…"/>
+          <button class="voice" type="button" aria-label="Voz">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+          </button>
+        </div>
+
+        <!-- RESTOCK CTA -->
+        <div class="restockRow">
+          <button class="restock" type="button">
+            <span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><polyline points="21 3 21 9 15 9"/></svg></span>
+            <div class="info">
+              <div class="lbl">Reabastecer ahora</div>
+              <div class="sub">8 productos con bajo stock</div>
+            </div>
+            <span class="chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span>
+          </button>
+        </div>
+
+        <!-- CATEGORIES -->
+        <div class="section">
+          <div class="sectionHead">
+            <span class="t">Categorías</span>
+            <button class="see" type="button">Ver todas <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></button>
+          </div>
+          <div class="catGrid">
+            <button class="cat abarrotes active" type="button">
+              <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8 12 13 3 8"/><path d="M3 8v8l9 5 9-5V8L12 3Z"/></svg></div>
+              <div class="lbl">Abarrotes</div>
+              <div class="num">48</div>
+            </button>
+            <button class="cat bebidas" type="button">
+              <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2h14l-2 8a4 4 0 0 1-4 3h-2a4 4 0 0 1-4-3z"/><line x1="12" y1="13" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></div>
+              <div class="lbl">Bebidas</div>
+              <div class="num">36</div>
+            </button>
+            <button class="cat lacteos" type="button">
+              <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8v4l2 4v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10l2-4z"/></svg></div>
+              <div class="lbl">Lácteos</div>
+              <div class="num">24</div>
+            </button>
+            <button class="cat snacks" type="button">
+              <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l2 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z"/><line x1="4" y1="8" x2="20" y2="8"/></svg></div>
+              <div class="lbl">Snacks</div>
+              <div class="num">34</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- INVENTORY LIST -->
+        <div class="listWrap">
+          <div class="pTitle">
+            <span class="t">Abarrotes</span>
+            <span class="count">48 ítems</span>
+          </div>
+          <div class="pList">
+            <div class="p has-best">
+              <div class="thumb coffee">☕</div>
+              <div class="info">
+                <div class="topLine"><span class="name">Café Molido 500g</span></div>
+                <div class="topLine">
+                  <span class="pin best">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c0 4-4 4-4 8 0 1.5.7 2.8 1.7 3.7C8.1 14.2 7 12.3 7 10c-3 2-5 5-5 9 0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5 0-4-2-7-5-9 0 2.3-1.1 4.2-2.7 3.7 1-.9 1.7-2.2 1.7-3.7 0-4-4-4-4-8z"/></svg>
+                    Más vendido
+                  </span>
+                  <span class="meta"><span class="sku">CAF-500</span></span>
+                </div>
+              </div>
+              <div class="right">
+                <div class="price">$80.00</div>
+                <div class="stock hi">24 stock</div>
+              </div>
+            </div>
+
+            <div class="p has-fresh">
+              <div class="thumb bread">P</div>
+              <div class="info">
+                <div class="topLine"><span class="name">Pan Multigrano</span></div>
+                <div class="topLine">
+                  <span class="pin fresh">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    Nuevo
+                  </span>
+                  <span class="meta"><span class="sku">PAN-MUL</span></span>
+                </div>
+              </div>
+              <div class="right">
+                <div class="price">$32.00</div>
+                <div class="stock hi">20 stock</div>
+              </div>
+            </div>
+
+            <div class="p has-rising">
+              <div class="thumb milk">L</div>
+              <div class="info">
+                <div class="topLine"><span class="name">Leche Entera 1L</span></div>
+                <div class="topLine">
+                  <span class="pin rising">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                    Tendencia
+                  </span>
+                  <span class="meta"><span class="sku">LEC-1L</span></span>
+                </div>
+              </div>
+              <div class="right">
+                <div class="price">$28.00</div>
+                <div class="stock mid">14 stock</div>
+              </div>
+            </div>
+
+            <div class="p">
+              <div class="thumb sugar">A</div>
+              <div class="info">
+                <div class="topLine"><span class="name">Aceite Vegetal 1L</span></div>
+                <div class="topLine">
+                  <span class="pin slow">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Sin movimiento
+                  </span>
+                  <span class="meta"><span class="sku">ACE-1L</span></span>
+                </div>
+              </div>
+              <div class="right">
+                <div class="price">$42.00</div>
+                <div class="stock hi">28 stock</div>
+              </div>
+            </div>
+
+            <div class="p">
+              <div class="thumb sugar">A</div>
+              <div class="info">
+                <div class="topLine"><span class="name">Azúcar 1kg</span></div>
+                <div class="topLine">
+                  <span class="pin restock">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><polyline points="21 3 21 9 15 9"/></svg>
+                    Reabastecer
+                  </span>
+                  <span class="meta"><span class="sku">AZU-1KG</span></span>
+                </div>
+              </div>
+              <div class="right">
+                <div class="price">$50.00</div>
+                <div class="stock low">3 stock</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM NAV -->
+      <div class="barWrap">
+        <div class="bar">
+          <div class="pill"></div>
+          <button class="item" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 12 3l9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+            <span class="lbl">Inicio</span>
+          </button>
+          <button class="item" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.5 3h3l3 13h12l2.5-9H6"/></svg>
+            <span class="lbl">Ventas</span>
+          </button>
+          <button class="fab" aria-label="Acciones" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="12" y1="6" x2="12" y2="18"/><line x1="6" y1="12" x2="18" y2="12"/></svg>
+          </button>
+          <button class="item active" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="m7.5 4.27 9 5.15"/><path d="M21 8 12 13 3 8z"/><path d="M3 8v8l9 5 9-5V8L12 3z" opacity=".55"/></svg>
+            <span class="lbl">Productos</span>
+          </button>
+          <button class="item" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span class="lbl">Perfil</span>
+            <span class="badge">3</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></body></html>

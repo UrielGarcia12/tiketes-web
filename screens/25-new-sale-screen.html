@@ -1,0 +1,275 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+.stage{ background: linear-gradient(180deg, #EEEEF5 0%, #F7F7FB 100%);padding:24px;border-radius:18px;display:flex;justify-content:center;align-items:flex-start }
+.phone{
+  position:relative;width:340px;height:720px;border-radius:32px;background:#F7F7FB;overflow:hidden;
+  box-shadow: 0 28px 64px rgba(15,15,40,.18), 0 8px 18px rgba(15,15,40,.06);
+}
+.scroll{ position:absolute;inset:0;overflow-y:auto;padding-bottom:24px }
+
+/* ── HEADER ── */
+.appHead{ display:flex;align-items:center;justify-content:space-between;padding:16px 18px 6px }
+.appHead .back{ width:36px;height:36px;border-radius:12px;border:0;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--ink-900);cursor:pointer;outline:none;box-shadow:0 1px 2px rgba(15,15,40,.04);transition: all 220ms var(--ease-spring) }
+.appHead .back:hover{ transform: translateX(-2px); background:#FAFAFE }
+.appHead .title{ display:flex;flex-direction:column;align-items:center;line-height:1.1 }
+.appHead .title .t{ font-family:var(--font-display);font-weight:700;font-size:16px;color:var(--ink-900);letter-spacing:-.01em }
+.appHead .title .s{ font-size:10.5px;color:var(--fg-muted);margin-top:2px;font-family:var(--font-mono);letter-spacing:.04em }
+.appHead .cart{ width:36px;height:36px;border-radius:12px;border:0;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--ink-900);cursor:pointer;outline:none;box-shadow:0 1px 2px rgba(15,15,40,.04);position:relative }
+.appHead .cart .badge{ position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;border-radius:99px;background:linear-gradient(135deg,#EF4444,#DC2626);color:#fff;font-family:var(--font-display);font-weight:700;font-size:9px;display:inline-flex;align-items:center;justify-content:center;padding:0 4px;box-shadow:0 0 0 2px #fff, 0 4px 10px rgba(239,68,68,.42);animation: badgeBob 2.4s ease-in-out infinite }
+@keyframes badgeBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+
+/* ── Search ── */
+.searchWrap{ position:relative;padding:8px 18px 10px }
+.searchWrap svg.lens{ position:absolute;left:32px;top:50%;transform:translateY(-50%);color:var(--fg-subtle);pointer-events:none;transition: color 240ms var(--ease-out), transform 360ms var(--ease-spring) }
+.searchWrap input{
+  width:100%;border:1px solid var(--border);border-radius:14px;background:#fff;
+  padding:11px 14px 11px 38px;font-family:var(--font-body);font-size:13px;color:var(--ink-900);
+  outline:none;box-sizing:border-box;transition: all 220ms var(--ease-out);
+  box-shadow:0 1px 2px rgba(15,15,40,.04);
+}
+.searchWrap input:focus{ border-color:var(--violet-500);box-shadow:0 0 0 3px rgba(107,75,255,.16) }
+.searchWrap input:focus + .lens{ color:var(--violet-500) }
+
+/* ── Scanner card (dark, animated) ── */
+.section{ padding:0 18px;margin-top:8px }
+.sectionHead{ display:flex;justify-content:space-between;align-items:center;margin-bottom:10px }
+.sectionHead .t{ font-family:var(--font-display);font-weight:700;font-size:11px;color:var(--fg-muted);letter-spacing:.18em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px }
+.sectionHead .t::before{ content:'';width:5px;height:5px;border-radius:99px;background:var(--violet-500);box-shadow:0 0 8px var(--violet-500);animation: blinkDot 1.6s ease-in-out infinite }
+@keyframes blinkDot { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+.scanCard{
+  position:relative;background:linear-gradient(135deg,#0F0F2A 0%,#050617 100%);
+  border-radius:18px;padding:22px 18px 18px;color:#fff;text-align:center;cursor:pointer;outline:none;
+  overflow:hidden;transition: all 280ms var(--ease-spring);
+  box-shadow: 0 18px 36px rgba(15,15,40,.32);
+  border:0;width:100%;
+}
+.scanCard:hover{ transform: translateY(-2px); box-shadow: 0 24px 48px rgba(107,75,255,.32) }
+.scanCard::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(60% 80% at 80% 30%, rgba(245,197,24,.10), transparent 60%),
+    radial-gradient(50% 70% at 20% 80%, rgba(167,142,255,.22), transparent 60%);
+}
+.scanCard::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image: radial-gradient(rgba(167,142,255,.4) 1px, transparent 1.2px);
+  background-size: 16px 16px;
+  mask: radial-gradient(closest-side, #000 0%, transparent 80%);
+  -webkit-mask: radial-gradient(closest-side, #000 0%, transparent 80%);
+  opacity:.12;
+}
+
+.scanIcoWrap{
+  position:relative;width:72px;height:72px;margin:0 auto 14px;
+  border-radius:18px;background: linear-gradient(135deg, rgba(167,142,255,.22) 0%, rgba(107,75,255,.32) 100%);
+  border:1px solid rgba(167,142,255,.42);
+  display:flex;align-items:center;justify-content:center;color:#A88EFF;
+  box-shadow: 0 10px 24px rgba(107,75,255,.32), inset 0 1px 0 rgba(255,255,255,.10);
+  z-index:1;
+}
+@keyframes scanPulse { 0%{box-shadow: 0 0 0 0 rgba(167,142,255,.55), 0 10px 24px rgba(107,75,255,.32), inset 0 1px 0 rgba(255,255,255,.10)} 70%{box-shadow: 0 0 0 16px rgba(167,142,255,0), 0 10px 24px rgba(107,75,255,.32), inset 0 1px 0 rgba(255,255,255,.10)} 100%{box-shadow: 0 0 0 0 rgba(167,142,255,0), 0 10px 24px rgba(107,75,255,.32), inset 0 1px 0 rgba(255,255,255,.10)} }
+.scanIcoWrap{ animation: scanPulse 2.2s ease-out infinite }
+@keyframes lineSweep{ 0%{transform:translateY(-22px);opacity:.3} 50%{opacity:1} 100%{transform:translateY(22px);opacity:.3} }
+.scanIcoWrap .line{ position:absolute;left:14px;right:14px;top:50%;height:2px;background:linear-gradient(90deg,transparent,#A88EFF,transparent);box-shadow:0 0 12px #6B4BFF;animation: lineSweep 1.8s ease-in-out infinite }
+
+.scanCard .ttl{ font-family:var(--font-display);font-weight:700;font-size:16px;color:#fff;letter-spacing:-.01em;position:relative;z-index:1 }
+.scanCard .sub{ font-size:12px;color:rgba(255,255,255,.55);margin-top:4px;position:relative;z-index:1 }
+.scanCard .chip{ display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(167,142,255,.16);color:#A88EFF;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:99px;position:relative;z-index:1 }
+
+/* ── Categories grid (2 cols × 3 rows, colored cards) ── */
+.catGrid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+@keyframes catIn{ 0%{opacity:0;transform:translateY(10px) scale(.96)} 100%{opacity:1;transform:translateY(0) scale(1)} }
+.cat{
+  position:relative;border-radius:18px;padding:16px 14px 14px;cursor:pointer;outline:none;
+  display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:120px;
+  border:0;transition: all 260ms var(--ease-spring);
+  animation: catIn 520ms var(--ease-spring) both;
+  overflow:hidden;
+}
+.cat:nth-child(1){ animation-delay:  0ms }
+.cat:nth-child(2){ animation-delay: 50ms }
+.cat:nth-child(3){ animation-delay:100ms }
+.cat:nth-child(4){ animation-delay:150ms }
+.cat:nth-child(5){ animation-delay:200ms }
+.cat:nth-child(6){ animation-delay:250ms }
+.cat:nth-child(7){ animation-delay:300ms }
+.cat:nth-child(8){ animation-delay:350ms }
+.cat:nth-child(9){ animation-delay:400ms }
+.cat:nth-child(10){ animation-delay:450ms }
+.cat:nth-child(11){ animation-delay:500ms }
+.cat:hover{ transform:translateY(-3px) }
+.cat .emoji{ font-size:28px;line-height:1;filter:drop-shadow(0 3px 8px rgba(0,0,0,.10));transition: transform 360ms var(--ease-spring) }
+.cat:hover .emoji{ transform: rotate(-8deg) scale(1.12) }
+.cat .lbl{ font-family:var(--font-display);font-weight:700;font-size:14px;letter-spacing:-.01em;line-height:1 }
+.cat .meta{ display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:auto }
+.cat .num{ font-family:var(--font-mono);font-size:9.5px;font-weight:700;letter-spacing:.06em;opacity:.72 }
+.cat .chev{ width:22px;height:22px;border-radius:99px;background:rgba(0,0,0,.06);display:inline-flex;align-items:center;justify-content:center;transition: all 280ms var(--ease-spring);opacity:.5 }
+.cat:hover .chev{ opacity:1;background:rgba(0,0,0,.10);transform: translateX(3px) }
+
+/* sparkle dot animation */
+.cat::after{
+  content:'';position:absolute;top:14px;right:14px;width:6px;height:6px;border-radius:99px;
+  background:currentColor;opacity:.18;
+  animation: catSparkle 3s ease-in-out infinite;
+}
+@keyframes catSparkle{ 0%,100%{transform:scale(.6);opacity:.18} 50%{transform:scale(1.4);opacity:.45} }
+
+/* color variants */
+.cat.abarrotes{ background:linear-gradient(135deg,#FFF7E6 0%, #FFEFCD 100%);color:#A07300;box-shadow: 0 6px 16px rgba(245,197,24,.14) }
+.cat.bebidas  { background:linear-gradient(135deg,#E6F0FF 0%, #CFE3FF 100%);color:#1E5BB8;box-shadow: 0 6px 16px rgba(30,91,184,.14) }
+.cat.lacteos  { background:linear-gradient(135deg,#DCFCE7 0%, #BBF7D0 100%);color:#137333;box-shadow: 0 6px 16px rgba(34,197,94,.14) }
+.cat.snacks   { background:linear-gradient(135deg,#FFE6E6 0%, #FFCCCC 100%);color:#B8252B;box-shadow: 0 6px 16px rgba(184,37,43,.14) }
+.cat.papas    { background:linear-gradient(135deg,#FEF3C7 0%, #FDE68A 100%);color:#7A5500;box-shadow: 0 6px 16px rgba(245,197,24,.18) }
+.cat.galletas { background:linear-gradient(135deg,#F2EEFF 0%, #E3DBFF 100%);color:#4524D6;box-shadow: 0 6px 16px rgba(107,75,255,.16) }
+.cat.dulces   { background:linear-gradient(135deg,#FFE9F2 0%, #FFC7DD 100%);color:#9D174D;box-shadow: 0 6px 16px rgba(157,23,77,.14) }
+.cat.panaderia{ background:linear-gradient(135deg,#FFF3E0 0%, #FFE0B3 100%);color:#A0522D;box-shadow: 0 6px 16px rgba(160,82,45,.14) }
+.cat.limpieza { background:linear-gradient(135deg,#E6FBFF 0%, #C7F0FA 100%);color:#0E7A9E;box-shadow: 0 6px 16px rgba(14,122,158,.14) }
+.cat.cuidado  { background:linear-gradient(135deg,#EAFCE8 0%, #C7F0C2 100%);color:#1F7D2A;box-shadow: 0 6px 16px rgba(31,125,42,.14) }
+.cat.mascotas { background:linear-gradient(135deg,#FFEDE0 0%, #FFD3B3 100%);color:#9C4A1C;box-shadow: 0 6px 16px rgba(156,74,28,.14) }
+.cat.otros    { background:linear-gradient(135deg,#EEEEF5 0%, #DCDCE8 100%);color:#3F3F58;box-shadow: 0 6px 16px rgba(15,15,40,.10) }
+
+/* hot tag floating top-right on one of the cards */
+.cat .hot{ position:absolute;top:10px;right:10px;background:linear-gradient(135deg,#FF7A18,#EF4444);color:#fff;font-size:8.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:99px;box-shadow:0 4px 10px rgba(239,68,68,.32);animation: hotFloat 2.4s ease-in-out infinite;z-index:2 }
+@keyframes hotFloat{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+
+/* ── BOTTOM NAV ── */
+.barWrap{ position:absolute;left:14px;right:14px;bottom:14px;z-index:5 }
+.bar{
+  position:relative;background:rgba(255,255,255,.94);backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border:1px solid rgba(255,255,255,.6);border-radius:22px;padding:8px 10px;
+  display:grid;grid-template-columns:1fr 1fr 64px 1fr 1fr;align-items:center;justify-items:center;
+  height:72px;gap:4px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 18px 36px rgba(15,15,40,.10), 0 4px 12px rgba(15,15,40,.04);
+}
+.item{ position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:transparent;border:0;cursor:pointer;padding:6px 2px;outline:none;color:var(--ink-400);font-family:var(--font-body);font-size:10px;font-weight:500;width:100% }
+.item.active{ color:var(--violet-700) }
+.item.active .lbl{ font-weight:600 }
+.item .badge{ position:absolute;top:0;right:8px;min-width:14px;height:14px;border-radius:99px;background:linear-gradient(135deg, #EF4444, #DC2626);color:#fff;font-family:var(--font-display);font-weight:700;font-size:8.5px;display:inline-flex;align-items:center;justify-content:center;padding:0 4px;box-shadow: 0 0 0 2px #fff, 0 4px 10px rgba(239,68,68,.42) }
+.fab{ position:relative;width:54px;height:54px;border-radius:999px;border:0;cursor:pointer;outline:none;background: linear-gradient(135deg, #A88EFF 0%, #6B4BFF 45%, #4524D6 100%);color:#fff;display:flex;align-items:center;justify-content:center;margin-top:-26px;box-shadow: 0 12px 28px rgba(107,75,255,.55), inset 0 1px 0 rgba(255,255,255,.30), inset 0 -8px 16px rgba(0,0,0,.10);z-index:2 }
+.fab::after{ content:'';position:absolute;inset:-2px;border-radius:999px;box-shadow:0 0 0 0 rgba(107,75,255,.45);animation: fabPulse 2.4s ease-out infinite;pointer-events:none }
+@keyframes fabPulse{ 0%{box-shadow:0 0 0 0 rgba(107,75,255,.42)} 70%{box-shadow:0 0 0 18px rgba(107,75,255,0)} 100%{box-shadow:0 0 0 0 rgba(107,75,255,0)} }
+.pill{ position:absolute;top:6px;left:0;height:50px;width:60px;border-radius:16px;background: linear-gradient(180deg, rgba(107,75,255,.12) 0%, rgba(107,75,255,.04) 100%);border:1px solid rgba(107,75,255,.22);z-index:0;box-shadow: 0 4px 12px rgba(107,75,255,.10), inset 0 1px 0 rgba(255,255,255,.4);transform: translateX(70px) }
+</style></head>
+<body><div class="card" style="padding:0;background:transparent;border:0">
+  <div class="stage">
+    <div class="phone">
+      <div class="scroll">
+
+        <!-- HEADER -->
+        <div class="appHead">
+          <button class="back" type="button" aria-label="Atrás">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </button>
+          <div class="title">
+            <span class="t">Nueva venta</span>
+            <span class="s">4 ítems · $215.76</span>
+          </div>
+          <button class="cart" type="button" aria-label="Carrito">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.5 3h3l3 13h12l2.5-9H6"/></svg>
+            <span class="badge">4</span>
+          </button>
+        </div>
+
+        <!-- SEARCH -->
+        <div class="searchWrap">
+          <input type="text" placeholder="Buscar producto o SKU…"/>
+          <svg class="lens" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </div>
+
+        <!-- SCANNER -->
+        <div class="section">
+          <div class="sectionHead">
+            <span class="t">Escanear</span>
+          </div>
+          <button class="scanCard" type="button">
+            <div class="scanIcoWrap">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M21 7V5a2 2 0 0 0-2-2h-2"/><path d="M3 17v2a2 2 0 0 0 2 2h2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 12h10"/></svg>
+              <div class="line"></div>
+            </div>
+            <div class="ttl">Toca para escanear</div>
+            <div class="sub">Detecta productos por código de barras</div>
+            <span class="chip">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Más rápido
+            </span>
+          </button>
+        </div>
+
+        <!-- CATEGORIES -->
+        <div class="section">
+          <div class="sectionHead">
+            <span class="t">Categorías</span>
+          </div>
+          <div class="catGrid">
+            <button class="cat abarrotes" type="button">
+              <div class="emoji">🛒</div>
+              <div class="lbl">Abarrotes</div>
+              <div class="meta"><span class="num">48 ÍTEMS</span><span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span></div>
+            </button>
+            <button class="cat bebidas" type="button">
+              <div class="emoji">🥤</div>
+              <div class="lbl">Bebidas</div>
+              <div class="meta"><span class="num">36 ÍTEMS</span><span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span></div>
+            </button>
+            <button class="cat lacteos" type="button">
+              <div class="emoji">🥛</div>
+              <div class="lbl">Lácteos</div>
+              <div class="meta"><span class="num">24 ÍTEMS</span><span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span></div>
+            </button>
+            <button class="cat snacks" type="button">
+              <span class="hot">🔥 Hot</span>
+              <div class="emoji">🍿</div>
+              <div class="lbl">Snacks</div>
+              <div class="meta"><span class="num">34 ÍTEMS</span><span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span></div>
+            </button>
+            <button class="cat papas" type="button">
+              <div class="emoji">🥔</div>
+              <div class="lbl">Papas</div>
+              <div class="meta"><span class="num">12 ÍTEMS</span><span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span></div>
+            </button>
+            <button class="cat galletas" type="button">
+              <div class="emoji">🍪</div>
+              <div class="lbl">Galletas</div>
+              <div class="meta"><span class="num">18 ÍTEMS</span><span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span></div>
+            </button>
+            <button class="cat dulces" type="button">
+              <div class="emoji">🍬</div>
+              <div class="lbl">Dulces</div>
+              <div class="meta"><span class="num">22 ÍTEMS</span><span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span></div>
+            </button>
+            <button class="cat panaderia" type="button">
+              <div class="emoji">🥖</div>
+              <div class="lbl">Panadería</div>
+              <div class="meta"><span class="num">16 ÍTEMS</span><span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span></div>
+            </button>
+            <button class="cat limpieza" type="button">
+              <div class="emoji">🧼</div>
+              <div class="lbl">Limpieza</div>
+              <div class="meta"><span class="num">28 ÍTEMS</span><span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span></div>
+            </button>
+            <button class="cat cuidado" type="button">
+              <div class="emoji">🧴</div>
+              <div class="lbl">Cuidado</div>
+              <div class="meta"><span class="num">14 ÍTEMS</span><span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span></div>
+            </button>
+            <button class="cat mascotas" type="button">
+              <div class="emoji">🐶</div>
+              <div class="lbl">Mascotas</div>
+              <div class="meta"><span class="num">9 ÍTEMS</span><span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span></div>
+            </button>
+            <button class="cat otros" type="button">
+              <div class="emoji">📦</div>
+              <div class="lbl">Otros</div>
+              <div class="meta"><span class="num">7 ÍTEMS</span><span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span></div>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div></body></html>
