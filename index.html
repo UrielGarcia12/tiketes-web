@@ -1,1680 +1,1165 @@
 <!doctype html>
-<html lang="es-MX">
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Tiketes — POS sin comisiones para tu negocio</title>
-  <meta name="description" content="Sistema de inventario, tickets y comandas para PyMEs mexicanas. Cero comisión por venta. Plan Free para siempre." />
-  <meta name="theme-color" content="#050617" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tikeles — Ventas rápidas. Inventario listo.</title>
+<meta name="description" content="La app de ventas e inventario diseñada para negocios reales en México y LATAM. Cobra en segundos, controla tu stock, crece con datos reales.">
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+/* ================================================================
+   Tikeles Landing — Rediseño Premium 2026
+   Estética: Porsche × Apple × Zara
+   ================================================================ */
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Tiketes — POS sin comisiones" />
-  <meta property="og:description" content="Sistema de inventario y tickets para tu negocio. Plan Free para siempre. Sin comisión por venta." />
-  <meta property="og:url" content="https://tiketes.app" />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://tiketes.app/icon.png" />
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: #07070F;
+  color: #F2F2F8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+/* ── TOKENS EXTRA ─────────────────────────────────────────────── */
+:root {
+  --gold:        #C9A96E;
+  --gold-dim:    #8C6E3C;
+  --gold-light:  #F0CB7A;
+  --onyx:        #07070F;
+  --onyx-2:      #0C0C1A;
+  --onyx-3:      #111120;
+  --rule-dark:   rgba(255,255,255,0.07);
+  --rule-light:  rgba(15,15,40,0.08);
+}
 
-  <link rel="icon" type="image/png" href="./icon.png" />
+/* ── NAV ──────────────────────────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 68px;
+  display: flex; align-items: center;
+  padding: 0 clamp(24px, 5vw, 80px);
+  justify-content: space-between;
+  border-bottom: 1px solid transparent;
+  transition: background 300ms var(--ease-out), border-color 300ms var(--ease-out);
+}
+.nav.scrolled {
+  background: rgba(7,7,15,.88);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom-color: var(--rule-dark);
+}
+.nav-logo { height: 24px; display: block; }
 
-  <style>
-    /* ════════════════════════════════════════════════════════════════════ */
-    /*  DESIGN TOKENS (semantic, matches app)                                */
-    /* ════════════════════════════════════════════════════════════════════ */
-    :root {
-      --bg: #050617;
-      --surface: rgba(20,21,42,0.62);
-      --surface-2: rgba(255,255,255,0.04);
-      --surface-hover: rgba(168,142,255,0.07);
-      --border: rgba(255,255,255,0.08);
-      --border-active: rgba(168,142,255,0.40);
-      --violet-100: #C4B5FD;
-      --violet-300: #A88EFF;
-      --violet-500: #8B70FF;
-      --violet-700: #6B4BFF;
-      --violet-900: #4524D6;
-      --gold: #F5C518;
-      --gold-glow: rgba(245,197,24,0.14);
-      --success: #34D399;
-      --danger: #FCA5A5;
-      --fg: #ffffff;
-      --fg-2: rgba(255,255,255,0.72);
-      --fg-3: rgba(255,255,255,0.55);
-      --fg-4: rgba(255,255,255,0.32);
-      --radius-sm: 10px;
-      --radius: 14px;
-      --radius-lg: 22px;
-      --radius-xl: 28px;
-      --shadow-violet: 0 12px 32px rgba(107,75,255,0.30);
-      --shadow-deep: 0 30px 60px -20px rgba(0,0,0,0.70);
-      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-    }
+.nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+.nav-links a {
+  font-size: 13px; font-weight: var(--fw-medium); letter-spacing: .01em;
+  color: rgba(255,255,255,.50); text-decoration: none;
+  transition: color 140ms var(--ease-out);
+}
+.nav-links a:hover { color: rgba(255,255,255,.90); }
 
-    /* ── Reset ─────────────────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-    body {
-      background: var(--bg);
-      color: var(--fg);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-      line-height: 1.55;
-      min-height: 100vh;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-    img, svg { max-width: 100%; display: block; }
-    a { color: inherit; text-decoration: none; }
-    button { background: none; border: 0; cursor: pointer; font: inherit; color: inherit; }
+.nav-actions { display: flex; align-items: center; gap: 8px; }
+.btn-nav-ghost {
+  font-size: 13px; font-weight: var(--fw-medium);
+  color: rgba(255,255,255,.50); background: transparent; border: 0;
+  cursor: pointer; padding: 9px 16px; border-radius: var(--radius-md);
+  transition: color 140ms var(--ease-out);
+}
+.btn-nav-ghost:hover { color: rgba(255,255,255,.90); }
+.btn-nav-primary {
+  font-size: 13px; font-weight: var(--fw-semibold); letter-spacing: -.01em;
+  background: #fff; color: #07070F; border: 0; cursor: pointer;
+  padding: 10px 22px; border-radius: var(--radius-pill);
+  transition: all 160ms var(--ease-out);
+}
+.btn-nav-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+.btn-nav-primary:active { transform: scale(.97); }
 
-    .display { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; }
-    .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+@media (max-width: 768px) { .nav-links { display: none; } }
 
-    /* ════════════════════════════════════════════════════════════════════ */
-    /*  ATMOSPHERE — orbs + sparks (replica del LoginScreen)                 */
-    /* ════════════════════════════════════════════════════════════════════ */
-    .atmosphere {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-    .orb {
-      position: absolute;
-      border-radius: 999px;
-      filter: blur(60px);
-      will-change: transform;
-    }
-    .orb-violet-1 {
-      top: -120px; left: -80px;
-      width: 460px; height: 460px;
-      background: radial-gradient(circle, rgba(107,75,255,0.65) 0%, rgba(107,75,255,0) 70%);
-      animation: floatA 16s ease-in-out infinite;
-    }
-    .orb-violet-2 {
-      top: 320px; right: -140px;
-      width: 380px; height: 380px;
-      background: radial-gradient(circle, rgba(167,142,255,0.45) 0%, rgba(167,142,255,0) 70%);
-      animation: floatB 22s ease-in-out infinite;
-    }
-    .orb-gold {
-      bottom: -180px; left: 50%;
-      transform: translateX(-50%);
-      width: 580px; height: 580px;
-      background: radial-gradient(circle, rgba(245,197,24,0.18) 0%, rgba(245,197,24,0) 70%);
-      animation: floatC 28s ease-in-out infinite;
-    }
-    @keyframes floatA { 0%,100% { transform: translate(0,0); } 50% { transform: translate(30px,-40px); } }
-    @keyframes floatB { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-30px,30px); } }
-    @keyframes floatC { 0%,100% { transform: translate(-50%,0); } 50% { transform: translate(-50%,-30px); } }
 
-    /* Sparks — verticales como el login */
-    .spark {
-      position: absolute;
-      width: 4px; height: 4px;
-      border-radius: 50%;
-      pointer-events: none;
-      animation: rise 5s linear infinite;
-      will-change: transform, opacity;
-    }
-    @keyframes rise {
-      0%   { transform: translateY(0) scale(0.3); opacity: 0; }
-      15%  { opacity: 1; }
-      85%  { opacity: 1; }
-      100% { transform: translateY(-420px) scale(0.8); opacity: 0; }
-    }
+/* ── HERO ─────────────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  background: var(--onyx);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 130px clamp(24px, 5vw, 80px) 110px;
+  text-align: center;
+}
 
-    /* Cursor glow (subtle, follows mouse) */
-    .cursor-glow {
-      position: fixed;
-      top: 0; left: 0;
-      width: 360px; height: 360px;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 1;
-      background: radial-gradient(circle, rgba(168,142,255,0.10) 0%, transparent 60%);
-      transform: translate(-50%, -50%);
-      transition: opacity 0.4s;
-      opacity: 0;
-      will-change: transform;
-    }
-    @media (hover: hover) {
-      body:hover .cursor-glow { opacity: 1; }
-    }
+/* Dot grid — very subtle */
+.hero::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.017) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.017) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask: radial-gradient(ellipse 80% 80% at 50% 50%, #000 0%, transparent 80%);
+  -webkit-mask: radial-gradient(ellipse 80% 80% at 50% 50%, #000 0%, transparent 80%);
+}
 
-    /* ════════════════════════════════════════════════════════════════════ */
-    /*  LAYOUT                                                                */
-    /* ════════════════════════════════════════════════════════════════════ */
-    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+/* Bottom rule */
+.hero::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rule-dark) 25%, var(--rule-dark) 75%, transparent);
+}
 
-    /* ── Nav ──────────────────────────────────────────────────────────── */
-    nav {
-      position: sticky; top: 0;
-      z-index: 100;
-      background: rgba(5,6,23,0.72);
-      backdrop-filter: blur(20px) saturate(140%);
-      -webkit-backdrop-filter: blur(20px) saturate(140%);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 0;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Sora', sans-serif;
-      font-weight: 800;
-      font-size: 19px;
-      letter-spacing: -0.02em;
-    }
-    .brand-mark {
-      width: 28px; height: 28px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #A88EFF 0%, #6B4BFF 100%);
-      display: grid; place-items: center;
-      box-shadow: 0 4px 14px rgba(107,75,255,0.45), inset 0 1px 0 rgba(255,255,255,0.20);
-      position: relative;
-    }
-    .brand-mark::after {
-      content: '';
-      position: absolute; inset: 4px;
-      border-radius: 5px;
-      background: linear-gradient(135deg, transparent, rgba(255,255,255,0.15));
-    }
-    .nav-links { display: flex; gap: 30px; align-items: center; }
-    .nav-link {
-      font-size: 13.5px;
-      font-weight: 500;
-      color: var(--fg-2);
-      transition: color 0.2s;
-      position: relative;
-    }
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: -4px; left: 50%;
-      transform: translateX(-50%);
-      width: 0; height: 2px;
-      background: var(--violet-300);
-      transition: width 0.25s var(--ease-out);
-    }
-    .nav-link:hover { color: var(--fg); }
-    .nav-link:hover::after { width: 18px; }
-    .nav-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: linear-gradient(135deg, var(--violet-500), var(--violet-900));
-      padding: 9px 16px;
-      border-radius: var(--radius);
-      font-weight: 600;
-      font-size: 13px;
-      box-shadow: var(--shadow-violet), inset 0 1px 0 rgba(255,255,255,0.15);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 16px 36px rgba(107,75,255,0.40), inset 0 1px 0 rgba(255,255,255,0.15); }
-    @media (max-width: 720px) {
-      .nav-links { gap: 14px; }
-      .nav-links .nav-link { display: none; }
-    }
+/* Ambient orbs */
+.orb { position: absolute; border-radius: 50%; pointer-events: none; }
+.orb-a {
+  top: -300px; left: -200px; width: 720px; height: 720px;
+  background: radial-gradient(closest-side, rgba(107,75,255,.25), transparent 70%);
+  filter: blur(22px);
+  animation: driftA 24s ease-in-out infinite;
+}
+.orb-b {
+  bottom: -320px; right: -240px; width: 640px; height: 640px;
+  background: radial-gradient(closest-side, rgba(201,169,110,.10), transparent 70%);
+  filter: blur(26px);
+  animation: driftB 32s ease-in-out infinite;
+}
+@keyframes driftA { 0%,100%{transform:translate(0,0)} 50%{transform:translate(48px,-40px)} }
+@keyframes driftB { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-48px,40px)} }
 
-    /* ════════════════════════════════════════════════════════════════════ */
-    /*  HERO                                                                  */
-    /* ════════════════════════════════════════════════════════════════════ */
-    .hero { padding: 80px 0 110px; position: relative; }
+.hero-eyebrow {
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .20em;
+  color: var(--gold); margin-bottom: 36px;
+  display: inline-flex; align-items: center; gap: 12px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ''; width: 28px; height: 1px; background: var(--gold-dim); display: block;
+}
 
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      gap: 70px;
-      align-items: center;
-    }
-    @media (max-width: 920px) {
-      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
-      .hero-grid .phone-col { order: -1; }
-    }
+.hero-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(58px, 9.5vw, 112px);
+  font-weight: 800;
+  letter-spacing: -.047em;
+  line-height: .93;
+  color: #fff;
+  max-width: 900px;
+  margin: 0 auto 28px;
+}
+.hero-h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 60%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(168,142,255,0.10);
-      border: 1px solid rgba(168,142,255,0.30);
-      padding: 7px 14px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--violet-100);
-      margin-bottom: 24px;
-      letter-spacing: 0.02em;
-    }
-    .badge-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 10px var(--success);
-      animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.hero-lead {
+  font-size: clamp(15px, 2vw, 19px);
+  color: rgba(255,255,255,.46);
+  line-height: 1.65;
+  max-width: 460px;
+  margin: 0 auto 48px;
+}
 
-    h1.hero-title {
-      font-family: 'Sora', sans-serif;
-      font-size: clamp(38px, 6.2vw, 64px);
-      font-weight: 800;
-      line-height: 1.04;
-      letter-spacing: -0.035em;
-      margin-bottom: 24px;
-      max-width: 640px;
-    }
-    .accent {
-      background: linear-gradient(135deg, var(--violet-300) 0%, var(--gold) 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      position: relative;
-    }
-    .hero-lead {
-      font-size: clamp(15px, 1.5vw, 17.5px);
-      color: var(--fg-2);
-      max-width: 540px;
-      margin-bottom: 32px;
-      line-height: 1.65;
-    }
-    .hero-lead strong { color: var(--fg); font-weight: 700; }
+.hero-actions {
+  display: flex; align-items: center; gap: 12px;
+  flex-wrap: wrap; justify-content: center;
+}
+.btn-hero-primary {
+  font-family: var(--font-body); font-size: 15px; font-weight: 600;
+  letter-spacing: -.01em;
+  background: #fff; color: #07070F; border: 0; cursor: pointer;
+  padding: 15px 32px; border-radius: var(--radius-pill);
+  transition: all 200ms var(--ease-out);
+}
+.btn-hero-primary:hover {
+  background: var(--gold-light); transform: translateY(-2px);
+  box-shadow: 0 18px 44px rgba(240,203,122,.22);
+}
+.btn-hero-secondary {
+  font-family: var(--font-body); font-size: 15px; font-weight: 500;
+  background: transparent; color: rgba(255,255,255,.55);
+  border: 1px solid rgba(255,255,255,.14); cursor: pointer;
+  padding: 15px 28px; border-radius: var(--radius-pill);
+  transition: all 200ms var(--ease-out);
+}
+.btn-hero-secondary:hover { border-color: rgba(255,255,255,.38); color: rgba(255,255,255,.90); }
 
-    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.hero-caption {
+  margin-top: 22px; font-size: 12px;
+  color: rgba(255,255,255,.24); letter-spacing: .02em;
+}
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 22px;
-      border-radius: var(--radius);
-      font-weight: 600;
-      font-size: 14.5px;
-      transition: transform 0.18s var(--ease-out), box-shadow 0.18s, background 0.18s;
-      will-change: transform;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--violet-500), var(--violet-900));
-      box-shadow: 0 12px 30px rgba(107,75,255,0.40), inset 0 1px 0 rgba(255,255,255,0.15);
-      color: #fff;
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(107,75,255,0.50), inset 0 1px 0 rgba(255,255,255,0.15); }
-    .btn-primary:active { transform: translateY(0); }
-    .btn-secondary {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      color: var(--fg);
-    }
-    .btn-secondary:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.20); }
+/* Scroll cue */
+.scroll-cue {
+  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  pointer-events: none;
+}
+.scroll-cue-line {
+  width: 1px; height: 44px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.22));
+  animation: scrollPulse 2.2s ease-in-out infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:0;transform:scaleY(.4) translateY(-8px)} 55%{opacity:1;transform:scaleY(1) translateY(0)} }
 
-    .hero-trust {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 12.5px; color: var(--fg-3);
-      margin-top: 22px;
-      flex-wrap: wrap;
-    }
-    .hero-trust svg { flex-shrink: 0; }
-    .hero-trust-divider { color: var(--fg-4); }
 
-    /* ── Hero stats strip ─────────────────────────────────────────────── */
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      margin-top: 56px;
-      padding-top: 32px;
-      border-top: 1px solid var(--border);
-      max-width: 540px;
-    }
-    .stat { padding-right: 12px; }
-    .stat + .stat { padding-left: 24px; border-left: 1px solid var(--border); }
-    .stat-num {
-      font-family: 'Sora', sans-serif;
-      font-weight: 800;
-      font-size: clamp(22px, 3vw, 30px);
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #fff 0%, var(--violet-300) 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .stat-label {
-      font-size: 11.5px;
-      color: var(--fg-3);
-      margin-top: 4px;
-      letter-spacing: 0.02em;
-    }
+/* ── STATS ────────────────────────────────────────────────────── */
+.stats-section {
+  background: var(--onyx-2);
+  border-top: 1px solid var(--rule-dark);
+  border-bottom: 1px solid var(--rule-dark);
+  padding: 80px clamp(24px, 5vw, 80px);
+}
+.stats-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+}
+.stat-item { text-align: center; position: relative; }
+.stat-item + .stat-item::before {
+  content: ''; position: absolute;
+  left: -24px; top: 15%; bottom: 15%;
+  width: 1px; background: var(--rule-dark);
+}
+.stat-number {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6.5vw, 82px);
+  font-weight: 800; letter-spacing: -.042em;
+  color: #fff; line-height: 1; margin-bottom: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.stat-label {
+  font-size: 12px; color: rgba(255,255,255,.34);
+  text-transform: uppercase; letter-spacing: .10em;
+}
 
-    /* ════════════════════════════════════════════════════════════════════ */
-    /*  PHONE MOCKUP — Replica EXACTA del LoginScreen                       */
-    /* ════════════════════════════════════════════════════════════════════ */
-    .phone-col { display: flex; justify-content: center; }
-    .phone {
-      position: relative;
-      width: 100%;
-      max-width: 320px;
-      aspect-ratio: 9 / 19.5;
-      background: linear-gradient(160deg, #1A1A3E 0%, #050617 100%);
-      border-radius: 46px;
-      padding: 9px;
-      box-shadow:
-        0 80px 140px -40px rgba(107,75,255,0.55),
-        var(--shadow-deep),
-        inset 0 1px 0 rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.08);
-      transition: transform 0.5s var(--ease-out);
-    }
-    .phone:hover { transform: translateY(-6px) rotateY(-2deg); }
+@media (max-width: 640px) {
+  .stats-inner { grid-template-columns: 1fr; gap: 40px; }
+  .stat-item + .stat-item::before { display: none; }
+}
 
-    .phone::before {
-      content: '';
-      position: absolute;
-      top: 9px; left: 50%;
-      transform: translateX(-50%);
-      width: 84px; height: 22px;
-      background: #050617;
-      border-radius: 0 0 16px 16px;
-      z-index: 10;
-    }
-    .phone-screen {
-      width: 100%; height: 100%;
-      border-radius: 38px;
-      background: #050617;
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-    }
 
-    /* Inner orbs (matches login atmosphere) */
-    .phone-orb-1, .phone-orb-2, .phone-orb-3 {
-      position: absolute; border-radius: 999px; filter: blur(45px); pointer-events: none;
-    }
-    .phone-orb-1 {
-      top: -40px; left: -30px;
-      width: 180px; height: 180px;
-      background: rgba(107,75,255,0.55);
-    }
-    .phone-orb-2 {
-      top: 130px; right: -50px;
-      width: 160px; height: 160px;
-      background: rgba(167,142,255,0.40);
-    }
-    .phone-orb-3 {
-      bottom: -50px; left: 30%;
-      width: 200px; height: 200px;
-      background: rgba(245,197,24,0.14);
-    }
+/* ── SHARED SECTION LAYOUT ────────────────────────────────────── */
+.section-inner { max-width: 1140px; margin: 0 auto; }
 
-    /* Sparks in phone */
-    .phone-spark {
-      position: absolute;
-      width: 3px; height: 3px;
-      border-radius: 50%;
-      bottom: 40%;
-      animation: phoneRise 4s linear infinite;
-    }
-    @keyframes phoneRise {
-      0%   { transform: translateY(0); opacity: 0; }
-      20%  { opacity: 1; }
-      80%  { opacity: 1; }
-      100% { transform: translateY(-200px); opacity: 0; }
-    }
+.s-eyebrow {
+  display: block;
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .20em;
+  color: var(--violet-500); margin-bottom: 20px;
+}
+.s-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5.5vw, 62px);
+  font-weight: 800; letter-spacing: -.042em;
+  line-height: .98; color: var(--ink-900);
+  max-width: 640px; margin-bottom: 20px;
+}
+.s-lead {
+  font-size: 17px; color: var(--ink-500);
+  line-height: 1.65; max-width: 460px; margin-bottom: 72px;
+}
 
-    .phone-content {
-      position: relative; z-index: 2;
-      padding: 50px 18px 24px;
-      display: flex; flex-direction: column;
-      height: 100%;
-    }
 
-    /* Top pill */
-    .phone-pill {
-      display: inline-flex;
-      align-self: center;
-      align-items: center;
-      gap: 4px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 999px;
-      padding: 6px 11px;
-      font-size: 9.5px;
-      color: #fff;
-      margin-top: 4px;
-      margin-bottom: 22px;
-    }
-    .phone-pill-accent { color: var(--violet-300); font-weight: 600; }
+/* ── FEATURES ─────────────────────────────────────────────────── */
+.features-section {
+  background: #F7F7FB;
+  padding: 148px clamp(24px, 5vw, 80px);
+}
 
-    /* Wordmark */
-    .phone-wordmark-wrap {
-      display: flex; justify-content: center;
-      margin-bottom: 14px;
-    }
-    .phone-wordmark {
-      width: 175px;
-      filter: drop-shadow(0 8px 24px rgba(167,142,255,0.45));
-    }
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--ink-200);
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  gap: 1px;
+}
+@media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 560px) { .features-grid { grid-template-columns: 1fr; } }
 
-    /* Heading */
-    .phone-heading {
-      text-align: center;
-      font-family: 'Sora', sans-serif;
-      font-weight: 700;
-      font-size: 17px;
-      color: #fff;
-      letter-spacing: -0.3px;
-      margin-bottom: 1px;
-    }
-    .phone-subtitle {
-      text-align: center;
-      font-size: 10.5px;
-      color: rgba(255,255,255,0.55);
-      margin-bottom: 14px;
-    }
+.f-card {
+  background: #fff; padding: 40px 36px;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
+}
+.f-card.vis { opacity: 1; transform: translateY(0); }
+.f-icon {
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--violet-50); border-radius: var(--radius-sm);
+  color: var(--violet-500); margin-bottom: 24px;
+}
+.f-title {
+  font-family: var(--font-display); font-size: 16px; font-weight: 700;
+  letter-spacing: -.01em; color: var(--ink-900); margin-bottom: 8px;
+}
+.f-desc { font-size: 13.5px; color: var(--ink-500); line-height: 1.62; }
 
-    /* Glass form card */
-    .phone-card {
-      background: rgba(20,21,42,0.62);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 14px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.30);
-    }
 
-    /* Google button */
-    .phone-google {
-      background: #fff;
-      border-radius: 11px;
-      padding: 10px;
-      display: flex; align-items: center; justify-content: center;
-      gap: 8px;
-    }
-    .phone-google-icon {
-      width: 14px; height: 14px;
-      flex-shrink: 0;
-    }
-    .phone-google-text {
-      font-size: 10.5px;
-      font-weight: 600;
-      color: #1F1F1F;
-    }
+/* ── PRODUCT ──────────────────────────────────────────────────── */
+.product-section {
+  background: var(--onyx);
+  padding: 148px clamp(24px, 5vw, 80px);
+  position: relative; overflow: hidden;
+}
+.product-section::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 55% 55% at 50% 100%, rgba(107,75,255,.10), transparent);
+}
+.product-section .s-h2  { color: #fff; }
+.product-section .s-eyebrow { color: rgba(255,255,255,.32); }
+.product-section .s-lead    { color: rgba(255,255,255,.40); }
 
-    /* Divider */
-    .phone-divider {
-      display: flex; align-items: center; gap: 8px;
-      margin: 2px 0;
-    }
-    .phone-divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
-    .phone-divider-text { font-size: 9px; color: rgba(255,255,255,0.45); text-transform: lowercase; }
+/* Phone frames */
+.phones-wrap {
+  display: flex; justify-content: center; align-items: flex-start;
+  gap: clamp(16px, 2.5vw, 40px);
+  margin-top: 80px;
+}
+.p-phone {
+  width: clamp(175px, 22vw, 248px);
+  border-radius: 32px; overflow: hidden;
+  border: 1.5px solid rgba(255,255,255,.09);
+  box-shadow: 0 44px 88px rgba(0,0,0,.64), 0 0 0 1px rgba(255,255,255,.04);
+  flex-shrink: 0;
+}
+.p-phone-main { aspect-ratio: 390/844; }
+.p-phone-side {
+  aspect-ratio: 390/844;
+  opacity: .68; transform: scale(.93) translateY(32px);
+}
+@media (max-width: 580px) {
+  .p-phone-side { display: none; }
+  .p-phone { width: clamp(150px, 55vw, 220px); }
+}
 
-    /* Fields */
-    .phone-field-label {
-      font-size: 8.5px;
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      color: rgba(255,255,255,0.55);
-      margin-bottom: 4px;
-    }
-    .phone-input {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 10px;
-      padding: 9px 11px;
-      font-size: 10.5px;
-      color: rgba(255,255,255,0.55);
-      font-family: 'JetBrains Mono', monospace;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .phone-input-with-icon { display: flex; align-items: center; justify-content: space-between; }
-    .phone-eye { width: 11px; height: 11px; opacity: 0.5; }
 
-    .phone-forgot {
-      align-self: flex-end;
-      font-size: 9.5px;
-      color: var(--violet-300);
-      font-weight: 500;
-      margin-top: -4px;
-    }
+/* ── PLANS ────────────────────────────────────────────────────── */
+.plans-section {
+  background: var(--onyx);
+  padding: 148px clamp(24px, 5vw, 80px) 120px;
+  border-top: 1px solid var(--rule-dark);
+}
+.plans-section .s-h2     { color: #fff; }
+.plans-section .s-eyebrow { color: rgba(255,255,255,.28); }
+.plans-section .s-lead    { color: rgba(255,255,255,.38); }
 
-    /* Primary login button */
-    .phone-login-btn {
-      background: linear-gradient(135deg, #8B70FF, #4524D6);
-      border-radius: 11px;
-      padding: 11px;
-      text-align: center;
-      font-size: 11px;
-      font-weight: 700;
-      box-shadow: 0 10px 22px rgba(107,75,255,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
-      margin-top: 4px;
-    }
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 64px;
+}
+@media (max-width: 1200px) {
+  .plans-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .plans-grid { grid-template-columns: 1fr; max-width: 440px; }
+}
 
-    /* Bottom CTA */
-    .phone-bottom {
-      margin-top: 12px;
-      display: flex; align-items: center; gap: 8px;
-      background: rgba(168,142,255,0.08);
-      border: 1px solid rgba(168,142,255,0.30);
-      border-radius: 11px;
-      padding: 8px 10px;
-    }
-    .phone-bottom-icon {
-      width: 22px; height: 22px;
-      background: rgba(168,142,255,0.20);
-      border-radius: 7px;
-      display: grid; place-items: center;
-      flex-shrink: 0;
-    }
-    .phone-bottom-text { flex: 1; }
-    .phone-bottom-title { font-size: 9.5px; font-weight: 600; color: #fff; line-height: 1.2; }
-    .phone-bottom-sub { font-size: 8px; color: rgba(255,255,255,0.55); margin-top: 1px; }
+.plan {
+  border-radius: 20px; padding: 36px 28px;
+  display: flex; flex-direction: column; gap: 26px;
+  border: 1px solid rgba(255,255,255,.08);
+  position: relative; overflow: hidden;
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out), border-color 220ms, box-shadow 220ms;
+}
+.plan.vis { opacity: 1; transform: translateY(0); }
 
-    /* ════════════════════════════════════════════════════════════════════ */
-    /*  SECTIONS                                                              */
-    /* ════════════════════════════════════════════════════════════════════ */
-    section { position: relative; z-index: 2; padding: 100px 0; }
+/* Free */
+.plan.free { background: #0F0F1C; }
+.plan.free:hover { border-color: rgba(255,255,255,.18); }
 
-    .section-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(168,142,255,0.08);
-      border: 1px solid rgba(168,142,255,0.25);
-      padding: 5px 14px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--violet-100);
-      letter-spacing: 1.4px;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-    }
-    .section-eyebrow::before {
-      content: '';
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--violet-300);
-    }
-    .section-title {
-      font-family: 'Sora', sans-serif;
-      font-size: clamp(30px, 4.5vw, 46px);
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      line-height: 1.08;
-      margin-bottom: 18px;
-      max-width: 760px;
-    }
-    .section-sub {
-      font-size: 16px;
-      color: var(--fg-3);
-      max-width: 580px;
-      margin-bottom: 56px;
-      line-height: 1.65;
-    }
+/* Essential */
+.plan.essential {
+  background: linear-gradient(155deg, #0B1018 0%, #0E1520 100%);
+}
+.plan.essential:hover { border-color: rgba(56,189,248,.30); }
+.plan.essential::before {
+  content: ''; position: absolute;
+  top: -90px; right: -90px; width: 280px; height: 280px;
+  background: radial-gradient(closest-side, rgba(56,189,248,.10), transparent);
+  pointer-events: none;
+}
 
-    /* ── Giros ────────────────────────────────────────────────────────── */
-    .giros-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 12px;
-    }
-    .giro-card {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 22px 16px;
-      text-align: center;
-      transition: transform 0.3s var(--ease-out), border-color 0.3s, background 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-    .giro-card::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(168,142,255,0.05), transparent);
-      opacity: 0; transition: opacity 0.3s;
-    }
-    .giro-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--border-active);
-      background: var(--surface-hover);
-    }
-    .giro-card:hover::before { opacity: 1; }
-    .giro-icon {
-      width: 38px; height: 38px;
-      margin: 0 auto 10px;
-      color: var(--violet-300);
-      position: relative;
-      z-index: 1;
-    }
-    .giro-name { font-size: 13px; font-weight: 600; color: var(--fg); position: relative; z-index: 1; }
+/* Pro */
+.plan.pro {
+  background: linear-gradient(155deg, #0D0B22 0%, #111038 100%);
+}
+.plan.pro:hover { border-color: rgba(107,75,255,.38); }
+.plan.pro::before {
+  content: ''; position: absolute;
+  top: -90px; right: -90px; width: 300px; height: 300px;
+  background: radial-gradient(closest-side, rgba(107,75,255,.16), transparent);
+  pointer-events: none;
+}
 
-    /* ── Features ─────────────────────────────────────────────────────── */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 18px;
-    }
-    .feature {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 30px 26px;
-      transition: transform 0.3s var(--ease-out), border-color 0.3s, background 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-    .feature::after {
-      content: '';
-      position: absolute;
-      top: 0; right: 0;
-      width: 120px; height: 120px;
-      background: radial-gradient(circle, rgba(168,142,255,0.20) 0%, transparent 70%);
-      opacity: 0; transition: opacity 0.4s;
-    }
-    .feature:hover {
-      transform: translateY(-4px);
-      border-color: var(--border-active);
-    }
-    .feature:hover::after { opacity: 1; }
-    .feature-icon-box {
-      width: 52px; height: 52px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(168,142,255,0.25), rgba(107,75,255,0.10));
-      border: 1px solid rgba(168,142,255,0.35);
-      display: grid; place-items: center;
-      margin-bottom: 20px;
-      color: var(--violet-300);
-      position: relative; z-index: 1;
-    }
-    .feature h3 {
-      font-family: 'Sora', sans-serif;
-      font-weight: 700;
-      font-size: 18px;
-      margin-bottom: 8px;
-      color: var(--fg);
-      position: relative; z-index: 1;
-    }
-    .feature p {
-      color: var(--fg-3);
-      font-size: 14px;
-      line-height: 1.65;
-      position: relative; z-index: 1;
-    }
+/* Premium */
+.plan.premium {
+  background: linear-gradient(155deg, #130F09 0%, #1B1609 100%);
+  border-color: rgba(201,169,110,.18);
+}
+.plan.premium:hover {
+  border-color: rgba(201,169,110,.45);
+  box-shadow: 0 0 64px rgba(201,169,110,.07);
+}
+.plan.premium::before {
+  content: ''; position: absolute;
+  top: -90px; right: -90px; width: 340px; height: 340px;
+  background: radial-gradient(closest-side, rgba(201,169,110,.13), transparent);
+  pointer-events: none;
+}
 
-    /* ── Pricing ──────────────────────────────────────────────────────── */
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 18px;
-    }
-    .price {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 32px 26px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.3s var(--ease-out), border-color 0.3s;
-    }
-    .price:hover { transform: translateY(-4px); }
-    .price.popular {
-      border-color: rgba(168,142,255,0.50);
-      background: linear-gradient(180deg, rgba(168,142,255,0.10), rgba(107,75,255,0.03));
-      box-shadow: 0 24px 50px -10px rgba(107,75,255,0.35);
-    }
-    .price-tag {
-      position: absolute;
-      top: -13px; left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(135deg, var(--gold), #DAA520);
-      color: #050617;
-      font-size: 10.5px;
-      font-weight: 800;
-      letter-spacing: 1.3px;
-      padding: 5px 12px;
-      border-radius: 999px;
-      box-shadow: 0 6px 16px rgba(245,197,24,0.30);
-    }
-    .price-name {
-      font-family: 'Sora', sans-serif;
-      font-weight: 700;
-      font-size: 19px;
-      margin-bottom: 4px;
-    }
-    .price-desc {
-      font-size: 12.5px;
-      color: var(--fg-3);
-      margin-bottom: 18px;
-      min-height: 32px;
-    }
-    .price-amount-wrap { display: flex; align-items: baseline; gap: 6px; }
-    .price-currency { font-size: 14px; color: var(--fg-3); }
-    .price-amount {
-      font-family: 'Sora', sans-serif;
-      font-weight: 800;
-      font-size: 42px;
-      letter-spacing: -0.03em;
-    }
-    .price-period { font-size: 13px; color: var(--fg-3); margin-bottom: 22px; }
-    .price-features { list-style: none; margin-bottom: 24px; flex: 1; }
-    .price-features li {
-      font-size: 13.5px;
-      color: var(--fg-2);
-      padding: 9px 0;
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .price-features li:last-child { border-bottom: none; }
-    .price-features svg { flex-shrink: 0; margin-top: 2px; color: var(--success); }
-    .price-cta {
-      display: block;
-      text-align: center;
-      padding: 13px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 14px;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .price-cta:hover { transform: translateY(-1px); }
-    .price-cta.primary {
-      background: linear-gradient(135deg, var(--violet-500), var(--violet-900));
-      box-shadow: 0 10px 24px rgba(107,75,255,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
-      color: #fff;
-    }
-    .price-cta.outline {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: var(--fg);
-    }
+.plan-badge {
+  position: absolute; top: 20px; right: 20px;
+  font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .14em;
+  padding: 5px 11px; border-radius: 999px;
+  background: var(--gold); color: #07070F;
+}
 
-    /* ── Comparison ───────────────────────────────────────────────────── */
-    .comp-card {
-      background: linear-gradient(160deg, rgba(168,142,255,0.08) 0%, rgba(245,197,24,0.04) 100%);
-      border: 1px solid rgba(168,142,255,0.25);
-      border-radius: var(--radius-xl);
-      padding: 44px;
-      position: relative;
-      overflow: hidden;
-    }
-    .comp-card::before {
-      content: '';
-      position: absolute;
-      top: -100px; right: -100px;
-      width: 280px; height: 280px;
-      background: radial-gradient(circle, rgba(245,197,24,0.12) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .comp-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      position: relative; z-index: 1;
-    }
-    @media (max-width: 720px) {
-      .comp-card { padding: 28px; }
-      .comp-grid { grid-template-columns: 1fr; }
-    }
-    .comp-side h3 {
-      font-family: 'Sora', sans-serif;
-      font-size: 19px;
-      font-weight: 700;
-      margin-bottom: 18px;
-      display: flex; align-items: center; gap: 9px;
-    }
-    .comp-row {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      padding: 11px 0;
-      font-size: 14px;
-      color: var(--fg-2);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .comp-row:last-child { border-bottom: none; }
-    .comp-row svg { flex-shrink: 0; margin-top: 2px; }
+.plan-label {
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .16em;
+  color: rgba(255,255,255,.28); margin-bottom: 6px;
+}
+.plan.premium .plan-label { color: var(--gold-dim); }
 
-    /* ── FAQ ──────────────────────────────────────────────────────────── */
-    .faq-grid { display: flex; flex-direction: column; gap: 10px; }
-    .faq-item {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 22px 24px;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-      list-style: none;
-    }
-    .faq-item::-webkit-details-marker { display: none; }
-    .faq-item:hover { border-color: var(--border-active); }
-    .faq-item[open] { background: rgba(168,142,255,0.06); border-color: var(--border-active); }
-    .faq-q {
-      font-family: 'Sora', sans-serif;
-      font-weight: 600;
-      font-size: 15.5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-    }
-    .faq-q-icon {
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      background: rgba(168,142,255,0.15);
-      display: grid; place-items: center;
-      color: var(--violet-300);
-      flex-shrink: 0;
-      transition: transform 0.3s;
-    }
-    .faq-item[open] .faq-q-icon { transform: rotate(45deg); }
-    .faq-a {
-      color: var(--fg-2);
-      font-size: 14px;
-      line-height: 1.7;
-      padding-top: 14px;
-      margin-top: 14px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
+.plan-name {
+  font-family: var(--font-display); font-size: 28px; font-weight: 800;
+  letter-spacing: -.02em; color: #fff; line-height: 1;
+}
 
-    /* ── CTA Final ────────────────────────────────────────────────────── */
-    .cta-final {
-      background: linear-gradient(160deg, rgba(107,75,255,0.20) 0%, rgba(245,197,24,0.08) 100%);
-      border: 1px solid rgba(168,142,255,0.35);
-      border-radius: var(--radius-xl);
-      padding: 64px 40px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .cta-final::before {
-      content: '';
-      position: absolute;
-      top: -120px; left: 10%;
-      width: 320px; height: 320px;
-      background: radial-gradient(circle, rgba(107,75,255,0.30) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .cta-final::after {
-      content: '';
-      position: absolute;
-      bottom: -100px; right: 10%;
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(245,197,24,0.18) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .cta-final > * { position: relative; z-index: 1; }
-    .cta-final h2 {
-      font-family: 'Sora', sans-serif;
-      font-size: clamp(28px, 4vw, 42px);
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      margin-bottom: 14px;
-    }
-    .cta-final p {
-      color: var(--fg-2);
-      max-width: 480px;
-      margin: 0 auto 28px;
-      font-size: 16px;
-    }
+.plan-price {
+  font-family: var(--font-display); font-size: 54px; font-weight: 800;
+  letter-spacing: -.042em; line-height: 1; color: #fff;
+  display: flex; align-items: flex-start; gap: 5px;
+}
+.plan-price .cur {
+  font-size: 12px; font-weight: 600; letter-spacing: .10em;
+  color: rgba(255,255,255,.36); margin-top: 10px;
+}
+.plan-per  { font-size: 13px; color: rgba(255,255,255,.32); margin-top: 6px; }
+.plan-usd  { font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,.20); margin-top: 4px; letter-spacing: .04em; }
 
-    /* ── Footer ───────────────────────────────────────────────────────── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 60px 0 36px;
-      position: relative;
-      z-index: 2;
-      margin-top: 60px;
-    }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 50px;
-      margin-bottom: 40px;
-    }
-    @media (max-width: 720px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; } }
-    .footer-brand { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 18px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
-    .footer-tag { color: var(--fg-3); font-size: 13.5px; line-height: 1.7; max-width: 320px; }
-    .footer-social { display: flex; gap: 10px; margin-top: 16px; }
-    .social-btn {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      display: grid; place-items: center;
-      color: var(--fg-3);
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
-    }
-    .social-btn:hover { color: var(--violet-300); border-color: var(--border-active); background: rgba(168,142,255,0.10); }
-    .footer-col h4 {
-      font-size: 11px;
-      letter-spacing: 1.6px;
-      color: var(--fg-3);
-      font-weight: 700;
-      margin-bottom: 16px;
-      text-transform: uppercase;
-    }
-    .footer-col a {
-      display: block;
-      font-size: 13.5px;
-      color: var(--fg-2);
-      padding: 6px 0;
-      transition: color 0.15s;
-    }
-    .footer-col a:hover { color: var(--fg); }
-    .footer-bottom {
-      border-top: 1px solid var(--border);
-      padding-top: 24px;
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 12px;
-      color: var(--fg-4);
-    }
-    @media (max-width: 600px) {
-      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
-    }
+.plan-rule { height: 1px; background: rgba(255,255,255,.06); }
+.plan.premium .plan-rule { background: rgba(201,169,110,.11); }
 
-    /* ── Reveal on scroll ─────────────────────────────────────────────── */
-    @media (prefers-reduced-motion: no-preference) {
-      .reveal {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
-      }
-      .reveal.visible { opacity: 1; transform: translateY(0); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  </style>
+.plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.plan-features li {
+  font-size: 13.5px; color: rgba(255,255,255,.60);
+  display: flex; align-items: flex-start; gap: 10px; line-height: 1.45;
+}
+.plan-features li svg { flex-shrink: 0; margin-top: 1px; }
+.plan.essential .plan-features li { color: rgba(255,255,255,.65); }
+.plan.premium .plan-features li { color: rgba(255,255,255,.74); }
+
+.plan-cta {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 24px; border-radius: var(--radius-pill);
+  font-family: var(--font-body); font-size: 14px; font-weight: 600;
+  letter-spacing: -.01em; cursor: pointer; border: 0;
+  transition: all 200ms var(--ease-out);
+}
+.plan.free .plan-cta     { background: rgba(255,255,255,.08); color: rgba(255,255,255,.75); }
+.plan.free .plan-cta:hover { background: rgba(255,255,255,.14); }
+.plan.essential .plan-cta {
+  background: rgba(56,189,248,.14); color: #7DD3FC; border: 1px solid rgba(56,189,248,.20);
+}
+.plan.essential .plan-cta:hover { background: rgba(56,189,248,.22); border-color: rgba(56,189,248,.40); }
+.plan.pro .plan-cta {
+  background: var(--violet-500); color: #fff;
+  box-shadow: 0 8px 26px rgba(107,75,255,.34);
+}
+.plan.pro .plan-cta:hover { background: var(--violet-600); transform: translateY(-1px); box-shadow: 0 14px 38px rgba(107,75,255,.48); }
+.plan.premium .plan-cta {
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+  color: #07070F;
+  box-shadow: 0 8px 30px rgba(201,169,110,.28);
+}
+.plan.premium .plan-cta:hover { transform: translateY(-1px); box-shadow: 0 16px 48px rgba(201,169,110,.44); }
+
+.plans-footnote {
+  text-align: center; margin-top: 44px;
+  font-size: 12px; color: rgba(255,255,255,.24); letter-spacing: .02em;
+}
+.plans-footnote a { color: rgba(255,255,255,.38); text-underline-offset: 3px; }
+
+
+/* ── CTA BANNER ───────────────────────────────────────────────── */
+.cta-banner {
+  background: #fff;
+  padding: 128px clamp(24px, 5vw, 80px);
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.cta-banner::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(107,75,255,.04), transparent);
+  pointer-events: none;
+}
+.cta-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 7.5vw, 96px);
+  font-weight: 800; letter-spacing: -.046em;
+  color: var(--ink-900); line-height: .95;
+  margin-bottom: 28px;
+}
+.cta-h2 em { font-style: normal; color: var(--violet-500); }
+.cta-sub {
+  font-size: 16px; color: var(--ink-500);
+  max-width: 380px; margin: 0 auto 48px; line-height: 1.65;
+}
+.btn-banner {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--ink-900); color: #fff;
+  font-family: var(--font-body); font-size: 15px; font-weight: 600;
+  letter-spacing: -.01em;
+  padding: 16px 38px; border-radius: var(--radius-pill);
+  text-decoration: none;
+  transition: all 200ms var(--ease-out);
+}
+.btn-banner:hover {
+  background: var(--violet-700); transform: translateY(-2px);
+  box-shadow: 0 18px 48px rgba(107,75,255,.28);
+}
+
+
+/* ── FOOTER ───────────────────────────────────────────────────── */
+footer {
+  background: var(--onyx);
+  border-top: 1px solid var(--rule-dark);
+  padding: 72px clamp(24px, 5vw, 80px) 40px;
+}
+.footer-inner { max-width: 1140px; margin: 0 auto; }
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid var(--rule-dark);
+  margin-bottom: 32px;
+}
+@media (max-width: 780px) {
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
+}
+.footer-brand img { height: 22px; margin-bottom: 16px; display: block; }
+.footer-brand p   { font-size: 13px; color: rgba(255,255,255,.28); line-height: 1.65; max-width: 220px; }
+.footer-col h4    { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .14em; color: rgba(255,255,255,.26); margin-bottom: 16px; }
+.footer-col ul    { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col a     { font-size: 13px; color: rgba(255,255,255,.40); text-decoration: none; transition: color 140ms; }
+.footer-col a:hover { color: rgba(255,255,255,.80); }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; color: rgba(255,255,255,.20); letter-spacing: .02em;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-bottom a { color: rgba(255,255,255,.26); text-decoration: none; }
+.footer-bottom a:hover { color: rgba(255,255,255,.54); }
+
+
+/* ── REVEAL ANIMATION ─────────────────────────────────────────── */
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 640ms var(--ease-out), transform 640ms var(--ease-out);
+}
+.reveal.vis { opacity: 1; transform: translateY(0); }
+
+</style>
 </head>
-
 <body>
-  <!-- ════ Atmosphere (orbs + sparks + cursor glow) ════ -->
-  <div class="atmosphere" aria-hidden="true">
-    <div class="orb orb-violet-1"></div>
-    <div class="orb orb-violet-2"></div>
-    <div class="orb orb-gold"></div>
-    <div class="spark" style="left: 12%; background: #A88EFF; animation-delay: 0s;"></div>
-    <div class="spark" style="left: 28%; background: #F5C518; animation-delay: 1.2s;"></div>
-    <div class="spark" style="left: 52%; background: #A88EFF; animation-delay: 2.4s;"></div>
-    <div class="spark" style="left: 74%; background: #F5C518; animation-delay: 3.1s;"></div>
-    <div class="spark" style="left: 88%; background: #A88EFF; animation-delay: 0.8s;"></div>
+
+
+<!-- ════════ NAV ════════════════════════════════════════════════ -->
+<nav class="nav" id="nav">
+  <a href="#" aria-label="Tikeles inicio">
+    <img src="assets/wordmark-light.svg" alt="Tikeles" class="nav-logo">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Funciones</a></li>
+    <li><a href="#product">La app</a></li>
+    <li><a href="#plans">Planes</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn-nav-ghost">Iniciar sesión</button>
+    <button class="btn-nav-primary">Comenzar gratis</button>
   </div>
-  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+</nav>
 
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <!--  NAV                                                                  -->
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <nav>
-    <div class="wrap nav-inner">
-      <a href="#" class="brand">
-        <span class="brand-mark"></span>
-        <span>Tiketes</span>
-      </a>
-      <div class="nav-links">
-        <a class="nav-link" href="#caracteristicas">Características</a>
-        <a class="nav-link" href="#precios">Precios</a>
-        <a class="nav-link" href="#faq">Preguntas</a>
-        <a class="nav-cta" href="#descargar">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
-          Descargar gratis
-        </a>
-      </div>
+
+<!-- ════════ HERO ═══════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+
+  <div class="hero-eyebrow">Punto de venta · México y LATAM</div>
+
+  <h1 class="hero-h1">
+    Vende en<br>
+    <em>segundos.</em><br>
+    Controla todo.
+  </h1>
+
+  <p class="hero-lead">
+    La app de ventas e inventario diseñada para negocios reales.
+    Sin complicaciones, sin contratos, sin sorpresas.
+  </p>
+
+  <div class="hero-actions">
+    <button class="btn-hero-primary" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})">Comenzar gratis →</button>
+    <button class="btn-hero-secondary" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})">Ver planes</button>
+  </div>
+
+  <p class="hero-caption">Sin tarjeta de crédito · Plan básico siempre gratis</p>
+
+  <div class="scroll-cue">
+    <div class="scroll-cue-line"></div>
+  </div>
+</section>
+
+
+<!-- ════════ STATS ═══════════════════════════════════════════════ -->
+<section class="stats-section">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-number" id="stat-negocios">7,200+</div>
+      <div class="stat-label">Negocios activos</div>
     </div>
-  </nav>
+    <div class="stat-item">
+      <div class="stat-number" id="stat-ventas">2.4M+</div>
+      <div class="stat-label">Ventas procesadas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">&lt;&nbsp;3s</div>
+      <div class="stat-label">Por cobrar una venta</div>
+    </div>
+  </div>
+</section>
 
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <!--  HERO                                                                  -->
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div class="hero-content reveal">
-        <div class="badge">
-          <span class="badge-dot"></span>
-          Hecho en México · Próximo lanzamiento
+
+<!-- ════════ FEATURES ════════════════════════════════════════════ -->
+<section class="features-section" id="features">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="s-eyebrow">Funciones</span>
+      <h2 class="s-h2">Todo lo que<br>necesitas.<br>Nada más.</h2>
+      <p class="s-lead">Diseñada para que cualquier persona en tu negocio la use el primer día, sin capacitación.</p>
+    </div>
+
+    <div class="features-grid" id="features-grid">
+
+      <div class="f-card">
+        <div class="f-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <path d="M8 21h8M12 17v4"/>
+          </svg>
         </div>
-
-        <h1 class="hero-title display">
-          El POS de tu negocio,<br/>
-          <span class="accent">sin comisiones.</span>
-        </h1>
-
-        <p class="hero-lead">
-          Inventario, tickets y comandas — todo desde tu celular.
-          Cobras como quieras y <strong>te quedas con el 100%</strong> de cada venta.
-          Sin sorpresas, sin comisiones por transacción.
-        </p>
-
-        <div class="hero-ctas">
-          <a href="#descargar" class="btn btn-primary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 01-.61-.92V2.734c0-.388.241-.72.61-.92zm10.89 10.893l2.302 2.302-10.391 5.881 8.089-8.183zm3.682-3.694l-2.69 1.522-2.812-2.812 2.812-2.812 2.69 1.522c.788.466.788 1.114 0 1.58zM5.41.59L15.79 6.404l-2.302 2.302L5.41.59z"/></svg>
-            Descargar Android
-          </a>
-          <a href="#caracteristicas" class="btn btn-secondary">
-            Ver demo
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-
-        <div class="hero-trust">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>Plan gratis para siempre</span>
-          <span class="hero-trust-divider">·</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>Sin tarjeta de crédito</span>
-          <span class="hero-trust-divider">·</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>5 min de setup</span>
-        </div>
-
-        <div class="hero-stats">
-          <div class="stat">
-            <div class="stat-num mono">0%</div>
-            <div class="stat-label">Comisión por venta</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num mono">11</div>
-            <div class="stat-label">Giros soportados</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num mono">100%</div>
-            <div class="stat-label">Hecho en México</div>
-          </div>
-        </div>
+        <div class="f-title">Punto de venta veloz</div>
+        <p class="f-desc">Busca productos, agrega al carrito y cobra en menos de 3 segundos. Efectivo, transferencia o fiado.</p>
       </div>
 
-      <!-- ═══ Phone Mockup — replica EXACTA del LoginScreen ═══ -->
-      <div class="phone-col reveal">
-        <div class="phone">
-          <div class="phone-screen">
-            <div class="phone-orb-1"></div>
-            <div class="phone-orb-2"></div>
-            <div class="phone-orb-3"></div>
-            <span class="phone-spark" style="left: 30%; background: #A88EFF; animation-delay: 0s;"></span>
-            <span class="phone-spark" style="left: 60%; background: #F5C518; animation-delay: 1.5s;"></span>
-            <span class="phone-spark" style="left: 80%; background: #A88EFF; animation-delay: 2.8s;"></span>
+      <div class="f-card">
+        <div class="f-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+            <path d="M16 3v4M8 3v4M2 13h20"/>
+          </svg>
+        </div>
+        <div class="f-title">Inventario en tiempo real</div>
+        <p class="f-desc">Cada venta actualiza el stock automáticamente. Alertas cuando un producto está por agotarse.</p>
+      </div>
 
-            <div class="phone-content">
-              <!-- Top pill -->
-              <div class="phone-pill">
-                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#A88EFF" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-                ¿Aún no tienes cuenta? <span class="phone-pill-accent">Crear cuenta</span>
+      <div class="f-card">
+        <div class="f-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v18h18"/>
+            <polyline points="18 9 12 15 8 11 3 16"/>
+          </svg>
+        </div>
+        <div class="f-title">Reportes de ventas</div>
+        <p class="f-desc">Ganancias del día, la semana y el mes de un vistazo. Historial completo siempre disponible.</p>
+      </div>
+
+      <div class="f-card">
+        <div class="f-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="f-title">Multi-empleado</div>
+        <p class="f-desc">Agrega a tu equipo, asigna ventas por empleado y ve el desempeño de cada uno.</p>
+      </div>
+
+      <div class="f-card">
+        <div class="f-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12V22H4V12"/>
+            <path d="M22 7H2v5h20V7z"/>
+            <path d="M12 22V7"/>
+            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+          </svg>
+        </div>
+        <div class="f-title">Clientes y fiados</div>
+        <p class="f-desc">Registra clientes, vende a crédito y lleva el control de lo que te deben, sin hojas de papel.</p>
+      </div>
+
+      <div class="f-card">
+        <div class="f-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <div class="f-title">Logros y racha de ventas</div>
+        <p class="f-desc">Mantén la motivación con rachas de ventas diarias y logros desbloqueables en tu perfil.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════ PRODUCT ══════════════════════════════════════════════ -->
+<section class="product-section" id="product">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="s-eyebrow">La app</span>
+      <h2 class="s-h2">Una pantalla.<br>Mil decisiones.</h2>
+      <p class="s-lead">Diseñada para que tus manos hagan el trabajo, no tu cabeza.</p>
+    </div>
+
+    <div class="phones-wrap">
+
+      <!-- Inventario -->
+      <div class="p-phone p-phone-main" style="background:#fff">
+        <div style="padding:14px;height:100%;display:flex;flex-direction:column">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div style="font-family:Sora,sans-serif;font-weight:700;font-size:12px;color:#0A0B1F">Inventario</div>
+            <div style="background:#6B4BFF;border-radius:7px;padding:4px 10px;font-size:9px;font-weight:600;color:#fff">+ Producto</div>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:10px">
+            <div style="flex:1;background:#F7F7FB;border:1px solid #EEEEF5;border-radius:9px;padding:7px 10px;display:flex;align-items:center;gap:6px">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#8A8AA3" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <span style="font-size:10px;color:#8A8AA3">Buscar producto…</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;flex:1;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:#fff;border:1px solid #EEEEF5;border-radius:11px">
+              <div style="width:34px;height:34px;border-radius:9px;background:#F2EEFF;color:#6B4BFF;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:14px;flex-shrink:0">C</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:11px;font-weight:500;color:#0A0B1F">Café Molido Premium</div>
+                <div style="font-size:9px;color:#8A8AA3;margin-top:1px;display:flex;gap:6px">
+                  <span style="font-family:JetBrains Mono,monospace">CAF-001</span><span>·</span><span>24 en stock</span>
+                </div>
               </div>
-
-              <!-- Wordmark -->
-              <div class="phone-wordmark-wrap">
-                <img src="./wordmark.png" alt="Tiketes" class="phone-wordmark" />
-              </div>
-
-              <!-- Heading -->
-              <div class="phone-heading">Inicia sesión</div>
-              <div class="phone-subtitle">Vuelve a tu mostrador en segundos.</div>
-
-              <!-- Glass form card -->
-              <div class="phone-card">
-                <!-- Google button -->
-                <div class="phone-google">
-                  <svg class="phone-google-icon" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                  </svg>
-                  <span class="phone-google-text">Continuar con Google</span>
-                </div>
-
-                <!-- Divider -->
-                <div class="phone-divider">
-                  <div class="phone-divider-line"></div>
-                  <span class="phone-divider-text">o con correo</span>
-                  <div class="phone-divider-line"></div>
-                </div>
-
-                <!-- Email -->
-                <div>
-                  <div class="phone-field-label">CORREO</div>
-                  <div class="phone-input">tu@correo.com</div>
-                </div>
-
-                <!-- Password -->
-                <div>
-                  <div class="phone-field-label">CONTRASEÑA</div>
-                  <div class="phone-input phone-input-with-icon">
-                    <span>••••••••</span>
-                    <svg class="phone-eye" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  </div>
-                </div>
-
-                <div class="phone-forgot">¿Olvidaste?</div>
-
-                <!-- Login button -->
-                <div class="phone-login-btn">Iniciar sesión</div>
-
-                <!-- Employee CTA -->
-                <div class="phone-bottom">
-                  <div class="phone-bottom-icon">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#A88EFF" stroke-width="2.4"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h7v7h-7z"/></svg>
-                  </div>
-                  <div class="phone-bottom-text">
-                    <div class="phone-bottom-title">Soy empleado</div>
-                    <div class="phone-bottom-sub">Escanear código QR</div>
-                  </div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:11.5px;color:#0A0B1F;font-variant-numeric:tabular-nums">$80.00</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:#fff;border:1px solid #EEEEF5;border-radius:11px">
+              <div style="width:34px;height:34px;border-radius:9px;background:#FFF7E6;color:#A07300;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:14px;flex-shrink:0">A</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:11px;font-weight:500;color:#0A0B1F">Azúcar 1kg</div>
+                <div style="font-size:9px;color:#8A8AA3;margin-top:1px;display:flex;gap:6px">
+                  <span style="font-family:JetBrains Mono,monospace">AZU-1K</span><span>·</span><span>16 en stock</span>
                 </div>
               </div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:11.5px;color:#0A0B1F;font-variant-numeric:tabular-nums">$50.00</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:#fff;border:1px solid #EEEEF5;border-radius:11px">
+              <div style="width:34px;height:34px;border-radius:9px;background:#E6F0FF;color:#1E5BB8;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:14px;flex-shrink:0">L</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:11px;font-weight:500;color:#0A0B1F">Leche Entera 1L</div>
+                <div style="font-size:9px;color:#8A8AA3;margin-top:1px;display:flex;gap:6px">
+                  <span style="font-family:JetBrains Mono,monospace">LEC-1L</span><span>·</span><span>32 en stock</span>
+                </div>
+              </div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:11.5px;color:#0A0B1F;font-variant-numeric:tabular-nums">$28.00</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:#fff;border:1px solid #EEEEF5;border-radius:11px">
+              <div style="width:34px;height:34px;border-radius:9px;background:#FFE6E6;color:#B8252B;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:14px;flex-shrink:0">G</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:11px;font-weight:500;color:#0A0B1F">Galletas Chips Ahoy</div>
+                <div style="font-size:9px;color:#A02020;margin-top:1px;display:flex;gap:6px;font-weight:600">
+                  <span style="font-family:JetBrains Mono,monospace;color:#8A8AA3;font-weight:400">GAL-CHA</span>
+                  <span style="color:#8A8AA3;font-weight:400">·</span>
+                  <span>⚠ 8 en stock</span>
+                </div>
+              </div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:11.5px;color:#0A0B1F;font-variant-numeric:tabular-nums">$35.00</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:#fff;border:1px solid #EEEEF5;border-radius:11px">
+              <div style="width:34px;height:34px;border-radius:9px;background:#E9F8EF;color:#137333;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:14px;flex-shrink:0">R</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:11px;font-weight:500;color:#0A0B1F">Refresco Cola 600ml</div>
+                <div style="font-size:9px;color:#8A8AA3;margin-top:1px;display:flex;gap:6px">
+                  <span style="font-family:JetBrains Mono,monospace">REF-600</span><span>·</span><span>41 en stock</span>
+                </div>
+              </div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:11.5px;color:#0A0B1F;font-variant-numeric:tabular-nums">$22.00</div>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Nueva venta -->
+      <div class="p-phone p-phone-side" style="background:#fff">
+        <div style="padding:14px;height:100%;display:flex;flex-direction:column">
+          <div style="font-family:Sora,sans-serif;font-weight:700;font-size:12px;color:#0A0B1F;margin-bottom:10px">Nueva venta</div>
+          <div style="display:flex;flex-direction:column;gap:6px;flex:1">
+            <div style="display:flex;align-items:center;gap:7px;padding:7px 8px;background:#F7F7FB;border:1px solid #EEEEF5;border-radius:9px">
+              <div style="width:28px;height:28px;border-radius:8px;background:#3A2417;color:#E9D7BB;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">☕</div>
+              <div style="flex:1"><div style="font-size:9.5px;font-weight:500;color:#0A0B1F">Café Molido</div><div style="font-size:8px;color:#8A8AA3">1 × $80.00</div></div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:10px;color:#0A0B1F;font-variant-numeric:tabular-nums">$80</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px;padding:7px 8px;background:#F7F7FB;border:1px solid #EEEEF5;border-radius:9px">
+              <div style="width:28px;height:28px;border-radius:8px;background:#FFF7E6;color:#A07300;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:11px;flex-shrink:0">A</div>
+              <div style="flex:1"><div style="font-size:9.5px;font-weight:500;color:#0A0B1F">Azúcar 1kg</div><div style="font-size:8px;color:#8A8AA3">1 × $50.00</div></div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:10px;color:#0A0B1F;font-variant-numeric:tabular-nums">$50</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px;padding:7px 8px;background:#F7F7FB;border:1px solid #EEEEF5;border-radius:9px">
+              <div style="width:28px;height:28px;border-radius:8px;background:#E6F0FF;color:#1E5BB8;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:11px;flex-shrink:0">L</div>
+              <div style="flex:1"><div style="font-size:9.5px;font-weight:500;color:#0A0B1F">Leche 1L ×2</div><div style="font-size:8px;color:#8A8AA3">2 × $28.00</div></div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:10px;color:#0A0B1F;font-variant-numeric:tabular-nums">$56</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px;padding:7px 8px;background:#F7F7FB;border:1px solid #EEEEF5;border-radius:9px">
+              <div style="width:28px;height:28px;border-radius:8px;background:#FFE6E6;color:#B8252B;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:11px;flex-shrink:0">G</div>
+              <div style="flex:1"><div style="font-size:9.5px;font-weight:500;color:#0A0B1F">Galletas Chips</div><div style="font-size:8px;color:#8A8AA3">1 × $35.00</div></div>
+              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:10px;color:#0A0B1F;font-variant-numeric:tabular-nums">$35</div>
+            </div>
+          </div>
+          <div style="border-top:1px dashed #DCDCE8;padding-top:10px;margin-top:8px">
+            <div style="display:flex;justify-content:space-between;font-size:9.5px;color:#5F5F7A;margin-bottom:3px"><span>Subtotal</span><span style="font-variant-numeric:tabular-nums;color:#0A0B1F">$185.13</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:9.5px;color:#5F5F7A;margin-bottom:8px"><span>IVA (16%)</span><span style="font-variant-numeric:tabular-nums;color:#0A0B1F">$29.62</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+              <span style="font-family:Sora,sans-serif;font-weight:700;font-size:12px;color:#0A0B1F">Total</span>
+              <span style="font-family:Sora,sans-serif;font-weight:800;font-size:18px;color:#0A0B1F;letter-spacing:-.03em;font-variant-numeric:tabular-nums">$215.76</span>
+            </div>
+            <div style="background:linear-gradient(135deg,#8B70FF,#4524D6);border-radius:11px;padding:10px;text-align:center;color:#fff;font-family:Inter,sans-serif;font-size:10.5px;font-weight:600;box-shadow:0 8px 20px rgba(107,75,255,.40)">
+              Cobrar $215.76
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
-  </section>
 
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <!--  GIROS                                                                -->
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <section id="giros">
-    <div class="wrap">
-      <div class="reveal">
-        <span class="section-eyebrow">Para tu giro</span>
-        <h2 class="section-title display">Tu negocio,<br/>tu manera de vender</h2>
-        <p class="section-sub">
-          Tiketes se adapta a 11 tipos de negocio mexicanos.
-          Cada uno ve sus categorías y herramientas justas — sin features de más que estorben.
-        </p>
-      </div>
-
-      <div class="giros-grid reveal">
-        <div class="giro-card">
-          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l1.5-5h15L21 9M3 9v11a1 1 0 001 1h16a1 1 0 001-1V9M3 9h18M8 13h.01M12 13h.01M16 13h.01"/></svg>
-          <div class="giro-name">Tienda</div>
-        </div>
-        <div class="giro-card">
-          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11h18l-2 9H5l-2-9zM6 6h12M9 3h6"/></svg>
-          <div class="giro-name">Restaurante</div>
-        </div>
-        <div class="giro-card">
-          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 8h1a4 4 0 010 8h-1M3 8h14v9a4 4 0 01-4 4H7a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
-          <div class="giro-name">Cafetería</div>
-        </div>
-        <div class="giro-card">
-          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V7M4 7l8-4 8 4M4 7l8 4 8-4M12 11v8"/></svg>
-          <div class="giro-name">Panadería</div>
-        </div>
-        <div class="giro-card">
-          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11V7a3 3 0 016 0v4M5 11h14l-1 9H6l-1-9zM12 15v3"/></svg>
-          <div class="giro-name">Farmacia</div>
-        </div>
-        <div class="giro-card">
-          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg>
-          <div class="giro-name">Carnicería</div>
-        </div>
-        <div class="giro-card">
-          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>
-          <div class="giro-name">Belleza</div>
-        </div>
-        <div class="giro-card">
-          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
-          <div class="giro-name">Ferretería</div>
-        </div>
-        <div class="giro-card">
-          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.38 3.46L16 2a4 4 0 00-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg>
-          <div class="giro-name">Ropa</div>
-        </div>
-        <div class="giro-card">
-          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-          <div class="giro-name">Servicios</div>
-        </div>
-        <div class="giro-card">
-          <svg class="giro-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16zM3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
-          <div class="giro-name">Otro giro</div>
-        </div>
-      </div>
+    <!-- Real app screenshot -->
+    <div class="reveal" style="margin-top:80px;text-align:center">
+      <img
+        src="assets/reference-full-platform.png"
+        alt="Tikeles — app de ventas e inventario para negocios en México"
+        style="width:100%;max-width:900px;border-radius:24px;box-shadow:0 32px 96px rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.06)"
+        loading="lazy"
+        width="900"
+        height="506"
+      >
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <!--  FEATURES                                                              -->
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <section id="caracteristicas">
-    <div class="wrap">
-      <div class="reveal">
-        <span class="section-eyebrow">Características</span>
-        <h2 class="section-title display">Todo lo que necesita<br/>tu negocio en un lugar</h2>
-      </div>
 
-      <div class="features-grid">
-        <div class="feature reveal">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.4L7.55 4.24M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16zM3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
-          </div>
-          <h3>Inventario en tiempo real</h3>
-          <p>Carga tu catálogo escaneando códigos de barras. El stock baja solo con cada venta. Alertas cuando se acerca a cero.</p>
-        </div>
-
-        <div class="feature reveal">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M9 16h6M9 8h6M5 22h14a2 2 0 002-2V4a2 2 0 00-2-2H5a2 2 0 00-2 2v16a2 2 0 002 2z"/></svg>
-          </div>
-          <h3>Tickets profesionales</h3>
-          <p>Imprime, manda por WhatsApp o exporta a PDF. Con tu logo y datos. Sin marca de Tiketes — pareces empresa grande.</p>
-        </div>
-
-        <div class="feature reveal">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18l-2 9H5l-2-9zM6 6h12M9 3h6"/></svg>
-          </div>
-          <h3>Comandas a cocina</h3>
-          <p>Para restaurantes y cafeterías. El mesero toma la orden y llega a la pantalla del cocinero al instante. En tiempo real.</p>
-        </div>
-
-        <div class="feature reveal">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/><circle cx="9" cy="7" r="4"/></svg>
-          </div>
-          <h3>Multi-empleado con QR</h3>
-          <p>Invita a tus empleados con un código QR. Cada uno con su rol: cajero, mesero, cocinero, gerente.</p>
-        </div>
-
-        <div class="feature reveal">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-          </div>
-          <h3>Reportes claros</h3>
-          <p>Ventas del día, semana o mes. Top productos, métodos de pago, propinas. Exportable a PDF o Excel.</p>
-        </div>
-
-        <div class="feature reveal">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-          </div>
-          <h3>Cobra como quieras</h3>
-          <p>Efectivo, tarjeta (tu terminal) o transferencia. Tiketes solo registra — <strong style="color: var(--fg)">nunca tocamos tu dinero</strong>.</p>
-        </div>
-
-        <div class="feature reveal">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-          </div>
-          <h3>Funciona en celular</h3>
-          <p>No necesitas computadora ni terminal cara. Solo tu Android. Funciona offline para no perder ventas.</p>
-        </div>
-
-        <div class="feature reveal">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.91 11.12L12 16l-8.91-4.88M12 22V16M22 7l-10 5L2 7l10-5 10 5z"/></svg>
-          </div>
-          <h3>Clientes y fiados</h3>
-          <p>Control de quién te debe y desde cuándo. Un toque para llamar o recordar por WhatsApp. Nunca olvides un cobro.</p>
-        </div>
-
-        <div class="feature reveal">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-          </div>
-          <h3>Delivery integrado</h3>
-          <p>Sincroniza con Uber Eats, Rappi y DiDi Food. Los pedidos llegan directo a tu cocina <em>(Plan Premium)</em>.</p>
-        </div>
-      </div>
+<!-- ════════ PLANS ════════════════════════════════════════════════ -->
+<section class="plans-section" id="plans">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="s-eyebrow">Planes</span>
+      <h2 class="s-h2">El precio justo<br>para cada etapa.</h2>
+      <p class="s-lead">Empieza gratis, crece cuando quieras. Sin contratos ni sorpresas.</p>
     </div>
-  </section>
 
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <!--  COMPARISON                                                            -->
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <section id="vs">
-    <div class="wrap reveal">
-      <span class="section-eyebrow">Diferencia honesta</span>
-      <h2 class="section-title display">Tú vendes,<br/>tú te quedas el dinero</h2>
-      <p class="section-sub">
-        La mayoría de POS te cobran 2-3% por cada venta con tarjeta.
-        En 1 año, eso puede ser <strong>más caro que un sueldo entero</strong>.
-        Tiketes nunca toca tu dinero — solo cobra tu suscripción fija.
-      </p>
+    <div class="plans-grid" id="plans-grid">
 
-      <div class="comp-card">
-        <div class="comp-grid">
-          <div class="comp-side">
-            <h3>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-              Otros sistemas
-            </h3>
-            <div class="comp-row">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              <span>Cobran 2-3% de comisión por venta con tarjeta</span>
-            </div>
-            <div class="comp-row">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              <span>Suscripción mensual + comisiones encima</span>
-            </div>
-            <div class="comp-row">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              <span>Terminal propia obligatoria con renta mensual</span>
-            </div>
-            <div class="comp-row">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              <span>Interfaz en inglés o mala traducción</span>
-            </div>
-            <div class="comp-row">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              <span>Soporte por chatbot, no humano</span>
-            </div>
-          </div>
-
-          <div class="comp-side">
-            <h3>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
-              Tiketes
-            </h3>
-            <div class="comp-row">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.6" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-              <span><strong style="color: var(--fg)">CERO comisión por venta</strong> — el 100% es tuyo</span>
-            </div>
-            <div class="comp-row">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.6" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Suscripción única fija — sin sorpresas</span>
-            </div>
-            <div class="comp-row">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.6" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Usa la terminal que ya tienes (Clip, Mercado Pago, BBVA…)</span>
-            </div>
-            <div class="comp-row">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.6" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Diseñado en México, para PyMEs mexicanas</span>
-            </div>
-            <div class="comp-row">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.6" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Soporte por WhatsApp en español</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <!--  PRICING                                                               -->
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <section id="precios">
-    <div class="wrap">
-      <div class="reveal">
-        <span class="section-eyebrow">Precios honestos</span>
-        <h2 class="section-title display">Paga solo lo que uses</h2>
-        <p class="section-sub">
-          Empieza gratis. Sube cuando tu negocio crezca.
-          Cancela cuando quieras — tu plan sigue activo hasta que termine el periodo pagado.
-        </p>
-      </div>
-
-      <div class="pricing-grid">
-        <div class="price reveal">
-          <div class="price-name">Free</div>
-          <div class="price-desc">Para empezar a vender hoy mismo</div>
-          <div class="price-amount-wrap">
-            <span class="price-currency">$</span>
-            <span class="price-amount mono">0</span>
-          </div>
-          <div class="price-period">MXN para siempre</div>
-          <ul class="price-features">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Hasta 100 productos</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Tickets digitales</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 1 sucursal</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Cierre de caja</li>
-          </ul>
-          <a href="#descargar" class="price-cta outline">Comenzar gratis</a>
-        </div>
-
-        <div class="price reveal">
-          <div class="price-name">Essential</div>
-          <div class="price-desc">Para tiendas que ya crecen</div>
-          <div class="price-amount-wrap">
-            <span class="price-currency">$</span>
-            <span class="price-amount mono">179</span>
-          </div>
-          <div class="price-period">MXN / mes</div>
-          <ul class="price-features">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Hasta 800 productos</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Empleados ilimitados</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Reportes en PDF</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Sin anuncios</li>
-          </ul>
-          <a href="#descargar" class="price-cta outline">Probar Essential</a>
-        </div>
-
-        <div class="price popular reveal">
-          <div class="price-tag">MÁS POPULAR</div>
-          <div class="price-name">Pro</div>
-          <div class="price-desc">Para restaurantes y multi-sucursal</div>
-          <div class="price-amount-wrap">
-            <span class="price-currency">$</span>
-            <span class="price-amount mono">350</span>
-          </div>
-          <div class="price-period">MXN / mes</div>
-          <ul class="price-features">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Hasta 2,500 productos</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Comandas a cocina</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Multi-sucursal</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Mesas y propinas</li>
-          </ul>
-          <a href="#descargar" class="price-cta primary">Probar Pro</a>
-        </div>
-
-        <div class="price reveal">
-          <div class="price-name">Premium</div>
-          <div class="price-desc">Para los que venden mucho</div>
-          <div class="price-amount-wrap">
-            <span class="price-currency">$</span>
-            <span class="price-amount mono">750</span>
-          </div>
-          <div class="price-period">MXN / mes</div>
-          <ul class="price-features">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Hasta 20,000 productos</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Delivery integrado</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Sugerencias IA</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Soporte prioritario</li>
-          </ul>
-          <a href="#descargar" class="price-cta outline">Probar Premium</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <!--  FAQ                                                                   -->
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <section id="faq">
-    <div class="wrap">
-      <div class="reveal">
-        <span class="section-eyebrow">Preguntas</span>
-        <h2 class="section-title display">Lo que más nos preguntan</h2>
-      </div>
-
-      <div class="faq-grid reveal">
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>¿Cobran comisión por cada venta?</span>
-            <span class="faq-q-icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            </span>
-          </summary>
-          <p class="faq-a">No. Tiketes solo cobra tu suscripción mensual fija. El 100% del dinero que te cobra el cliente queda contigo. Otros POS cobran 2-3% por cada venta con tarjeta — eso lo pagas en TU terminal externa (Clip, BBVA, etc.), no a nosotros.</p>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>¿Necesito una terminal de tarjeta?</span>
-            <span class="faq-q-icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            </span>
-          </summary>
-          <p class="faq-a">Solo si quieres cobrar con tarjeta. Tiketes funciona perfecto con efectivo y transferencia. Si ya tienes terminal (Clip, Mercado Pago, BBVA), úsala. Tiketes solo registra la venta — el cobro pasa por tu terminal.</p>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>¿Funciona sin internet?</span>
-            <span class="faq-q-icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            </span>
-          </summary>
-          <p class="faq-a">Sí. Puedes seguir vendiendo aunque se caiga el WiFi. Las ventas se guardan en tu celular y se sincronizan automáticamente cuando vuelve la conexión.</p>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>¿Cuánto tarda en estar listo?</span>
-            <span class="faq-q-icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            </span>
-          </summary>
-          <p class="faq-a">5 minutos. Te registras con tu correo, escoges el tipo de negocio (Tiketes te pre-configura categorías) y ya puedes vender. La primera venta es gratis sin necesidad de tarjeta.</p>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>¿Puedo invitar a mis empleados?</span>
-            <span class="faq-q-icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            </span>
-          </summary>
-          <p class="faq-a">Sí, desde el plan Essential. Generas un código QR, ellos lo escanean y entran con su propio usuario. Tú ves todas sus ventas y puedes asignarles roles (cajero, mesero, cocinero, gerente).</p>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>¿Puedo cancelar cuando quiera?</span>
-            <span class="faq-q-icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            </span>
-          </summary>
-          <p class="faq-a">Sí, sin penalización. Cuando cancelas, tu plan sigue activo hasta el final del periodo que ya pagaste. Después pasas a Free automáticamente. Tus datos no se borran nunca — solo regresas a los límites del plan gratis.</p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <!--  CTA FINAL                                                             -->
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <section id="descargar">
-    <div class="wrap">
-      <div class="cta-final reveal">
-        <h2 class="display">Empieza a vender hoy mismo</h2>
-        <p>Descarga gratis en tu celular Android. Primera venta en 5 minutos.</p>
-        <a href="#" class="btn btn-primary" style="font-size: 16px; padding: 17px 30px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 01-.61-.92V2.734c0-.388.241-.72.61-.92zm10.89 10.893l2.302 2.302-10.391 5.881 8.089-8.183zm3.682-3.694l-2.69 1.522-2.812-2.812 2.812-2.812 2.69 1.522c.788.466.788 1.114 0 1.58zM5.41.59L15.79 6.404l-2.302 2.302L5.41.59z"/></svg>
-          Descargar en Google Play
-        </a>
-        <div style="margin-top: 20px; font-size: 12.5px; color: var(--fg-3);">
-          Pronto disponible · Hecho con 💜 en México
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <!--  FOOTER                                                                -->
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <footer>
-    <div class="wrap">
-      <div class="footer-grid">
+      <!-- FREE -->
+      <div class="plan free">
         <div>
-          <div class="footer-brand">
-            <span class="brand-mark" style="width: 26px; height: 26px;"></span>
-            <span>Tiketes</span>
-          </div>
-          <p class="footer-tag">
-            POS sin comisiones para PyMEs mexicanas. Inventario, tickets,
-            comandas y reportes — todo desde tu celular.
-          </p>
-          <div class="footer-social">
-            <a class="social-btn" href="https://www.instagram.com/tiketes.oficial/" target="_blank" rel="noopener" aria-label="Instagram">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01"/></svg>
-            </a>
-            <a class="social-btn" href="mailto:soporte@tiketes.app" aria-label="Correo">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            </a>
-            <a class="social-btn" href="https://github.com/UrielGarcia12/tiketes" target="_blank" rel="noopener" aria-label="GitHub">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.01-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.23 1.84 1.23 1.07 1.83 2.81 1.3 3.49.99.11-.77.42-1.3.76-1.6-2.66-.3-5.46-1.33-5.46-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1-.32 3.3 1.23.96-.27 1.98-.4 3-.4s2.04.13 3 .4c2.3-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.29 0 .32.22.69.83.57C20.56 21.79 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
-            </a>
-          </div>
+          <div class="plan-label">Siempre gratis</div>
+          <div class="plan-name">Free</div>
         </div>
-        <div class="footer-col">
-          <h4>Producto</h4>
-          <a href="#caracteristicas">Características</a>
-          <a href="#precios">Precios</a>
-          <a href="#faq">Preguntas</a>
+        <div>
+          <div class="plan-price">$0<span class="cur">MXN</span></div>
+          <div class="plan-per">para siempre</div>
         </div>
-        <div class="footer-col">
-          <h4>Empresa</h4>
-          <a href="#descargar">Descargar</a>
-          <a href="mailto:soporte@tiketes.app">Soporte</a>
-          <a href="https://www.instagram.com/tiketes.oficial/" target="_blank" rel="noopener">Instagram</a>
-        </div>
-        <div class="footer-col">
-          <h4>Legal</h4>
-          <a href="./privacy.html">Privacidad</a>
-          <a href="./terms.html">Términos</a>
-          <a href="mailto:legal@tiketes.app">Contacto legal</a>
-        </div>
+        <div class="plan-rule"></div>
+        <ul class="plan-features">
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Ventas ilimitadas
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Hasta 100 productos
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            1 usuario · 1 sucursal
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Soporte chatbot
+          </li>
+        </ul>
+        <button class="plan-cta">
+          Comenzar gratis
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
       </div>
-      <div class="footer-bottom">
-        <div>© 2026 Tiketes · Hecho con 💜 en México</div>
-        <div class="mono">v1.0.0 · soporte@tiketes.app</div>
+
+      <!-- ESSENTIAL -->
+      <div class="plan essential">
+        <div>
+          <div class="plan-label">Para empezar en serio</div>
+          <div class="plan-name">Essential</div>
+        </div>
+        <div>
+          <div class="plan-price">$159<span class="cur">MXN</span></div>
+          <div class="plan-per">/mes</div>
+          <div class="plan-usd">≈ USD $8.80 · al cambio actual</div>
+        </div>
+        <div class="plan-rule"></div>
+        <ul class="plan-features">
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Hasta 800 productos
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            2 usuarios
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Registro de gastos
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Reportes mensuales
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Backup 6 meses
+          </li>
+        </ul>
+        <button class="plan-cta">
+          Suscribirme a Essential
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan pro">
+        <div class="plan-badge">Más popular</div>
+        <div>
+          <div class="plan-label">Para crecer</div>
+          <div class="plan-name">Pro</div>
+        </div>
+        <div>
+          <div class="plan-price">$399<span class="cur">MXN</span></div>
+          <div class="plan-per">/mes</div>
+          <div class="plan-usd">≈ USD $22 · al cambio actual</div>
+        </div>
+        <div class="plan-rule"></div>
+        <ul class="plan-features">
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B70FF" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Hasta 2,500 productos
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B70FF" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            10 usuarios
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B70FF" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Hasta 8 sucursales
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B70FF" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Reportes avanzados
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B70FF" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Soporte por WhatsApp
+          </li>
+        </ul>
+        <button class="plan-cta">
+          Suscribirme a Pro
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="plan premium">
+        <div>
+          <div class="plan-label">Potencia total</div>
+          <div class="plan-name">Premium</div>
+        </div>
+        <div>
+          <div class="plan-price">$859<span class="cur">MXN</span></div>
+          <div class="plan-per">/mes</div>
+          <div class="plan-usd">≈ USD $47 · al cambio actual</div>
+        </div>
+        <div class="plan-rule"></div>
+        <ul class="plan-features">
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Hasta 25,000 productos
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            25 usuarios
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Sucursales ilimitadas
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Clientes y fiados (crédito)
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Logros · Racha de ventas
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Backup diario · 1 año
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Soporte prioritario
+          </li>
+        </ul>
+        <button class="plan-cta">
+          Suscribirme a Premium
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+
+    </div>
+
+    <p class="plans-footnote">
+      ¿Necesitas cambiar o cancelar? <a href="mailto:oscar.garciavevm@gmail.com">Escríbenos</a> y lo gestionamos en menos de 24 h.
+    </p>
+  </div>
+</section>
+
+
+<!-- ════════ CTA ══════════════════════════════════════════════════ -->
+<section class="cta-banner">
+  <div style="position:relative;z-index:1">
+    <h2 class="cta-h2">Empieza <em>hoy.</em><br>Es gratis.</h2>
+    <p class="cta-sub">Sin tarjeta de crédito. Sin contratos. Cancela cuando quieras.</p>
+    <a href="#" class="btn-banner">
+      Comenzar gratis
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
+
+
+<!-- ════════ FOOTER ═══════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/wordmark-light.svg" alt="Tikeles">
+        <p>La caja registradora que cabe en tu bolsillo. Para negocios en México y LATAM.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Producto</h4>
+        <ul>
+          <li><a href="#features">Funciones</a></li>
+          <li><a href="#plans">Precios</a></li>
+          <li><a href="#">Descargar</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#">Acerca de</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Soporte</h4>
+        <ul>
+          <li><a href="mailto:oscar.garciavevm@gmail.com">Contacto</a></li>
+          <li><a href="#">Centro de ayuda</a></li>
+        </ul>
       </div>
     </div>
-  </footer>
+    <div class="footer-bottom">
+      <span>© 2026 Tikeles &nbsp;·&nbsp; Hecho con ♥ en México</span>
+      <div style="display:flex;align-items:center;gap:24px">
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <!--  Behavior — cursor follow + reveal on scroll                          -->
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-  <script>
-    // Cursor glow follows mouse (desktop only)
-    if (window.matchMedia('(hover: hover)').matches) {
-      const glow = document.getElementById('cursorGlow');
-      let raf;
-      window.addEventListener('mousemove', (e) => {
-        cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(() => {
-          glow.style.transform = `translate(${e.clientX - 180}px, ${e.clientY - 180}px)`;
-        });
+
+<script>
+// ── Nav ──────────────────────────────────────────────────────────
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 52);
+}, { passive: true });
+
+// ── Reveal / stagger ─────────────────────────────────────────────
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    if (e.target.id === 'features-grid') {
+      e.target.querySelectorAll('.f-card').forEach((c, i) => {
+        setTimeout(() => c.classList.add('vis'), i * 75);
       });
-    }
-
-    // Reveal on scroll (IntersectionObserver)
-    const reveals = document.querySelectorAll('.reveal');
-    if ('IntersectionObserver' in window && reveals.length) {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            io.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
-      reveals.forEach((el) => io.observe(el));
+    } else if (e.target.id === 'plans-grid') {
+      e.target.querySelectorAll('.plan').forEach((p, i) => {
+        setTimeout(() => p.classList.add('vis'), i * 115);
+      });
     } else {
-      reveals.forEach((el) => el.classList.add('visible'));
+      e.target.classList.add('vis');
     }
-  </script>
+    io.unobserve(e.target);
+  });
+}, { threshold: 0.10 });
+
+document.querySelectorAll('.reveal, #features-grid, #plans-grid').forEach(el => io.observe(el));
+
+// ── Stat counters (trigger on viewport entry) ─────────────────────
+function animateCounter(el, target, fmt) {
+  if (!el) return;
+  const t0 = performance.now(), dur = 1600;
+  const tick = (now) => {
+    const p = Math.min(1, (now - t0) / dur);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = fmt(Math.round(target * e));
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+const statsEl = document.querySelector('.stats-section');
+if (statsEl) {
+  const statsObs = new IntersectionObserver((entries) => {
+    if (!entries[0].isIntersecting) return;
+    animateCounter(
+      document.getElementById('stat-negocios'), 7200,
+      v => v.toLocaleString('es-MX') + '+'
+    );
+    animateCounter(
+      document.getElementById('stat-ventas'), 2400000,
+      v => v >= 1000000 ? (v/1000000).toFixed(1).replace('.0','') + 'M+' : v.toLocaleString('es-MX') + '+'
+    );
+    statsObs.disconnect();
+  }, { threshold: 0.3 });
+  statsObs.observe(statsEl);
+}
+</script>
+
 </body>
 </html>
