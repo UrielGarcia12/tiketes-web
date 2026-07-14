@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>Ticket — Tiketes</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:#07070F}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  display:flex;flex-direction:column;align-items:center;
+  padding-bottom:60px;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Top bar */
+.topbar{
+  width:100%;padding:20px 20px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  margin-bottom:28px;
+}
+.topbar-brand{
+  font-size:13px;font-weight:700;letter-spacing:.10em;
+  color:rgba(255,255,255,.38);text-transform:uppercase;
+}
+.topbar-tag{
+  font-size:11px;font-weight:700;padding:4px 12px;border-radius:999px;
+  letter-spacing:.04em;transition:all .3s;
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.4);
+}
+.topbar-tag.ready{
+  background:rgba(34,197,94,.15);color:#4ADE80;
+}
+.topbar-tag.error{
+  background:rgba(239,68,68,.14);color:#F87171;
+}
+
+/* Status success section */
+.status{
+  display:flex;flex-direction:column;align-items:center;
+  padding:0 24px 28px;gap:14px;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .4s,transform .4s;
+}
+.status.show{opacity:1;transform:translateY(0)}
+.status-icon{
+  width:72px;height:72px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#22C55E,#16A34A);
+  box-shadow:0 14px 36px rgba(34,197,94,.38);
+}
+.status-icon svg{
+  width:34px;height:34px;stroke:#fff;stroke-width:3;
+  fill:none;stroke-linecap:round;stroke-linejoin:round;
+}
+.status-title{
+  font-size:22px;font-weight:800;color:#fff;
+  letter-spacing:-.04em;text-align:center;
+}
+.status-sub{
+  font-size:14px;color:rgba(255,255,255,.40);
+  text-align:center;line-height:1.55;max-width:280px;
+}
+
+/* Receipt card */
+.card{
+  background:#fff;border-radius:20px;
+  width:calc(100% - 32px);max-width:420px;
+  padding:26px 22px 22px;margin:0 16px;
+  box-shadow:0 28px 72px rgba(0,0,0,.48);
+  opacity:0;transform:translateY(16px);
+  transition:opacity .5s .15s,transform .5s .15s;
+}
+.card.show{opacity:1;transform:translateY(0)}
+.store-name{
+  font-size:17px;font-weight:800;color:#0F0F28;
+  text-align:center;letter-spacing:-.3px;
+}
+.meta{text-align:center;font-size:11.5px;color:#9CA3AF;margin-top:4px}
+.divider{border:none;border-top:1px dashed #E5E7EB;margin:14px 0}
+.items-hdr{
+  display:flex;justify-content:space-between;
+  font-size:10px;font-weight:700;color:#9CA3AF;
+  text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;
+}
+.item-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0}
+.item-name{font-size:13px;color:#1F2937;flex:1;padding-right:8px}
+.item-qty{font-size:11px;color:#9CA3AF;width:26px;text-align:center}
+.item-price{font-size:13px;font-weight:600;color:#1F2937;text-align:right}
+.total-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0 0}
+.total-label{font-size:12px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:1px}
+.total-amt{font-size:28px;font-weight:900;color:#0F0F28;letter-spacing:-1px}
+.pay-line{display:flex;justify-content:space-between;font-size:12px;color:#9CA3AF;padding:3px 0}
+.pay-line span:last-child{font-weight:600;color:#374151}
+.pay-badge{
+  display:block;font-size:11px;font-weight:700;
+  padding:4px 0;border-radius:20px;margin-top:10px;
+  text-align:center;
+}
+.bef{background:#DCFCE7;color:#15803D}
+.bta{background:#DBEAFE;color:#1D4ED8}
+.btr{background:#F3E8FF;color:#7C3AED}
+.bcr{background:#FEF3C7;color:#D97706}
+.card-footer{text-align:center;font-size:12px;color:#9CA3AF;margin-top:12px}
+.tik-brand{
+  text-align:center;font-size:10px;font-weight:700;
+  letter-spacing:.14em;color:#C4B5FD;text-transform:uppercase;margin-top:8px;
+}
+
+/* Download button */
+.btn-dl{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:calc(100% - 32px);max-width:420px;
+  margin:18px 16px 0;padding:16px;
+  background:#fff;border:0;border-radius:16px;cursor:pointer;
+  font-size:15px;font-weight:700;color:#0F0F28;letter-spacing:-.02em;
+  box-shadow:0 8px 28px rgba(0,0,0,.28);
+  -webkit-tap-highlight-color:transparent;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .4s .3s,transform .4s .3s;
+}
+.btn-dl.show{opacity:1;transform:translateY(0)}
+.btn-dl:active{opacity:.8;transform:scale(.97)}
+
+/* Error */
+.err{
+  color:rgba(255,255,255,.44);text-align:center;
+  padding:64px 32px;max-width:320px;
+}
+.err h2{font-size:20px;color:#fff;margin-bottom:8px;font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-brand">Tiketes</span>
+  <span class="topbar-tag" id="tag">Cargando…</span>
+</div>
+
+<div class="status" id="statusEl">
+  <div class="status-icon">
+    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <div class="status-title">¡Ticket guardado!</div>
+  <div class="status-sub">Tu comprobante se guardó en tu galería. Puedes compartirlo o imprimirlo cuando quieras.</div>
+</div>
+
+<div id="receiptWrap"></div>
+
+<button class="btn-dl" id="btnDl" onclick="downloadNow()">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  Guardar ticket
+</button>
+
+<canvas id="cv" style="display:none;position:fixed;left:-9999px;top:-9999px"></canvas>
+
+<script>
+function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fmt(n){return'$'+Number(n||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+function $(id){return document.getElementById(id);}
+
+var raw=new URLSearchParams(location.search).get('d');
+var d=null;
+try{d=JSON.parse(raw||'');}catch(e){}
+
+var tag=$('tag'),statusEl=$('statusEl'),receiptWrap=$('receiptWrap'),btnDl=$('btnDl');
+
+if(!d||d.T==null){
+  receiptWrap.innerHTML='<div class="err"><h2>Comprobante no encontrado</h2><p>El enlace no es válido o ya expiró. Pide al negocio que genere el QR de nuevo.</p></div>';
+  tag.textContent='Inválido';
+  tag.className='topbar-tag error';
+}else{
+  renderReceipt();
+  generatePNG().then(function(blob){
+    if(blob){
+      _blob=blob;
+      triggerDownload(blob);
+    }
+    showSuccess();
+  });
+}
+
+function renderReceipt(){
+  var items=Array.isArray(d.i)?d.i:[];
+  var pc=d.cr?'bcr':(d.pm==='transferencia'?'btr':d.pm==='tarjeta'?'bta':'bef');
+  var pl=d.cr?'FIADO':(d.pm==='transferencia'?'TRANSFERENCIA':d.pm==='tarjeta'?'TARJETA':'EFECTIVO');
+  var rows=items.map(function(i){
+    return '<div class="item-row"><span class="item-name">'+esc(i.n)+'</span><span class="item-qty">×'+i.q+'</span><span class="item-price">'+fmt(Number(i.q||0)*Number(i.p||0))+'</span></div>';
+  }).join('');
+  var payExtra='';
+  if(!d.cr&&d.pa!=null){
+    payExtra='<div class="pay-line"><span>Pagó</span><span>'+fmt(d.pa)+'</span></div><div class="pay-line"><span>Cambio</span><span>'+fmt(d.ca||0)+'</span></div>';
+  }
+  receiptWrap.innerHTML='<div class="card" id="card">'
+    +'<div class="store-name">'+esc(d.s||'Tienda')+'</div>'
+    +'<div class="meta">Folio #'+esc(d.f)+' &middot; '+esc(d.d)+' &middot; '+esc(d.t)+'</div>'
+    +'<hr class="divider"/>'
+    +'<div class="items-hdr"><span>Producto</span><span></span><span>Total</span></div>'
+    +rows
+    +'<hr class="divider"/>'
+    +'<div class="total-row"><span class="total-label">Total</span><span class="total-amt">'+fmt(d.T)+'</span></div>'
+    +(payExtra?'<div style="margin-top:8px">'+payExtra+'</div>':'')
+    +'<div class="pay-badge '+pc+'">'+pl+'</div>'
+    +(d.cr?'<div class="card-footer" style="color:#D97706">Pendiente a pagar</div>':'<div class="card-footer">¡Gracias por tu compra!</div>')
+    +'<div class="tik-brand">vía Tiketes</div>'
+    +'</div>';
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){ $('card').classList.add('show'); });
+  });
+}
+
+function generatePNG(){
+  return new Promise(function(resolve){
+    var items=Array.isArray(d.i)?d.i:[];
+    var DPR=2,W=560,PAD=44;
+    var H=PAD+60+32+(items.length*36)+24+80+100+PAD;
+    var cv=$('cv');
+    cv.width=W*DPR; cv.height=H*DPR;
+    var ctx=cv.getContext('2d');
+    ctx.scale(DPR,DPR);
+    var cx=W/2;
+    // bg
+    ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,W,H);
+    // border
+    ctx.strokeStyle='#E5E7EB'; ctx.lineWidth=1;
+    ctx.strokeRect(0.5,0.5,W-1,H-1);
+    var y=PAD;
+    // store name
+    ctx.fillStyle='#0F0F28'; ctx.font='800 20px -apple-system,system-ui,sans-serif'; ctx.textAlign='center';
+    ctx.fillText((d.s||'Tienda').slice(0,34),cx,y+20); y+=36;
+    // folio + date
+    ctx.fillStyle='#9CA3AF'; ctx.font='400 13px -apple-system,system-ui,sans-serif';
+    ctx.fillText('Folio #'+(d.f||'—')+' · '+(d.d||'')+' · '+(d.t||''),cx,y+13); y+=28;
+    // dashed line
+    dash(ctx,PAD,y,W-PAD); y+=18;
+    // items
+    ctx.textAlign='left';
+    items.forEach(function(it){
+      var lineTotal=fmt(Number(it.q||0)*Number(it.p||0));
+      var name=String(it.n||'').slice(0,28);
+      ctx.fillStyle='#1F2937'; ctx.font='400 14px -apple-system,system-ui,sans-serif';
+      ctx.fillText(name,PAD,y+14);
+      ctx.fillStyle='#9CA3AF'; ctx.font='400 12px -apple-system,system-ui,sans-serif';
+      ctx.fillText('×'+it.q,PAD+220,y+14);
+      ctx.textAlign='right'; ctx.fillStyle='#374151'; ctx.font='600 14px -apple-system,system-ui,sans-serif';
+      ctx.fillText(lineTotal,W-PAD,y+14); ctx.textAlign='left';
+      y+=36;
+    });
+    // dashed line
+    dash(ctx,PAD,y,W-PAD); y+=22;
+    // total
+    ctx.fillStyle='#6B7280'; ctx.font='700 12px -apple-system,system-ui,sans-serif'; ctx.textAlign='left';
+    ctx.fillText('TOTAL',PAD,y+28);
+    ctx.fillStyle='#0F0F28'; ctx.font='900 34px -apple-system,system-ui,sans-serif'; ctx.textAlign='right';
+    ctx.fillText(fmt(d.T),W-PAD,y+32); y+=52;
+    // payment badge
+    var pl=d.cr?'FIADO':(d.pm==='transferencia'?'TRANSFERENCIA':d.pm==='tarjeta'?'TARJETA':'EFECTIVO');
+    var pbg=d.cr?'#FEF3C7':(d.pm==='transferencia'?'#F3E8FF':d.pm==='tarjeta'?'#DBEAFE':'#DCFCE7');
+    var pfg=d.cr?'#D97706':(d.pm==='transferencia'?'#7C3AED':d.pm==='tarjeta'?'#1D4ED8':'#15803D');
+    var bw=120,bh=26; ctx.fillStyle=pbg;
+    roundRect(ctx,cx-bw/2,y,bw,bh,13); ctx.fill();
+    ctx.fillStyle=pfg; ctx.font='700 12px -apple-system,system-ui,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(pl,cx,y+17); y+=42;
+    // efectivo detail
+    if(!d.cr&&d.pa!=null){
+      ctx.textAlign='left'; ctx.fillStyle='#9CA3AF'; ctx.font='400 12px -apple-system,system-ui,sans-serif';
+      ctx.fillText('Pagó',PAD,y+12); ctx.textAlign='right'; ctx.fillStyle='#374151'; ctx.font='600 12px -apple-system,system-ui,sans-serif';
+      ctx.fillText(fmt(d.pa),W-PAD,y+12); y+=20;
+      ctx.textAlign='left'; ctx.fillStyle='#9CA3AF'; ctx.font='400 12px -apple-system,system-ui,sans-serif';
+      ctx.fillText('Cambio',PAD,y+12); ctx.textAlign='right'; ctx.fillStyle='#374151'; ctx.font='600 12px -apple-system,system-ui,sans-serif';
+      ctx.fillText(fmt(d.ca||0),W-PAD,y+12); y+=20;
+    }
+    y+=8;
+    // footer
+    ctx.textAlign='center'; ctx.fillStyle='#9CA3AF'; ctx.font='400 12px -apple-system,system-ui,sans-serif';
+    ctx.fillText(d.cr?'Pendiente a pagar':'¡Gracias por tu compra!',cx,y+12); y+=22;
+    ctx.fillStyle='#C4B5FD'; ctx.font='700 10px -apple-system,system-ui,sans-serif';
+    ctx.fillText('VÍA TIKETES',cx,y+12);
+    cv.toBlob(function(b){resolve(b);},'image/png');
+  });
+}
+
+function dash(ctx,x1,y,x2){
+  ctx.save(); ctx.strokeStyle='#E5E7EB'; ctx.setLineDash([5,4]); ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(x1,y); ctx.lineTo(x2,y); ctx.stroke(); ctx.restore();
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+}
+
+var _blob=null;
+function triggerDownload(blob){
+  var store=(d.s||'Tiketes').replace(/[^\w\u00C0-\u024F]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
+  var fname='Ticket-'+store+'-'+d.f+'.png';
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url; a.download=fname;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);document.body.removeChild(a);},4000);
+}
+
+function downloadNow(){
+  if(_blob) triggerDownload(_blob);
+}
+
+function showSuccess(){
+  tag.textContent='Listo ✓';
+  tag.className='topbar-tag ready';
+  statusEl.classList.add('show');
+  btnDl.classList.add('show');
+}
+</script>
+</body>
+</html>
