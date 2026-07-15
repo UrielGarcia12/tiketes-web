@@ -1,0 +1,80 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+/* Escáner — réplica de ScannerScreen: cámara + marco + producto detectado */
+.stage{background:linear-gradient(180deg,#EEEEF5 0%,#F7F7FB 100%);padding:24px;border-radius:18px;display:flex;justify-content:center;align-items:flex-start}
+.phone{position:relative;width:340px;height:720px;border-radius:32px;background:#0A0B14;overflow:hidden;box-shadow:0 28px 64px rgba(15,15,40,.28);display:flex;flex-direction:column}
+
+/* "cámara" */
+.cam{position:absolute;inset:0;background:
+  radial-gradient(120% 80% at 50% 30%, #2A2A3A 0%, #14141F 55%, #0A0B14 100%);}
+.cam::after{content:'';position:absolute;inset:0;background:
+  repeating-linear-gradient(0deg, rgba(255,255,255,.014) 0 2px, transparent 2px 4px);}
+
+.top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:16px}
+.top .x{width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.top .t{font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff}
+.top .fl{width:34px;height:34px;border-radius:12px;background:rgba(245,197,24,.22);display:flex;align-items:center;justify-content:center}
+
+/* marco de escaneo */
+.frame{position:relative;z-index:2;margin:52px auto 0;width:232px;height:150px}
+.frame i{position:absolute;width:30px;height:30px;border:3px solid #A88EFF;border-radius:4px}
+.frame i:nth-child(1){top:0;left:0;border-right:0;border-bottom:0}
+.frame i:nth-child(2){top:0;right:0;border-left:0;border-bottom:0}
+.frame i:nth-child(3){bottom:0;left:0;border-right:0;border-top:0}
+.frame i:nth-child(4){bottom:0;right:0;border-left:0;border-top:0}
+.laser{position:absolute;left:8px;right:8px;top:50%;height:2px;background:linear-gradient(90deg,transparent,#A88EFF,transparent);box-shadow:0 0 12px rgba(168,142,255,.8)}
+/* código de barras simulado */
+.bars{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:2px;align-items:center;opacity:.5}
+.bars b{display:block;width:2px;height:44px;background:#fff}
+.bars b:nth-child(3n){height:54px;width:3px}
+.bars b:nth-child(4n){height:34px}
+
+.hint{position:relative;z-index:2;text-align:center;font-family:var(--font-body);font-size:12px;color:rgba(255,255,255,.55);margin-top:18px}
+
+/* producto detectado */
+.found{
+  position:relative;z-index:2;margin:auto 14px 14px;background:#fff;border-radius:18px;padding:13px;
+  display:flex;align-items:center;gap:11px;box-shadow:0 18px 40px rgba(0,0,0,.4);
+}
+.found .im{width:46px;height:46px;border-radius:12px;background:#F2EEFF;display:flex;align-items:center;justify-content:center;font-size:22px}
+.found .in{flex:1;min-width:0}
+.found .nm{font-family:var(--font-display);font-weight:700;font-size:13.5px;color:var(--ink-900)}
+.found .sk{font-family:var(--font-mono);font-size:9.5px;color:var(--fg-muted);margin-top:2px}
+.found .pr{font-family:var(--font-display);font-weight:800;font-size:17px;color:var(--ink-900)}
+.chip{display:inline-block;background:#DCFCE7;color:#15803D;font-family:var(--font-body);font-weight:700;font-size:8px;padding:2px 7px;border-radius:99px;margin-top:4px}
+
+.add{
+  position:relative;z-index:2;margin:0 14px 18px;border-radius:16px;padding:14px;text-align:center;
+  background:linear-gradient(90deg,#8B70FF,#4524D6);color:#fff;
+  font-family:var(--font-body);font-weight:700;font-size:14px;
+  box-shadow:0 12px 24px rgba(107,75,255,.44);
+}
+</style></head>
+<body><div class="stage"><div class="phone">
+  <div class="cam"></div>
+
+  <div class="top">
+    <div class="x"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+    <div class="t">Escanear producto</div>
+    <div class="fl"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+  </div>
+
+  <div class="frame">
+    <i></i><i></i><i></i><i></i>
+    <div class="bars"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+    <div class="laser"></div>
+  </div>
+  <div class="hint">Apunta al código de barras</div>
+
+  <div class="found">
+    <div class="im">🥤</div>
+    <div class="in">
+      <div class="nm">Coca Cola 600ml</div>
+      <div class="sk">7501055363513</div>
+      <div class="chip">EN INVENTARIO · 24</div>
+    </div>
+    <div class="pr">$18</div>
+  </div>
+
+  <div class="add">Agregar a la venta</div>
+</div></div></body></html>

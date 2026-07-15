@@ -1,0 +1,127 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+/* Perfil + logros — réplica de ProfileScreen/AchievementsScreen
+   Anillo del avatar y colores por plan = PLAN_THEMES (pro = #6B4BFF).      */
+.stage{background:linear-gradient(180deg,#EEEEF5 0%,#F7F7FB 100%);padding:24px;border-radius:18px;display:flex;justify-content:center;align-items:flex-start}
+.phone{position:relative;width:340px;height:720px;border-radius:32px;background:#F7F7FB;overflow:hidden;box-shadow:0 28px 64px rgba(15,15,40,.18),0 8px 18px rgba(15,15,40,.06);display:flex;flex-direction:column}
+
+.head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 4px}
+.head .title{font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--ink-900)}
+.head .ic{width:34px;height:34px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(15,15,40,.05)}
+
+.scroll{flex:1;overflow:hidden;padding:6px 16px}
+
+/* Avatar con anillo del plan */
+.me{display:flex;flex-direction:column;align-items:center;padding:10px 0 4px}
+.ring{
+  width:92px;height:92px;border-radius:50%;padding:3px;
+  background:#6B4BFF;box-shadow:0 12px 28px rgba(107,75,255,.34);
+  display:flex;align-items:center;justify-content:center;
+}
+.av{
+  width:100%;height:100%;border-radius:50%;
+  background:linear-gradient(135deg,#8B70FF,#4524D6);
+  display:flex;align-items:center;justify-content:center;border:3px solid #F7F7FB;
+}
+.av span{font-family:var(--font-display);font-weight:800;font-size:32px;color:#fff}
+.tag{
+  margin-top:-11px;background:#6B4BFF;border-radius:99px;padding:3px 12px;
+  font-family:var(--font-body);font-weight:700;font-size:9.5px;color:#fff;letter-spacing:.06em;
+  box-shadow:0 4px 10px rgba(107,75,255,.34);
+}
+.me .n{font-family:var(--font-display);font-weight:800;font-size:19px;color:var(--ink-900);margin-top:11px;letter-spacing:-.3px}
+.me .e{font-family:var(--font-mono);font-size:10.5px;color:var(--fg-muted);margin-top:3px}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.kpi{background:#fff;border-radius:14px;padding:11px 8px;text-align:center;box-shadow:0 1px 3px rgba(15,15,40,.05)}
+.kpi .v{font-family:var(--font-display);font-weight:800;font-size:17px;color:var(--ink-900);font-variant-numeric:tabular-nums}
+.kpi .k{font-family:var(--font-body);font-size:8.5px;color:var(--fg-muted);margin-top:3px;letter-spacing:.04em}
+
+/* Nivel */
+.lvl{background:#fff;border-radius:16px;padding:13px;margin-top:12px;box-shadow:0 1px 3px rgba(15,15,40,.05)}
+.lvl .r{display:flex;align-items:center;justify-content:space-between}
+.lvl .t{font-family:var(--font-display);font-weight:700;font-size:12.5px;color:var(--ink-900);display:flex;align-items:center;gap:6px}
+.lvl .x{font-family:var(--font-mono);font-size:9.5px;color:var(--fg-muted)}
+.bar{height:6px;border-radius:99px;background:#EEEEF5;margin-top:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:64%;border-radius:99px;background:linear-gradient(90deg,#8B70FF,#4524D6)}
+
+/* Logros */
+.sh{display:flex;align-items:center;justify-content:space-between;margin:16px 0 9px}
+.sh .t{font-family:var(--font-display);font-weight:700;font-size:12.5px;color:var(--ink-900);display:inline-flex;align-items:center;gap:8px}
+.sh .t::before{content:'';width:3px;height:12px;background:var(--violet-500);border-radius:3px}
+.sh .see{font-family:var(--font-body);font-weight:600;font-size:10.5px;color:var(--violet-700)}
+
+.tro{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.t1{background:#fff;border-radius:14px;padding:10px 4px;text-align:center;box-shadow:0 1px 3px rgba(15,15,40,.05);position:relative}
+.t1 .em{font-size:21px;line-height:24px}
+.t1 .nm{font-family:var(--font-body);font-weight:600;font-size:7.5px;color:var(--ink-900);margin-top:4px;line-height:1.2}
+.t1.lock{opacity:.34}
+.t1.on::after{content:'';position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:99px;background:#22C55E}
+
+/* Próximo logro */
+.next{background:linear-gradient(135deg,#F2EEFF,#FAFAFE);border:1px solid rgba(107,75,255,.18);border-radius:16px;padding:13px;margin-top:12px}
+.next .h{display:flex;align-items:center;gap:8px}
+.next .h .em{font-size:20px}
+.next .h .tt{font-family:var(--font-display);font-weight:700;font-size:12px;color:var(--ink-900)}
+.next .h .ss{font-family:var(--font-body);font-size:9.5px;color:var(--fg-muted);margin-top:1px}
+.next .bar{background:#E3DBFF;margin-top:10px}
+.next .bar i{width:78%}
+.next .pg{font-family:var(--font-mono);font-size:9px;color:var(--violet-700);text-align:right;margin-top:5px}
+</style></head>
+<body><div class="stage"><div class="phone">
+
+  <div class="head">
+    <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0A0B1F" stroke-width="2.4" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="title">Perfil</div>
+    <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0A0B1F" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6h.09A1.65 1.65 0 0 0 10.6 3.09V3a2 2 0 1 1 4 0v.09A1.65 1.65 0 0 0 16.11 4.6h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v.09a1.65 1.65 0 0 0 1.51 1.51H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+  </div>
+
+  <div class="scroll">
+    <div class="me">
+      <div class="ring"><div class="av"><span>M</span></div></div>
+      <div class="tag">PRO</div>
+      <div class="n">Marisol</div>
+      <div class="e">marisol@abarrotes.mx</div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><div class="v">1,284</div><div class="k">Ventas</div></div>
+      <div class="kpi"><div class="v">312</div><div class="k">Productos</div></div>
+      <div class="kpi"><div class="v">28</div><div class="k">Días de racha</div></div>
+    </div>
+
+    <div class="lvl">
+      <div class="r">
+        <div class="t">⚡ Nivel 12 · Comerciante</div>
+        <div class="x">2,480 / 3,900 XP</div>
+      </div>
+      <div class="bar"><i></i></div>
+    </div>
+
+    <div class="sh"><div class="t">Logros</div><div class="see">Ver todos ›</div></div>
+    <div class="tro">
+      <div class="t1 on"><div class="em">🎉</div><div class="nm">Primera venta</div></div>
+      <div class="t1 on"><div class="em">🔥</div><div class="nm">10 ventas</div></div>
+      <div class="t1 on"><div class="em">💰</div><div class="nm">$1,000</div></div>
+      <div class="t1 on"><div class="em">📦</div><div class="nm">Primer producto</div></div>
+      <div class="t1 on"><div class="em">🌙</div><div class="nm">Venta nocturna</div></div>
+      <div class="t1 on"><div class="em">🏆</div><div class="nm">100 ventas</div></div>
+      <div class="t1 lock"><div class="em">👑</div><div class="nm">$10,000</div></div>
+      <div class="t1 lock"><div class="em">🚀</div><div class="nm">1,000 ventas</div></div>
+    </div>
+
+    <div class="next">
+      <div class="h">
+        <div class="em">👑</div>
+        <div>
+          <div class="tt">Próximo a desbloquear</div>
+          <div class="ss">$10,000 en ventas · Magnate</div>
+        </div>
+      </div>
+      <div class="bar"><i></i></div>
+      <div class="pg">$7,840 / $10,000</div>
+    </div>
+  </div>
+
+</div></div></body></html>

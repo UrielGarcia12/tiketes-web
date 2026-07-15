@@ -418,6 +418,49 @@ body {
 .product-section .s-eyebrow { color: rgba(255,255,255,.32); }
 .product-section .s-lead    { color: rgba(255,255,255,.40); }
 
+/* ── POR DENTRO: rejilla de pantallas reales ───────────────────── */
+.tour-section {
+  background: var(--onyx);
+  border-top: 1px solid var(--rule-dark);
+  padding: clamp(72px, 11vh, 130px) 0;
+}
+.tour-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 3vw, 44px);
+  margin-top: clamp(40px, 6vh, 68px);
+}
+@media (max-width: 1000px) { .tour-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px)  { .tour-grid { grid-template-columns: 1fr; max-width: 340px; margin-inline: auto; } }
+
+.tour-item { display: flex; flex-direction: column; }
+.tour-phone {
+  position: relative; width: 100%; aspect-ratio: 390/844;
+  border-radius: 26px; overflow: hidden;
+  border: 1.5px solid rgba(255,255,255,.10);
+  background: #07070F;
+  box-shadow: 0 30px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04);
+  transition: transform 400ms var(--ease-out), box-shadow 400ms var(--ease-out), border-color 400ms;
+}
+.tour-item:hover .tour-phone {
+  transform: translateY(-8px);
+  border-color: rgba(107,75,255,.34);
+  box-shadow: 0 44px 80px rgba(0,0,0,.7), 0 0 54px rgba(107,75,255,.12);
+}
+.tour-phone iframe {
+  position: absolute; inset: 0;
+  width: 390px; height: 844px;
+  border: 0; pointer-events: none; transform-origin: top left;
+}
+.tour-t {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 17px; color: #fff; letter-spacing: -.02em;
+  margin: 22px 0 7px;
+}
+.tour-d {
+  font-size: 13px; line-height: 1.62;
+  color: rgba(255,255,255,.42);
+}
+
 /* Phone frames with iframe screens */
 .phones-wrap {
   display: flex; justify-content: center; align-items: flex-end;
@@ -722,6 +765,7 @@ footer {
   <ul class="nav-links">
     <li><a href="#features">Funciones</a></li>
     <li><a href="#product">La app</a></li>
+    <li><a href="#tour">Por dentro</a></li>
     <li><a href="#plans">Planes</a></li>
   </ul>
   <div class="nav-actions">
@@ -1033,6 +1077,55 @@ footer {
 
 
 <!-- ════════ PLANS ════════════════════════════════════════════════ -->
+<!-- ════════ POR DENTRO ═══════════════════════════════════════════ -->
+<section class="tour-section" id="tour">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="s-eyebrow">Por dentro</span>
+      <h2 class="s-h2 rv">Así se ve<br>trabajar aquí.</h2>
+      <p class="s-lead rv rv-d1">Cada pantalla es la de verdad. Nada de maquetas bonitas que luego no existen.</p>
+    </div>
+
+    <div class="tour-grid">
+      <article class="tour-item rv">
+        <div class="tour-phone"><iframe src="screens/43-scanner.html" title="Escanear un producto" scrolling="no" loading="lazy"></iframe></div>
+        <h3 class="tour-t">Escanea y cobra</h3>
+        <p class="tour-d">Apuntas al código de barras y el producto entra a la venta con su precio y su stock. Sin teclear nada.</p>
+      </article>
+
+      <article class="tour-item rv rv-d1">
+        <div class="tour-phone"><iframe src="screens/40-ticket-view.html" title="Vista del ticket" scrolling="no" loading="lazy"></iframe></div>
+        <h3 class="tour-t">El ticket de tu cliente</h3>
+        <p class="tour-d">Se arma solo: productos, descuento, total y cambio. Lo imprimes, lo compartes por WhatsApp o le pasas el QR.</p>
+      </article>
+
+      <article class="tour-item rv rv-d2">
+        <div class="tour-phone"><iframe src="screens/45-alta-producto.html" title="Dar de alta un producto" scrolling="no" loading="lazy"></iframe></div>
+        <h3 class="tour-t">Da de alta en segundos</h3>
+        <p class="tour-d">Escaneas, pones precio y stock, eliges categoría. La foto es opcional. Listo para vender.</p>
+      </article>
+
+      <article class="tour-item rv">
+        <div class="tour-phone"><iframe src="screens/42-profile-logros.html" title="Perfil y logros" scrolling="no" loading="lazy"></iframe></div>
+        <h3 class="tour-t">Logros y rachas</h3>
+        <p class="tour-d">Tu primera venta, las 100, los $10,000. Subes de nivel conforme tu negocio crece. Se desbloquean solos.</p>
+      </article>
+
+      <article class="tour-item rv rv-d1">
+        <div class="tour-phone"><iframe src="screens/44-empleado.html" title="Modo empleado" scrolling="no" loading="lazy"></iframe></div>
+        <h3 class="tour-t">Modo empleado</h3>
+        <p class="tour-d">Tu cajero cobra y consulta inventario, pero no ve tus ganancias ni puede anular ventas sin tu permiso.</p>
+      </article>
+
+      <article class="tour-item rv rv-d2">
+        <div class="tour-phone"><iframe src="screens/41-login.html" title="Iniciar sesión" scrolling="no" loading="lazy"></iframe></div>
+        <h3 class="tour-t">Entra desde donde sea</h3>
+        <p class="tour-d">Tu cuenta vive en la nube. Cambias de teléfono y tu inventario, tus ventas y tu equipo siguen ahí.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
 <section class="plans-section" id="plans">
   <div class="section-inner">
     <div class="reveal">
@@ -1246,6 +1339,7 @@ footer {
         <h4>Empresa</h4>
         <ul>
           <li><a href="#product">La app</a></li>
+    <li><a href="#tour">Por dentro</a></li>
           <li><a href="#features">Funciones</a></li>
         </ul>
       </div>
@@ -1293,7 +1387,7 @@ function comingSoon(){
 
 // ── Scale iframes to fit phone frames ────────────────────────────
 function scalePhoneIframes() {
-  document.querySelectorAll('.p-phone').forEach(phone => {
+  document.querySelectorAll('.p-phone, .tour-phone').forEach(phone => {
     const iframe = phone.querySelector('iframe');
     if (!iframe) return;
     const scaleX = phone.offsetWidth / 390;

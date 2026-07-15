@@ -1,0 +1,98 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+/* Modo empleado — réplica de EmployeeDashboardScreen: vista limitada,
+   sin finanzas del dueño. El QR de invitación es lo que los da de alta.   */
+.stage{background:linear-gradient(180deg,#EEEEF5 0%,#F7F7FB 100%);padding:24px;border-radius:18px;display:flex;justify-content:center;align-items:flex-start}
+.phone{position:relative;width:340px;height:720px;border-radius:32px;background:#F7F7FB;overflow:hidden;box-shadow:0 28px 64px rgba(15,15,40,.18);display:flex;flex-direction:column}
+
+.head{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 6px}
+.head .g .hi{font-family:var(--font-body);font-size:10.5px;color:var(--fg-muted)}
+.head .g .n{font-family:var(--font-display);font-weight:700;font-size:16px;color:var(--ink-900);display:flex;align-items:center;gap:7px;margin-top:2px}
+.badge{background:#E0F2FE;color:#0369A1;font-family:var(--font-body);font-weight:700;font-size:8px;padding:2px 7px;border-radius:99px;letter-spacing:.06em}
+.head .ic{width:34px;height:34px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(15,15,40,.05)}
+
+.body{flex:1;padding:8px 16px;overflow:hidden}
+
+/* Turno */
+.shift{background:linear-gradient(135deg,#15152A,#0A0B1F);border-radius:18px;padding:16px;color:#fff;position:relative;overflow:hidden}
+.shift::after{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(closest-side,rgba(56,189,248,.28),transparent)}
+.shift .k{font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;color:rgba(255,255,255,.45)}
+.shift .v{font-family:var(--font-display);font-weight:800;font-size:30px;margin-top:5px;letter-spacing:-.02em}
+.shift .s{font-family:var(--font-body);font-size:11px;color:rgba(255,255,255,.5);margin-top:3px}
+.shift .live{position:absolute;top:16px;right:16px;display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.2);padding:3px 8px;border-radius:99px}
+.shift .live i{width:5px;height:5px;border-radius:99px;background:#4ADE80}
+.shift .live span{font-family:var(--font-body);font-weight:700;font-size:8px;color:#4ADE80;letter-spacing:.06em}
+
+/* Acciones permitidas */
+.sh{font-family:var(--font-display);font-weight:700;font-size:12.5px;color:var(--ink-900);display:inline-flex;align-items:center;gap:8px;margin:16px 0 9px}
+.sh::before{content:'';width:3px;height:12px;background:var(--violet-500);border-radius:3px}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.a{background:#fff;border-radius:16px;padding:14px 12px;box-shadow:0 1px 3px rgba(15,15,40,.05)}
+.a .em{font-size:20px}
+.a .t{font-family:var(--font-display);font-weight:700;font-size:12.5px;color:var(--ink-900);margin-top:7px}
+.a .d{font-family:var(--font-body);font-size:9.5px;color:var(--fg-muted);margin-top:2px;line-height:1.35}
+
+/* Bloqueado para empleados */
+.lock{background:#fff;border-radius:16px;padding:13px;margin-top:9px;display:flex;align-items:center;gap:11px;opacity:.6;box-shadow:0 1px 3px rgba(15,15,40,.05)}
+.lock .em{font-size:18px;filter:grayscale(1)}
+.lock .t{font-family:var(--font-display);font-weight:700;font-size:12px;color:var(--ink-900)}
+.lock .d{font-family:var(--font-body);font-size:9.5px;color:var(--fg-muted);margin-top:1px}
+.lock .ic{margin-left:auto}
+
+/* Nav */
+.nav{display:flex;justify-content:space-around;align-items:center;padding:11px 0 14px;background:#fff;border-top:1px solid #EEEEF5}
+.nv{display:flex;flex-direction:column;align-items:center;gap:3px}
+.nv .em{font-size:16px;opacity:.4}
+.nv.on .em{opacity:1}
+.nv .t{font-family:var(--font-body);font-weight:600;font-size:8.5px;color:var(--fg-muted)}
+.nv.on .t{color:var(--violet-700)}
+.plus{width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#8B70FF,#4524D6);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(107,75,255,.42);margin-top:-14px}
+</style></head>
+<body><div class="stage"><div class="phone">
+
+  <div class="head">
+    <div class="g">
+      <div class="hi">Buen día,</div>
+      <div class="n">Carlos <span class="badge">EMPLEADO</span></div>
+    </div>
+    <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0A0B1F" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+  </div>
+
+  <div class="body">
+    <div class="shift">
+      <div class="live"><i></i><span>EN TURNO</span></div>
+      <div class="k">VENDIDO EN TU TURNO</div>
+      <div class="v">$2,340.50</div>
+      <div class="s">18 ventas · desde las 9:00 a.m.</div>
+    </div>
+
+    <div class="sh">Lo que puedes hacer</div>
+    <div class="acts">
+      <div class="a"><div class="em">🛒</div><div class="t">Nueva venta</div><div class="d">Cobra y entrega el ticket</div></div>
+      <div class="a"><div class="em">📷</div><div class="t">Escanear</div><div class="d">Busca por código de barras</div></div>
+      <div class="a"><div class="em">📦</div><div class="t">Ver inventario</div><div class="d">Consulta stock y precios</div></div>
+      <div class="a"><div class="em">💬</div><div class="t">Avisar al dueño</div><div class="d">Reporta faltantes</div></div>
+    </div>
+
+    <div class="sh">Solo el dueño</div>
+    <div class="lock">
+      <div class="em">💰</div>
+      <div><div class="t">Ganancias y cortes</div><div class="d">Visible solo para el dueño</div></div>
+      <div class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    </div>
+    <div class="lock">
+      <div class="em">🗑️</div>
+      <div><div class="t">Anular una venta</div><div class="d">Requiere aprobación del dueño</div></div>
+      <div class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <div class="nv on"><div class="em">🏠</div><div class="t">Inicio</div></div>
+    <div class="nv"><div class="em">🧾</div><div class="t">Ventas</div></div>
+    <div class="plus"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+    <div class="nv"><div class="em">📦</div><div class="t">Productos</div></div>
+    <div class="nv"><div class="em">👤</div><div class="t">Perfil</div></div>
+  </div>
+
+</div></div></body></html>

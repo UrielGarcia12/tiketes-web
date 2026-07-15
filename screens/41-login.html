@@ -1,0 +1,88 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+/* Login — réplica de src/screens/LoginScreen.tsx (fondo #050617 + orbes) */
+.stage{background:linear-gradient(180deg,#EEEEF5 0%,#F7F7FB 100%);padding:24px;border-radius:18px;display:flex;justify-content:center;align-items:flex-start}
+.phone{
+  position:relative;width:340px;height:720px;border-radius:32px;background:#050617;overflow:hidden;
+  box-shadow:0 28px 64px rgba(15,15,40,.28),0 8px 18px rgba(15,15,40,.10);
+  display:flex;flex-direction:column;
+}
+/* Orbes exactos del LoginScreen */
+.orb{position:absolute;border-radius:999px;filter:blur(34px);pointer-events:none}
+.orb-a{top:-70px;left:-60px;width:240px;height:240px;background:rgba(107,75,255,.45)}
+.orb-b{top:200px;right:-80px;width:200px;height:200px;background:rgba(245,197,24,.18)}
+.orb-c{bottom:-60px;left:30px;width:180px;height:180px;background:rgba(107,75,255,.22)}
+
+.wrap{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 26px}
+
+.brand{display:flex;flex-direction:column;align-items:center;margin-bottom:30px}
+.mark{
+  width:62px;height:62px;border-radius:20px;
+  background:linear-gradient(135deg,#8B70FF,#4524D6);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 16px 34px rgba(107,75,255,.44);
+}
+.mark span{font-family:var(--font-display);font-weight:800;font-size:30px;color:#fff;line-height:1}
+.brand .n{font-family:var(--font-display);font-weight:800;font-size:22px;color:#fff;margin-top:14px;letter-spacing:-.5px}
+.brand .s{font-family:var(--font-body);font-size:12.5px;color:rgba(255,255,255,.5);margin-top:5px}
+
+.lb{font-family:var(--font-body);font-weight:600;font-size:10px;letter-spacing:1.2px;color:rgba(255,255,255,.5);margin-bottom:7px;text-transform:uppercase}
+.inp{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
+  border-radius:14px;padding:13px 14px;font-family:var(--font-body);font-size:14px;
+  color:rgba(255,255,255,.42);margin-bottom:14px;
+}
+.inp.f{border-color:rgba(167,142,255,.72);background:rgba(139,112,255,.10);color:#fff}
+.pw{display:flex;align-items:center;justify-content:space-between}
+.pw .dots{letter-spacing:3px;color:#fff}
+
+.forgot{text-align:right;font-family:var(--font-body);font-weight:600;font-size:11.5px;color:#A88EFF;margin:-4px 0 18px}
+
+.cta{
+  border-radius:18px;padding:15px;text-align:center;
+  background:linear-gradient(90deg,#8B70FF,#4524D6);
+  font-family:var(--font-body);font-weight:700;font-size:14.5px;color:#fff;
+  box-shadow:0 12px 22px rgba(107,75,255,.44);
+}
+.sep{display:flex;align-items:center;gap:10px;margin:18px 0}
+.sep i{flex:1;height:1px;background:rgba(255,255,255,.1)}
+.sep span{font-family:var(--font-body);font-size:10.5px;color:rgba(255,255,255,.32);letter-spacing:.06em}
+.goo{
+  border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:12px;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  font-family:var(--font-body);font-weight:600;font-size:13.5px;color:#fff;
+  background:rgba(255,255,255,.05);
+}
+.new{text-align:center;font-family:var(--font-body);font-size:12.5px;color:rgba(255,255,255,.45);margin-top:22px}
+.new b{color:#A88EFF;font-weight:600}
+</style></head>
+<body><div class="stage"><div class="phone">
+  <div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
+
+  <div class="wrap">
+    <div class="brand">
+      <div class="mark"><span>T</span></div>
+      <div class="n">Tiketes</div>
+      <div class="s">Tu negocio, en tu bolsillo</div>
+    </div>
+
+    <div class="lb">Correo electrónico</div>
+    <div class="inp f">marisol@abarrotes.mx</div>
+
+    <div class="lb">Contraseña</div>
+    <div class="inp pw"><span class="dots">••••••••••</span>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    </div>
+    <div class="forgot">¿Olvidaste tu contraseña?</div>
+
+    <div class="cta">Entrar</div>
+
+    <div class="sep"><i></i><span>o continúa con</span><i></i></div>
+    <div class="goo">
+      <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
+      Continuar con Google
+    </div>
+
+    <div class="new">¿Nuevo por aquí? <b>Crea tu cuenta</b></div>
+  </div>
+</div></div></body></html>
