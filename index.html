@@ -120,9 +120,9 @@ body {
   background: var(--onyx);
   position: relative; overflow: hidden;
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, .7fr);
   align-items: center;
-  column-gap: clamp(20px, 4vw, 64px);
+  column-gap: clamp(16px, 2.5vw, 40px);
   padding: 120px clamp(24px, 5vw, 80px) 96px;
   text-align: left;
 }
@@ -199,10 +199,12 @@ body {
 
 .hero-h1 {
   font-family: var(--font-hero);
-  font-size: clamp(70px, 13vw, 190px);
+  /* "Controla todo." es la línea más larga: el tamaño se ajusta para que
+     quepa en una sola línea, si no el titular desborda el hero. */
+  font-size: clamp(46px, 7.7vw, 112px);
   font-weight: 800;
   letter-spacing: -.018em;
-  line-height: .84;
+  line-height: .86;
   text-transform: uppercase;
   color: #fff;
   max-width: 100%;
@@ -254,15 +256,17 @@ body {
    igual que el sujeto rompe el título en las referencias editoriales.   */
 .printer {
   position: relative; z-index: 3;
-  width: clamp(180px, 22vw, 268px);
-  margin-left: -6%;                 /* pisa el titular, como la raqueta */
+  width: clamp(180px, 21vw, 250px);
+  margin-left: -14%;                /* pisa el titular, como la raqueta */
+  /* Lo sube para que caiga entre "segundos." y "controla todo." */
+  margin-bottom: clamp(70px, 17vh, 170px);
   transform: rotate(2.4deg);
   filter: drop-shadow(0 40px 70px rgba(0,0,0,.62));
   pointer-events: none;
   opacity: 0; animation: printerIn .9s .35s cubic-bezier(.16,1,.3,1) forwards;
 }
 @keyframes printerIn { from { opacity: 0; transform: rotate(2.4deg) translateY(-26px); } to { opacity: 1; transform: rotate(2.4deg) translateY(0); } }
-@media (max-width: 900px) { .printer { margin-left: 0; width: clamp(150px, 40vw, 200px); } }
+@media (max-width: 900px) { .printer { margin-left: 0; margin-bottom: 0; width: clamp(150px, 40vw, 200px); } }
 .pr-slot {
   height: 8px; background: var(--onyx-3);
   border: 1px solid var(--rule-dark); border-bottom: 0;
