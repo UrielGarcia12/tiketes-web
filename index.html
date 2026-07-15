@@ -521,20 +521,36 @@ body {
 }
 
 /* Premium */
+/* Premium usa el oro de la app (#F5C518 de PLAN_THEMES), no el oro del sitio */
 .plan.premium {
-  background: linear-gradient(155deg, #130F09 0%, #1B1609 100%);
-  border-color: rgba(201,169,110,.18);
+  background: linear-gradient(155deg, #15152A 0%, #1B1609 100%);
+  border-color: rgba(245,197,24,.22);
 }
 .plan.premium:hover {
-  border-color: rgba(201,169,110,.45);
-  box-shadow: 0 0 64px rgba(201,169,110,.07);
+  border-color: rgba(245,197,24,.55);
+  box-shadow: 0 0 64px rgba(245,197,24,.09);
 }
 .plan.premium::before {
   content: ''; position: absolute;
   top: -90px; right: -90px; width: 340px; height: 340px;
-  background: radial-gradient(closest-side, rgba(201,169,110,.13), transparent);
+  background: radial-gradient(closest-side, rgba(245,197,24,.16), transparent);
   pointer-events: none;
 }
+
+/* ── Barrido "holo" de la app (PLAN_THEMES.holoColors) ─────────── */
+/* En la app cada tarjeta tiene un destello que la recorre. Aquí se
+   dispara al pasar el mouse: mismo gesto, mismo color por plan.     */
+.plan::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 38%, var(--holo, rgba(255,255,255,.10)) 50%, transparent 62%);
+  transform: translateX(-120%);
+  transition: transform .9s cubic-bezier(.16,1,.3,1);
+}
+.plan:hover::after { transform: translateX(120%); }
+.plan.free      { --holo: rgba(134,239,172,.20); }
+.plan.essential { --holo: rgba(125,211,252,.20); }
+.plan.pro       { --holo: rgba(199,182,255,.22); }
+.plan.premium   { --holo: rgba(253,230,138,.22); }
 
 .plan-badge {
   position: absolute; top: 20px; right: 20px;
@@ -568,7 +584,7 @@ body {
 .plan-per  { font-size: 13px; color: rgba(255,255,255,.32); margin-top: 6px; }
 
 .plan-rule { height: 1px; background: rgba(255,255,255,.06); }
-.plan.premium .plan-rule { background: rgba(201,169,110,.11); }
+.plan.premium .plan-rule { background: rgba(245,197,24,.14); }
 
 .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; flex: 1; }
 .plan-features li {
@@ -597,12 +613,13 @@ body {
   box-shadow: 0 8px 26px rgba(107,75,255,.34);
 }
 .plan.pro .plan-cta:hover { background: var(--violet-600); transform: translateY(-1px); box-shadow: 0 14px 38px rgba(107,75,255,.48); }
+/* Botón Premium con el oro de la app: #FDE68A → #F5C518, texto #7A5500 */
 .plan.premium .plan-cta {
-  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
-  color: #07070F;
-  box-shadow: 0 8px 30px rgba(201,169,110,.28);
+  background: linear-gradient(135deg, #FDE68A 0%, #F5C518 100%);
+  color: #7A5500;
+  box-shadow: 0 8px 30px rgba(245,197,24,.30);
 }
-.plan.premium .plan-cta:hover { transform: translateY(-1px); box-shadow: 0 16px 48px rgba(201,169,110,.44); }
+.plan.premium .plan-cta:hover { transform: translateY(-1px); box-shadow: 0 16px 48px rgba(245,197,24,.46); }
 
 .plans-footnote {
   text-align: center; margin-top: 44px;
@@ -1029,7 +1046,7 @@ footer {
       <!-- FREE -->
       <div class="plan free">
         <div>
-          <div class="plan-label">Siempre gratis</div>
+          <div class="plan-label">Empieza aquí</div>
           <div class="plan-name">Free</div>
         </div>
         <div>
@@ -1064,7 +1081,7 @@ footer {
       <!-- ESSENTIAL -->
       <div class="plan essential">
         <div>
-          <div class="plan-label">Para empezar en serio</div>
+          <div class="plan-label">Recomendado</div>
           <div class="plan-name">Essential</div>
         </div>
         <div>
@@ -1104,7 +1121,7 @@ footer {
       <div class="plan pro">
         <div class="plan-badge">Más popular</div>
         <div>
-          <div class="plan-label">Para crecer</div>
+          <div class="plan-label">Mejor valor</div>
           <div class="plan-name">Pro</div>
         </div>
         <div>
@@ -1143,7 +1160,7 @@ footer {
       <!-- PREMIUM -->
       <div class="plan premium">
         <div>
-          <div class="plan-label">Potencia total</div>
+          <div class="plan-label">Premium</div>
           <div class="plan-name">Premium</div>
         </div>
         <div>
