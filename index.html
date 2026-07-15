@@ -40,15 +40,19 @@ body {
 }
 
 /* ── NAV ──────────────────────────────────────────────────────── */
+/* Grid de 3 columnas: la del centro queda centrada de verdad, sin importar
+   que el logo y los botones midan distinto (con space-between se recorrían). */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   height: 68px;
-  display: flex; align-items: center;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
   padding: 0 clamp(24px, 5vw, 80px);
-  justify-content: space-between;
   border-bottom: 1px solid transparent;
   transition: background 300ms var(--ease-out), border-color 300ms var(--ease-out);
 }
+.nav > a:first-child { justify-self: start; }
+.nav-links  { justify-self: center; }
+.nav-actions{ justify-self: end; }
 .nav.scrolled {
   background: rgba(7,7,15,.88);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -508,7 +512,6 @@ body {
   color: rgba(255,255,255,.36); margin-top: 10px;
 }
 .plan-per  { font-size: 13px; color: rgba(255,255,255,.32); margin-top: 6px; }
-.plan-usd  { font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,.20); margin-top: 4px; letter-spacing: .04em; }
 
 .plan-rule { height: 1px; background: rgba(255,255,255,.06); }
 .plan.premium .plan-rule { background: rgba(201,169,110,.11); }
@@ -1009,7 +1012,6 @@ footer {
         <div>
           <div class="plan-price">$159<span class="cur">MXN</span></div>
           <div class="plan-per">/mes</div>
-          <div class="plan-usd">≈ USD $8.80 · al cambio actual</div>
         </div>
         <div class="plan-rule"></div>
         <ul class="plan-features">
@@ -1050,7 +1052,6 @@ footer {
         <div>
           <div class="plan-price">$399<span class="cur">MXN</span></div>
           <div class="plan-per">/mes</div>
-          <div class="plan-usd">≈ USD $22 · al cambio actual</div>
         </div>
         <div class="plan-rule"></div>
         <ul class="plan-features">
@@ -1090,7 +1091,6 @@ footer {
         <div>
           <div class="plan-price">$859<span class="cur">MXN</span></div>
           <div class="plan-per">/mes</div>
-          <div class="plan-usd">≈ USD $47 · al cambio actual</div>
         </div>
         <div class="plan-rule"></div>
         <ul class="plan-features">

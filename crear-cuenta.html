@@ -5,207 +5,197 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Crear cuenta — Tiketes</title>
 <meta name="description" content="Crea tu cuenta de Tiketes y empieza a vender hoy. Gratis, sin tarjeta."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="colors_and_type.css">
 <style>
+/* ════════════════════════════════════════════════════════════════
+   Mismos tokens que la app (src/constants/colors.ts + Fonts).
+   Fondo #050617, orbes violeta+oro, inputs r14, CTA r18 con glow.
+   ════════════════════════════════════════════════════════════════ */
+:root{
+  --ink950:#050617; --ink900:#0A0B1F;
+  --violet500:#6B4BFF; --violet700:#4524D6; --violet300:#A88EFF; --violet400:#8B70FF;
+  --gold:#F5C518;
+  --f-display:'Sora',system-ui,sans-serif;
+  --f-body:'Inter',system-ui,sans-serif;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%}
+html{scroll-behavior:smooth}
 body{
-  background:var(--onyx,#07070F);
-  font-family:var(--font-body,Inter,sans-serif);
-  color:#fff;
-  display:flex;flex-direction:column;align-items:center;
-  padding:0 16px 64px;
-  -webkit-font-smoothing:antialiased;
+  background:var(--ink950);color:#fff;font-family:var(--f-body);
+  min-height:100dvh;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;align-items:center;padding:0 18px 56px;
 }
+/* Orbes de fondo — mismos colores/posiciones que SignupScreen */
+.orb{position:fixed;border-radius:999px;pointer-events:none;z-index:0;filter:blur(38px)}
+.orb-a{top:-90px;left:-70px;width:300px;height:300px;background:rgba(107,75,255,.45)}
+.orb-b{top:260px;right:-90px;width:250px;height:250px;background:rgba(245,197,24,.18)}
+.orb-c{bottom:-120px;left:10%;width:260px;height:260px;background:rgba(107,75,255,.22)}
 
-/* ── Top bar ─────────────────────────────────────────────── */
-.bar{
-  width:100%;max-width:520px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:22px 2px 26px;
-}
-.bar a.back{
-  font-family:var(--font-mono,monospace);font-size:11px;letter-spacing:.08em;
-  color:rgba(255,255,255,.42);text-decoration:none;text-transform:uppercase;
-}
-.bar a.back:hover{color:rgba(255,255,255,.8)}
-.bar img{height:18px;display:block}
+/* Barra */
+.bar{width:100%;max-width:560px;display:flex;align-items:center;justify-content:space-between;padding:20px 2px 22px;position:relative;z-index:2}
+.bar a{font-family:var(--f-body);font-size:13px;font-weight:500;color:rgba(255,255,255,.5);text-decoration:none;transition:color .16s}
+.bar a:hover{color:#fff}
+.bar img{height:20px;display:block}
 
-/* ── Recibo (firma visual: el mundo de Tiketes es el ticket) ── */
-.receipt{
-  width:100%;max-width:520px;position:relative;
-  background:var(--onyx-3,#111120);
-  border:1px solid var(--rule-dark,rgba(255,255,255,.07));
-  border-radius:4px;
-  padding:34px 26px 30px;
-}
-/* borde perforado superior */
-.receipt::before{
-  content:"";position:absolute;top:-1px;left:0;right:0;height:8px;
-  background:
-    radial-gradient(circle at 6px -2px, transparent 5px, var(--onyx-3,#111120) 5.5px) 0 0/12px 8px repeat-x;
-  border-top:0;
-}
-.perf{
-  position:absolute;top:0;left:0;right:0;height:7px;
-  background:radial-gradient(circle at 6px 0, var(--onyx,#07070F) 5px, transparent 5.5px) 0 0/12px 7px repeat-x;
-}
+/* Tarjeta */
+.card{width:100%;max-width:560px;position:relative;z-index:2}
 
 .eyebrow{
-  font-family:var(--font-mono,monospace);font-size:10px;letter-spacing:.16em;
-  color:var(--gold,#C9A96E);text-transform:uppercase;margin-bottom:10px;
+  font-family:var(--f-body);font-size:10.5px;font-weight:600;letter-spacing:1px;
+  text-transform:uppercase;color:var(--violet300);margin-bottom:10px;
 }
-h1{
-  font-family:var(--font-display,Sora,sans-serif);
-  font-size:clamp(24px,5vw,30px);font-weight:700;letter-spacing:-.03em;line-height:1.1;
-}
-.lede{
-  font-size:14px;line-height:1.6;color:rgba(255,255,255,.5);margin-top:8px;
-}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,4.6vw,34px);letter-spacing:-.6px;line-height:1.15}
+h1 .ac{color:var(--violet300)}
+.sub{font-family:var(--f-body);font-size:13.5px;color:rgba(255,255,255,.55);margin-top:7px;line-height:1.55}
 
-/* progreso */
-.steps{display:flex;gap:5px;margin:22px 0 24px}
-.steps i{flex:1;height:2px;background:rgba(255,255,255,.1);border-radius:0}
-.steps i.on{background:var(--gold,#C9A96E)}
+/* Progreso */
+.steps{display:flex;gap:6px;margin:20px 0 22px}
+.steps i{flex:1;height:3px;border-radius:99px;background:rgba(255,255,255,.1);transition:background .3s}
+.steps i.on{background:var(--violet400)}
 
-/* ── Campos ──────────────────────────────────────────────── */
-.field{margin-bottom:16px}
-label.lb{
-  display:block;font-family:var(--font-mono,monospace);
-  font-size:10px;letter-spacing:.12em;text-transform:uppercase;
-  color:rgba(255,255,255,.44);margin-bottom:7px;
+/* Campos — input r14, bg .05, borde .10, Inter 14 (idéntico a la app) */
+.field{margin-bottom:15px}
+.lb{
+  display:block;font-family:var(--f-body);font-size:10.5px;font-weight:600;
+  letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.66);margin-bottom:7px;
 }
-label.lb .opt{color:rgba(255,255,255,.25);letter-spacing:.04em}
+.lb .opt{color:rgba(255,255,255,.3);font-weight:500;letter-spacing:.3px;text-transform:none}
 input[type=text],input[type=email],input[type=password],input[type=tel]{
-  width:100%;background:rgba(255,255,255,.04);
-  border:1px solid var(--rule-dark,rgba(255,255,255,.09));
-  border-radius:3px;padding:13px 14px;
-  font-family:var(--font-body,Inter,sans-serif);font-size:15px;color:#fff;
+  width:100%;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.10);border-radius:14px;
+  padding:13px 14px;font-family:var(--f-body);font-size:14px;color:#fff;
   transition:border-color .18s,background .18s;
 }
-input::placeholder{color:rgba(255,255,255,.24)}
-input:focus{outline:none;border-color:var(--gold,#C9A96E);background:rgba(255,255,255,.06)}
-input:focus-visible{outline:2px solid var(--gold,#C9A96E);outline-offset:1px}
+input::placeholder{color:rgba(255,255,255,.28)}
+input:focus{outline:none;border-color:rgba(167,142,255,.72);background:rgba(139,112,255,.10)}
+input:focus-visible{outline:none}
 
-.row2{display:flex;gap:10px}
-.row2 .field{flex:1;margin-bottom:0}
-.dial{
-  display:flex;align-items:center;gap:8px;
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--rule-dark,rgba(255,255,255,.09));
-  border-radius:3px;padding:0 12px;
-  font-family:var(--font-mono,monospace);font-size:14px;color:rgba(255,255,255,.62);
-  white-space:nowrap;
-}
 .phone-wrap{display:flex;gap:8px}
+.dial{
+  display:flex;align-items:center;padding:0 14px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.10);border-radius:14px;
+  font-family:var(--f-body);font-weight:600;font-size:14px;color:#fff;white-space:nowrap;
+}
 .phone-wrap input{flex:1}
 
-/* giro de negocio */
-.giros{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-@media (max-width:420px){.giros{grid-template-columns:1fr}}
-.giro{
-  display:flex;align-items:center;gap:11px;text-align:left;
-  background:rgba(255,255,255,.03);
-  border:1px solid var(--rule-dark,rgba(255,255,255,.08));
-  border-radius:3px;padding:12px 12px;cursor:pointer;
-  transition:border-color .16s,background .16s;
-  font-family:inherit;color:inherit;width:100%;
+/* Giros — 3 por fila, emoji + nombre, r12 (idéntico a la app) */
+.bizGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.bizBtn{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);
+  border-radius:12px;padding:11px 4px;display:flex;flex-direction:column;
+  align-items:center;gap:5px;cursor:pointer;position:relative;
+  font-family:inherit;color:inherit;transition:background .18s,border-color .18s,transform .12s;
 }
-.giro:hover{background:rgba(255,255,255,.06)}
-.giro:focus-visible{outline:2px solid var(--gold,#C9A96E);outline-offset:1px}
-.giro[aria-pressed=true]{border-color:var(--gold,#C9A96E);background:rgba(201,169,110,.09)}
-.giro .em{font-size:19px;line-height:1}
-.giro .tx b{display:block;font-size:13.5px;font-weight:600;letter-spacing:-.01em}
-.giro .tx span{display:block;font-size:11px;color:rgba(255,255,255,.4);margin-top:2px;line-height:1.35}
+.bizBtn:hover{background:rgba(255,255,255,.08)}
+.bizBtn:active{transform:scale(.97)}
+.bizBtn[aria-pressed=true]{
+  background:rgba(139,112,255,.20);border-color:rgba(167,142,255,.72);
+  box-shadow:0 6px 12px rgba(107,75,255,.32);
+}
+.bizBtn[aria-pressed=true]::after{
+  content:'';position:absolute;top:6px;right:6px;width:8px;height:8px;
+  border-radius:99px;background:var(--violet300);
+}
+.bizIco{font-size:22px;line-height:26px}
+.bizName{font-family:var(--f-body);font-weight:600;font-size:9.5px;color:#fff;text-align:center}
 
-/* checkbox */
-.check{display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-top:4px}
+/* Tip box (igual que la app) */
+.tip{
+  display:flex;align-items:center;gap:8px;background:rgba(167,142,255,.10);
+  border:1px solid rgba(167,142,255,.22);border-radius:12px;
+  padding:10px 11px;margin-top:10px;
+  font-family:var(--f-body);font-size:11.5px;color:rgba(255,255,255,.62);line-height:1.45;
+}
+.tip b{color:var(--violet300);font-weight:600}
+
+/* Check */
+.check{display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-top:14px}
 .check input{
-  appearance:none;width:17px;height:17px;flex:0 0 17px;margin-top:1px;
-  border:1px solid rgba(255,255,255,.28);border-radius:2px;background:transparent;
+  appearance:none;width:18px;height:18px;flex:0 0 18px;margin-top:1px;
+  border:1px solid rgba(255,255,255,.28);border-radius:6px;background:transparent;
   cursor:pointer;position:relative;transition:background .15s,border-color .15s;
 }
-.check input:checked{background:var(--gold,#C9A96E);border-color:var(--gold,#C9A96E)}
+.check input:checked{background:var(--violet500);border-color:var(--violet500)}
 .check input:checked::after{
-  content:"";position:absolute;left:5px;top:1.5px;width:4px;height:9px;
-  border:solid var(--onyx,#07070F);border-width:0 2px 2px 0;transform:rotate(45deg);
+  content:'';position:absolute;left:5.5px;top:2px;width:4px;height:9px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
 }
-.check input:focus-visible{outline:2px solid var(--gold,#C9A96E);outline-offset:2px}
-.check span{font-size:12.5px;color:rgba(255,255,255,.55);line-height:1.5}
-.check a{color:var(--gold-light,#F0CB7A);text-decoration:none}
+.check span{font-family:var(--f-body);font-size:12.5px;color:rgba(255,255,255,.55);line-height:1.5}
+.check a{color:var(--violet300);text-decoration:none}
 .check a:hover{text-decoration:underline}
 
-/* separador punteado (lenguaje de recibo) */
-.rule{border:0;border-top:1px dashed rgba(255,255,255,.13);margin:22px 0}
-
-/* ── Botones ─────────────────────────────────────────────── */
-.actions{display:flex;gap:10px;margin-top:22px}
+/* Botones — CTA r18 con degradado violeta + glow (idéntico a la app) */
+.actions{display:flex;gap:10px;margin-top:20px}
 .btn{
-  flex:1;border:0;border-radius:3px;padding:14px 16px;cursor:pointer;
-  font-family:var(--font-display,Sora,sans-serif);font-size:14px;font-weight:600;
-  letter-spacing:-.01em;transition:opacity .16s,transform .1s,background .16s;
+  border:0;border-radius:18px;padding:15px 18px;cursor:pointer;
+  font-family:var(--f-body);font-weight:700;font-size:14.5px;
+  transition:transform .12s,opacity .16s,background .16s;
 }
-.btn:active{transform:scale(.985)}
-.btn:focus-visible{outline:2px solid var(--gold,#C9A96E);outline-offset:2px}
-.btn-primary{background:var(--gold,#C9A96E);color:var(--onyx,#07070F)}
-.btn-primary:hover{background:var(--gold-light,#F0CB7A)}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed}
-.btn-ghost{flex:0 0 auto;background:rgba(255,255,255,.06);color:rgba(255,255,255,.7)}
+.btn:active{transform:scale(.98)}
+.btn-primary{
+  flex:1;background:linear-gradient(90deg,var(--violet400),var(--violet700));
+  color:#fff;box-shadow:0 12px 20px rgba(107,75,255,.42);
+}
+.btn-primary:hover{opacity:.94}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+.btn-ghost{background:rgba(255,255,255,.06);color:rgba(255,255,255,.72);flex:0 0 auto}
 .btn-ghost:hover{background:rgba(255,255,255,.1)}
 
-.msg{
-  font-size:13px;line-height:1.5;margin-top:16px;padding:11px 13px;border-radius:3px;
-  font-family:var(--font-body,Inter,sans-serif);
-}
-.msg.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#FCA5A5}
+.msg{font-family:var(--f-body);font-size:12.5px;line-height:1.5;margin-top:14px;padding:11px 13px;border-radius:12px}
+.msg.err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#FCA5A5}
 
-.foot{
-  text-align:center;margin-top:22px;font-size:12.5px;color:rgba(255,255,255,.35);
-}
-.foot a{color:var(--gold-light,#F0CB7A);text-decoration:none}
-.foot a:hover{text-decoration:underline}
+.foot{text-align:center;margin-top:20px;font-family:var(--f-body);font-size:12.5px;color:rgba(255,255,255,.35)}
+.foot a{color:var(--violet300);text-decoration:none}
 
-/* ── Éxito ───────────────────────────────────────────────── */
-.done{text-align:center;padding:8px 0 4px}
-.done .seal{
-  width:56px;height:56px;margin:0 auto 18px;border-radius:50%;
-  border:1px solid var(--gold,#C9A96E);
+/* Éxito */
+.done{text-align:center;padding:6px 0}
+.seal{
+  width:64px;height:64px;margin:0 auto 16px;border-radius:32px;
+  background:linear-gradient(135deg,#22C55E,#16A34A);
   display:flex;align-items:center;justify-content:center;
+  box-shadow:0 14px 30px rgba(34,197,94,.38);
 }
-.done .seal svg{width:24px;height:24px;stroke:var(--gold,#C9A96E);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.done h2{font-family:var(--font-display,Sora,sans-serif);font-size:24px;font-weight:700;letter-spacing:-.03em}
-.done p{font-size:14px;line-height:1.65;color:rgba(255,255,255,.5);margin-top:9px}
+.seal svg{width:26px;height:26px;stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.done h2{font-family:var(--f-display);font-weight:800;font-size:24px;letter-spacing:-.6px}
+.done p{font-family:var(--f-body);font-size:13.5px;color:rgba(255,255,255,.55);margin-top:8px;line-height:1.6}
 .summary{
-  text-align:left;margin:22px 0;padding:16px;
-  border:1px dashed rgba(255,255,255,.13);border-radius:3px;
-  font-family:var(--font-mono,monospace);font-size:12px;
+  text-align:left;margin:20px 0;padding:14px;border-radius:14px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);
+  font-family:var(--f-body);font-size:12.5px;
 }
-.summary div{display:flex;justify-content:space-between;padding:4px 0;color:rgba(255,255,255,.45)}
-.summary div b{color:#fff;font-weight:500}
+.summary div{display:flex;justify-content:space-between;padding:5px 0;color:rgba(255,255,255,.5)}
+.summary div b{color:#fff;font-weight:600}
 
+/* Entrada */
+.rise{opacity:0;transform:translateY(14px);animation:rise .55s cubic-bezier(.16,1,.3,1) forwards}
+.rise:nth-child(2){animation-delay:.05s}
+@keyframes rise{to{opacity:1;transform:none}}
 .hidden{display:none!important}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rise{opacity:1;transform:none}}
+@media(max-width:400px){.bizGrid{gap:5px}.bizName{font-size:9px}}
 </style>
 </head>
 <body>
 
+<div class="orb orb-a"></div>
+<div class="orb orb-b"></div>
+<div class="orb orb-c"></div>
+
 <div class="bar">
-  <a class="back" href="/">← Tiketes</a>
+  <a href="/">← Volver</a>
   <img src="assets/wordmark-light.svg" alt="Tiketes">
 </div>
 
-<main class="receipt">
-  <div class="perf" aria-hidden="true"></div>
-
+<main class="card">
   <!-- ══ FORM ══ -->
-  <div id="formWrap">
+  <div id="formWrap" class="rise">
     <div class="eyebrow" id="eyebrow">Registro · Paso 1 de 2</div>
-    <h1 id="title">Cuéntanos de tu negocio</h1>
-    <p class="lede" id="lede">Con esto preparamos tu inventario y tus categorías desde el primer día.</p>
+    <h1 id="title">Cuéntanos de <span class="ac">tu negocio</span></h1>
+    <p class="sub" id="lede">Con esto preparamos tu inventario y tus categorías desde el primer día.</p>
 
-    <div class="steps" aria-hidden="true">
-      <i class="on" id="s1"></i><i id="s2"></i>
-    </div>
+    <div class="steps" aria-hidden="true"><i class="on" id="s1"></i><i id="s2"></i></div>
 
     <!-- Paso 1 -->
     <section id="step1">
@@ -216,7 +206,8 @@ input:focus-visible{outline:2px solid var(--gold,#C9A96E);outline-offset:1px}
 
       <div class="field">
         <label class="lb">Giro del negocio</label>
-        <div class="giros" id="giros" role="group" aria-label="Giro del negocio"></div>
+        <div class="bizGrid" id="giros" role="group" aria-label="Giro del negocio"></div>
+        <div class="tip" id="tip"><b>Listo:</b> <span id="tipTx">preparamos tus categorías de tienda automáticamente.</span></div>
       </div>
 
       <div class="field hidden" id="otroWrap">
@@ -232,14 +223,12 @@ input:focus-visible{outline:2px solid var(--gold,#C9A96E);outline-offset:1px}
       <div class="field">
         <label class="lb" for="tel">Teléfono <span class="opt">— opcional</span></label>
         <div class="phone-wrap">
-          <span class="dial">+52</span>
+          <span class="dial">🇲🇽 +52</span>
           <input id="tel" type="tel" placeholder="222 123 4567" maxlength="20" autocomplete="tel">
         </div>
       </div>
 
-      <div class="actions">
-        <button class="btn btn-primary" id="next">Continuar</button>
-      </div>
+      <div class="actions"><button class="btn btn-primary" id="next">Continuar</button></div>
     </section>
 
     <!-- Paso 2 -->
@@ -248,18 +237,14 @@ input:focus-visible{outline:2px solid var(--gold,#C9A96E);outline-offset:1px}
         <label class="lb" for="email">Correo electrónico</label>
         <input id="email" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" maxlength="120">
       </div>
-
       <div class="field">
         <label class="lb" for="pwd">Contraseña</label>
         <input id="pwd" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password" maxlength="72">
       </div>
-
       <div class="field">
         <label class="lb" for="pwd2">Confirmar contraseña</label>
         <input id="pwd2" type="password" placeholder="Repite tu contraseña" autocomplete="new-password" maxlength="72">
       </div>
-
-      <hr class="rule">
 
       <label class="check">
         <input type="checkbox" id="over18">
@@ -275,7 +260,6 @@ input:focus-visible{outline:2px solid var(--gold,#C9A96E);outline-offset:1px}
     </section>
 
     <div id="msg"></div>
-
     <p class="foot">¿Ya tienes cuenta? Inicia sesión desde la app.</p>
   </div>
 
@@ -284,34 +268,27 @@ input:focus-visible{outline:2px solid var(--gold,#C9A96E);outline-offset:1px}
     <div class="seal"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
     <h2 id="doneTitle">Tu cuenta quedó lista</h2>
     <p id="doneMsg">Ya puedes entrar desde la app con este correo y tu contraseña.</p>
-
     <div class="summary" id="summary"></div>
-
-    <div class="actions">
-      <button class="btn btn-primary" id="ctaApp">Descargar la app</button>
-    </div>
-    <p class="foot" id="doneFoot">Te esperamos dentro. Tu inventario ya está configurado para tu giro.</p>
+    <div class="actions"><button class="btn btn-primary" id="ctaApp">Descargar la app</button></div>
+    <p class="foot" id="doneFoot">Tu inventario ya está configurado para tu giro.</p>
   </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
-// ── Config (claves públicas por diseño: la anon key va en todo cliente) ──
 var SUPABASE_URL  = 'https://wwukfbadzhowpvruumrp.supabase.co';
 var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3dWtmYmFkemhvd3B2cnV1bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNDk1MjksImV4cCI6MjA5NDcyNTUyOX0.2-cPfqjoEkFkzVcWEvIzQHL4SWbvdJnNlCeUSEyzXk8';
 var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-// Mismos giros que la app (src/constants/categoryPresets.ts)
+// Mismos giros que la app (constants/categoryPresets.ts)
 var BIZ = [
-  { key:'tienda',     label:'Tienda',         desc:'Abarrotes, miscelánea, papelería',   emoji:'🛒', scanner:true },
-  { key:'farmacia',   label:'Farmacia',       desc:'Medicamentos, higiene, primeros aux.', emoji:'💊', scanner:true },
-  { key:'belleza',    label:'Belleza',        desc:'Cosméticos, estética, peluquería',   emoji:'💄', scanner:true },
-  { key:'ferreteria', label:'Ferretería',     desc:'Herramientas, materiales, construcción', emoji:'🔧', scanner:true },
-  { key:'ropa',       label:'Ropa / Calzado', desc:'Boutique, ropa, zapatería',          emoji:'👕', scanner:true },
-  { key:'otro',       label:'Otro',           desc:'Crea tus propias categorías desde 0', emoji:'📦', scanner:true }
+  { key:'tienda',     label:'Tienda',        emoji:'🛒', tip:'preparamos tus categorías de tienda automáticamente.' },
+  { key:'farmacia',   label:'Farmacia',      emoji:'💊', tip:'preparamos categorías de farmacia automáticamente.' },
+  { key:'belleza',    label:'Belleza',       emoji:'💄', tip:'preparamos categorías de belleza automáticamente.' },
+  { key:'ferreteria', label:'Ferretería',    emoji:'🔧', tip:'preparamos categorías de ferretería automáticamente.' },
+  { key:'ropa',       label:'Ropa/Calzado',  emoji:'👕', tip:'preparamos categorías de ropa automáticamente.' },
+  { key:'otro',       label:'Otro',          emoji:'📦', tip:'creas tus propias categorías desde cero.' }
 ];
-
-// Checkout de Polar (producción) — mismos links que la app
 var CHECKOUT = {
   essential:{ monthly:'https://buy.polar.sh/polar_cl_BoypVJJCYKo0lOpPld3tElviwqGBLKkZvEu5F3rs69f',
               yearly: 'https://buy.polar.sh/polar_cl_JZv29xAvaioiYIrvZELctHwJUqTu7yYmoC2TB1bcWdz' },
@@ -320,163 +297,126 @@ var CHECKOUT = {
   premium:  { monthly:'https://buy.polar.sh/polar_cl_qn8AjrSo5tiWSGTpWDtpS1LhiU5nADfjcLcLJ31E8tt',
               yearly: 'https://buy.polar.sh/polar_cl_LPs0Y60gXfnsS3f1C2wURLOObd0gkFPiqLOP40Bz8UV' }
 };
-var PLAN_NAME = { essential:'Essential', pro:'Pro', premium:'Premium' };
-var PLAN_PRICE = { essential:159, pro:399, premium:859 };
+var PLAN_NAME={essential:'Essential',pro:'Pro',premium:'Premium'};
+var PLAN_PRICE={essential:159,pro:399,premium:859};
 
-// Plan elegido desde la landing: crear-cuenta.html?plan=pro&cycle=yearly
-var q = new URLSearchParams(location.search);
-var wantPlan  = (q.get('plan')  || '').toLowerCase();
-var wantCycle = (q.get('cycle') === 'yearly') ? 'yearly' : 'monthly';
-if (!CHECKOUT[wantPlan]) wantPlan = '';
+var q=new URLSearchParams(location.search);
+var wantPlan=(q.get('plan')||'').toLowerCase();
+var wantCycle=(q.get('cycle')==='yearly')?'yearly':'monthly';
+if(!CHECKOUT[wantPlan]) wantPlan='';
 
-var $ = function(id){ return document.getElementById(id); };
-var bizKey = 'tienda';
+var $=function(id){return document.getElementById(id)};
+var bizKey='tienda';
 
-// ── Giros ────────────────────────────────────────────────
-(function renderGiros(){
-  var wrap = $('giros');
+(function(){
+  var w=$('giros');
   BIZ.forEach(function(b){
-    var el = document.createElement('button');
-    el.type = 'button'; el.className = 'giro';
-    el.setAttribute('aria-pressed', String(b.key === bizKey));
-    el.innerHTML = '<span class="em">'+b.emoji+'</span><span class="tx"><b>'+b.label+'</b><span>'+b.desc+'</span></span>';
-    el.addEventListener('click', function(){
-      bizKey = b.key;
-      wrap.querySelectorAll('.giro').forEach(function(x,i){ x.setAttribute('aria-pressed', String(BIZ[i].key === bizKey)); });
-      $('otroWrap').classList.toggle('hidden', bizKey !== 'otro');
+    var el=document.createElement('button');
+    el.type='button';el.className='bizBtn';
+    el.setAttribute('aria-pressed',String(b.key===bizKey));
+    el.setAttribute('aria-label',b.label);
+    el.innerHTML='<span class="bizIco">'+b.emoji+'</span><span class="bizName">'+b.label+'</span>';
+    el.addEventListener('click',function(){
+      bizKey=b.key;
+      w.querySelectorAll('.bizBtn').forEach(function(x,i){x.setAttribute('aria-pressed',String(BIZ[i].key===bizKey))});
+      $('otroWrap').classList.toggle('hidden',bizKey!=='otro');
+      $('tipTx').textContent=b.tip;
     });
-    wrap.appendChild(el);
+    w.appendChild(el);
   });
 })();
 
-// ── Copy por plan elegido ────────────────────────────────
-if (wantPlan) {
-  $('lede').textContent = 'Creas tu cuenta y enseguida pasas al pago del plan ' + PLAN_NAME[wantPlan] + '. Tu plan queda activo en la app al entrar.';
-}
+if(wantPlan){$('lede').textContent='Creas tu cuenta y enseguida pasas al pago del plan '+PLAN_NAME[wantPlan]+'. Tu plan queda activo en la app al entrar.';}
 
-// ── Navegación de pasos ──────────────────────────────────
-function showErr(t){ $('msg').innerHTML = '<div class="msg err">'+t+'</div>'; }
-function clearErr(){ $('msg').innerHTML = ''; }
+function showErr(t){$('msg').innerHTML='<div class="msg err">'+t+'</div>'}
+function clearErr(){$('msg').innerHTML=''}
 
-$('next').addEventListener('click', function(){
+$('next').addEventListener('click',function(){
   clearErr();
-  if (!$('nombre').value.trim()) { showErr('Escribe tu nombre para continuar.'); $('nombre').focus(); return; }
-  if (bizKey === 'otro' && !$('otroName').value.trim()) { showErr('Dinos el nombre de tu giro.'); $('otroName').focus(); return; }
-  $('step1').classList.add('hidden'); $('step2').classList.remove('hidden');
+  if(!$('nombre').value.trim()){showErr('Escribe tu nombre para continuar.');$('nombre').focus();return}
+  if(bizKey==='otro'&&!$('otroName').value.trim()){showErr('Dinos el nombre de tu giro.');$('otroName').focus();return}
+  $('step1').classList.add('hidden');$('step2').classList.remove('hidden');
   $('s2').classList.add('on');
-  $('eyebrow').textContent = 'Registro · Paso 2 de 2';
-  $('title').textContent = 'Crea tu acceso';
-  $('lede').textContent = 'Con este correo y contraseña entrarás a la app.';
-  window.scrollTo({ top:0, behavior:'smooth' });
+  $('eyebrow').textContent='Registro · Paso 2 de 2';
+  $('title').innerHTML='Crea tu <span class="ac">acceso</span>';
+  $('lede').textContent='Con este correo y contraseña entrarás a la app.';
+  scrollTo({top:0,behavior:'smooth'});
 });
-
-$('back').addEventListener('click', function(){
+$('back').addEventListener('click',function(){
   clearErr();
-  $('step2').classList.add('hidden'); $('step1').classList.remove('hidden');
+  $('step2').classList.add('hidden');$('step1').classList.remove('hidden');
   $('s2').classList.remove('on');
-  $('eyebrow').textContent = 'Registro · Paso 1 de 2';
-  $('title').textContent = 'Cuéntanos de tu negocio';
-  $('lede').textContent = 'Con esto preparamos tu inventario y tus categorías desde el primer día.';
+  $('eyebrow').textContent='Registro · Paso 1 de 2';
+  $('title').innerHTML='Cuéntanos de <span class="ac">tu negocio</span>';
+  $('lede').textContent='Con esto preparamos tu inventario y tus categorías desde el primer día.';
 });
 
-// ── Polar: mismo formato de metadata que la app ──────────
-function polarUrl(plan, cycle, userId, email){
-  var u = new URL(CHECKOUT[plan][cycle]);
-  u.searchParams.set('metadata[user_id]', userId);
-  u.searchParams.set('metadata[source]', 'tiketes-web');
-  u.searchParams.set('metadata[env]', 'production');
-  if (email) u.searchParams.set('customer_email', email);
+function polarUrl(plan,cycle,userId,email){
+  var u=new URL(CHECKOUT[plan][cycle]);
+  u.searchParams.set('metadata[user_id]',userId);
+  u.searchParams.set('metadata[source]','tiketes-web');
+  u.searchParams.set('metadata[env]','production');
+  if(email)u.searchParams.set('customer_email',email);
   return u.toString();
 }
 
-// ── Registro ─────────────────────────────────────────────
-$('submit').addEventListener('click', async function(){
+$('submit').addEventListener('click',async function(){
   clearErr();
-  var email = $('email').value.trim().toLowerCase();
-  var pwd   = $('pwd').value;
-  var pwd2  = $('pwd2').value;
+  var email=$('email').value.trim().toLowerCase(),pwd=$('pwd').value,pwd2=$('pwd2').value;
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){showErr('Escribe un correo válido.');$('email').focus();return}
+  if(pwd.length<8){showErr('La contraseña necesita al menos 8 caracteres.');$('pwd').focus();return}
+  if(pwd!==pwd2){showErr('Las contraseñas no coinciden.');$('pwd2').focus();return}
+  if(!$('over18').checked){showErr('Necesitas aceptar los Términos y confirmar que eres mayor de edad.');return}
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { showErr('Escribe un correo válido.'); $('email').focus(); return; }
-  if (pwd.length < 8) { showErr('La contraseña necesita al menos 8 caracteres.'); $('pwd').focus(); return; }
-  if (pwd !== pwd2)   { showErr('Las contraseñas no coinciden.'); $('pwd2').focus(); return; }
-  if (!$('over18').checked) { showErr('Necesitas aceptar los Términos y confirmar que eres mayor de edad.'); return; }
-
-  var btn = $('submit');
-  btn.disabled = true; btn.textContent = 'Creando tu cuenta…';
-
-  var meta = BIZ.filter(function(b){ return b.key === bizKey; })[0];
-  var otro = $('otroName').value.trim();
-  var tel  = $('tel').value.trim();
-  var profileData = {
-    full_name:     $('nombre').value.trim() || null,
-    store_name:    bizKey === 'otro' ? (otro || null) : null,
-    store_address: $('direccion').value.trim() || null,
-    phone:         tel ? ('+52 ' + tel) : null,
-    biz_type:      bizKey === 'otro' ? (otro || 'Otro') : bizKey,
-    uses_scanner:  meta ? meta.scanner : true
+  var btn=$('submit');btn.disabled=true;btn.textContent='Creando tu cuenta…';
+  var meta=BIZ.filter(function(b){return b.key===bizKey})[0];
+  var otro=$('otroName').value.trim(),tel=$('tel').value.trim();
+  var profileData={
+    full_name:$('nombre').value.trim()||null,
+    store_name:bizKey==='otro'?(otro||null):null,
+    store_address:$('direccion').value.trim()||null,
+    phone:tel?('+52 '+tel):null,
+    biz_type:bizKey==='otro'?(otro||'Otro'):bizKey,
+    uses_scanner:true
   };
-
-  try {
-    var res = await sb.auth.signUp({ email: email, password: pwd, options: { data: profileData } });
-    if (res.error) {
-      btn.disabled = false; btn.textContent = 'Crear mi cuenta';
-      var m = String(res.error.message || '');
-      if (/already registered|already been registered|User already/i.test(m)) {
-        showErr('Ese correo ya tiene una cuenta. Entra desde la app o recupera tu contraseña ahí.');
-      } else if (/rate|seconds/i.test(m)) {
-        showErr('Espera un momento antes de volver a intentar.');
-      } else {
-        showErr(m || 'No pudimos crear la cuenta. Intenta de nuevo.');
-      }
+  try{
+    var res=await sb.auth.signUp({email:email,password:pwd,options:{data:profileData}});
+    if(res.error){
+      btn.disabled=false;btn.textContent='Crear mi cuenta';
+      var m=String(res.error.message||'');
+      if(/already registered|already been registered|User already/i.test(m)) showErr('Ese correo ya tiene una cuenta. Entra desde la app o recupera tu contraseña ahí.');
+      else if(/rate|seconds/i.test(m)) showErr('Espera un momento antes de volver a intentar.');
+      else showErr(m||'No pudimos crear la cuenta. Intenta de nuevo.');
       return;
     }
+    var userId=res.data&&res.data.user?res.data.user.id:null;
+    if(userId){try{await sb.from('profiles').upsert(Object.assign({id:userId},profileData),{onConflict:'id'})}catch(e){}}
 
-    var userId = res.data && res.data.user ? res.data.user.id : null;
-
-    // Refuerzo: el trigger ya crea el perfil desde la metadata; esto asegura
-    // que todos los campos aterricen aunque el trigger cambie.
-    if (userId) {
-      try { await sb.from('profiles').upsert(Object.assign({ id: userId }, profileData), { onConflict: 'id' }); }
-      catch (e) { /* el trigger ya lo cubrió */ }
-    }
-
-    // ── Éxito ──
     $('formWrap').classList.add('hidden');
     $('doneWrap').classList.remove('hidden');
-
-    var giroLabel = bizKey === 'otro' ? (otro || 'Otro') : meta.label;
-    $('summary').innerHTML =
-      '<div><span>Correo</span><b>'+email.replace(/</g,'&lt;')+'</b></div>' +
-      '<div><span>Giro</span><b>'+giroLabel.replace(/</g,'&lt;')+'</b></div>' +
-      '<div><span>Plan</span><b>'+(wantPlan ? PLAN_NAME[wantPlan] : 'Free')+'</b></div>';
-
-    if (wantPlan && userId) {
-      $('doneTitle').textContent = 'Cuenta creada. Falta el pago.';
-      $('doneMsg').textContent = 'Te llevamos a pagar tu plan ' + PLAN_NAME[wantPlan] + ' ($' +
-        (wantCycle === 'yearly' ? Math.round(PLAN_PRICE[wantPlan]*0.8) : PLAN_PRICE[wantPlan]) +
-        ' MXN/mes). Al terminar, descarga la app: tu plan ya estará activo.';
-      $('ctaApp').textContent = 'Pagar plan ' + PLAN_NAME[wantPlan];
-      $('doneFoot').textContent = 'El pago lo procesa Polar de forma segura.';
-      $('ctaApp').addEventListener('click', function(){
-        location.href = polarUrl(wantPlan, wantCycle, userId, email);
-      });
-    } else {
-      $('ctaApp').addEventListener('click', function(){
-        if (window.comingSoon) window.comingSoon();
-        else alert('Próximamente en Google Play');
-      });
+    $('doneWrap').classList.add('rise');
+    var giroLabel=bizKey==='otro'?(otro||'Otro'):meta.label;
+    $('summary').innerHTML=
+      '<div><span>Correo</span><b>'+email.replace(/</g,'&lt;')+'</b></div>'+
+      '<div><span>Giro</span><b>'+giroLabel.replace(/</g,'&lt;')+'</b></div>'+
+      '<div><span>Plan</span><b>'+(wantPlan?PLAN_NAME[wantPlan]:'Free')+'</b></div>';
+    if(wantPlan&&userId){
+      $('doneTitle').textContent='Cuenta creada. Falta el pago.';
+      $('doneMsg').textContent='Te llevamos a pagar tu plan '+PLAN_NAME[wantPlan]+' ($'+(wantCycle==='yearly'?Math.round(PLAN_PRICE[wantPlan]*0.8):PLAN_PRICE[wantPlan])+' MXN/mes). Al terminar, descarga la app: tu plan ya estará activo.';
+      $('ctaApp').textContent='Pagar plan '+PLAN_NAME[wantPlan];
+      $('doneFoot').textContent='El pago lo procesa Polar de forma segura.';
+      $('ctaApp').addEventListener('click',function(){location.href=polarUrl(wantPlan,wantCycle,userId,email)});
+    }else{
+      $('ctaApp').addEventListener('click',function(){alert('Próximamente en Google Play')});
     }
-    window.scrollTo({ top:0, behavior:'smooth' });
-
-  } catch (e) {
-    btn.disabled = false; btn.textContent = 'Crear mi cuenta';
+    scrollTo({top:0,behavior:'smooth'});
+  }catch(e){
+    btn.disabled=false;btn.textContent='Crear mi cuenta';
     showErr('No pudimos conectar. Revisa tu internet e intenta de nuevo.');
   }
 });
-
-// Enter para avanzar
-$('nombre').addEventListener('keydown', function(e){ if(e.key==='Enter') $('next').click(); });
-$('pwd2').addEventListener('keydown', function(e){ if(e.key==='Enter') $('submit').click(); });
+$('nombre').addEventListener('keydown',function(e){if(e.key==='Enter')$('next').click()});
+$('pwd2').addEventListener('keydown',function(e){if(e.key==='Enter')$('submit').click()});
 </script>
 </body>
 </html>
