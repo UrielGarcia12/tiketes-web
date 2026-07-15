@@ -601,7 +601,8 @@ footer {
     <li><a href="#plans">Planes</a></li>
   </ul>
   <div class="nav-actions">
-    <button class="btn-nav-primary" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})">Ver planes</button>
+    <button class="btn-nav-ghost" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})">Ver planes</button>
+    <button class="btn-nav-primary" onclick="location.href='crear-cuenta.html'">Crear cuenta</button>
   </div>
 </nav>
 
@@ -926,7 +927,7 @@ footer {
             Soporte chatbot
           </li>
         </ul>
-        <button class="plan-cta" onclick="comingSoon()">
+        <button class="plan-cta" onclick="location.href='crear-cuenta.html'">
           Comenzar gratis
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
@@ -966,7 +967,7 @@ footer {
             Backup 6 meses
           </li>
         </ul>
-        <button class="plan-cta" onclick="comingSoon()">
+        <button class="plan-cta" onclick="goSignup('essential')">
           Suscribirme a Essential
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
@@ -1007,7 +1008,7 @@ footer {
             Soporte por WhatsApp
           </li>
         </ul>
-        <button class="plan-cta" onclick="comingSoon()">
+        <button class="plan-cta" onclick="goSignup('pro')">
           Suscribirme a Pro
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
@@ -1055,7 +1056,7 @@ footer {
             Soporte prioritario
           </li>
         </ul>
-        <button class="plan-cta" onclick="comingSoon()">
+        <button class="plan-cta" onclick="goSignup('premium')">
           Suscribirme a Premium
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
@@ -1075,7 +1076,7 @@ footer {
   <div style="position:relative;z-index:1">
     <h2 class="cta-h2">Empieza <em>hoy.</em><br>Es gratis.</h2>
     <p class="cta-sub">Sin tarjeta de crédito. Sin contratos. Cancela cuando quieras.</p>
-    <a href="javascript:void(0)" class="btn-banner" onclick="comingSoon()">
+    <a href="crear-cuenta.html" class="btn-banner">
       Comenzar gratis
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </a>
@@ -1126,6 +1127,13 @@ footer {
 
 
 <script>
+// ── Registro: lleva al alta de cuenta con el plan preseleccionado ──
+// El pago se cobra en Polar con metadata[user_id], igual que en la app, así
+// que al entrar a la app el plan ya está activo.
+function goSignup(plan){
+  location.href = 'crear-cuenta.html?plan=' + encodeURIComponent(plan) + '&cycle=monthly';
+}
+
 // ── "Próximamente en Google Play" toast (la app aún no está publicada) ──
 function comingSoon(){
   let t=document.getElementById('cs-toast');
