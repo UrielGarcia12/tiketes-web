@@ -1,4 +1,4 @@
-<svg width="120" height="160" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Tikeles ticket mark monochrome">
+<svg width="120" height="160" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Tiketes ticket mark monochrome">
   <path d="M16 6 a10 10 0 0 1 10 -2 h12 a6 6 0 0 0 12 0 h12 a6 6 0 0 0 12 0 h12 a6 6 0 0 0 12 0 h12 a10 10 0 0 1 10 10 v100 a6 6 0 0 0 -6 6 a6 6 0 0 0 6 6 v0 L96 152 L20 152 a10 10 0 0 1 -10 -10 v-12 a6 6 0 0 0 0 -12 v-12 a6 6 0 0 0 0 -12 v-12 a6 6 0 0 0 0 -12 v-12 a6 6 0 0 0 0 -12 V16 a10 10 0 0 1 6 -10 Z" fill="currentColor"></path>
   <path d="M96 152 L114 134 L114 152 Z" fill="currentColor" opacity="0.6"></path>
   <g fill="#FFFFFF" opacity="0.9">

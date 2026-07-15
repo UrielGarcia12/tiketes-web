@@ -3,12 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tikeles — Ventas rápidas. Inventario listo.</title>
+<title>Tiketes — Ventas rápidas. Inventario listo.</title>
 <meta name="description" content="La app de ventas e inventario diseñada para negocios reales en México y LATAM. Cobra en segundos, controla tu stock, crece con datos reales.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="colors_and_type.css">
 <style>
 /* ================================================================
-   Tikeles Landing — Rediseño Premium 2026
+   Tiketes Landing — Rediseño Premium 2026
    Estética: Porsche × Apple × Zara
    ================================================================ */
 
@@ -32,6 +35,8 @@ body {
   --onyx-3:      #111120;
   --rule-dark:   rgba(255,255,255,0.07);
   --rule-light:  rgba(15,15,40,0.08);
+  /* Display condensada SOLO para titulares grandes — nunca en botones ni UI */
+  --font-hero:   'Big Shoulders Display', 'Sora', system-ui, sans-serif;
 }
 
 /* ── NAV ──────────────────────────────────────────────────────── */
@@ -135,21 +140,19 @@ body {
 }
 
 .hero-h1 {
-  font-family: var(--font-display);
-  font-size: clamp(58px, 9.5vw, 112px);
+  font-family: var(--font-hero);
+  font-size: clamp(70px, 13vw, 190px);
   font-weight: 800;
-  letter-spacing: -.047em;
-  line-height: .93;
+  letter-spacing: -.018em;
+  line-height: .84;
+  text-transform: uppercase;
   color: #fff;
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto 28px;
+  position: relative; z-index: 2;
 }
-.hero-h1 em {
-  font-style: normal;
-  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 60%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+/* Oro sólido, sin gradiente de texto (los degradados en texto delatan plantilla) */
+.hero-h1 em { font-style: normal; color: var(--gold); }
 
 .hero-lead {
   font-size: clamp(15px, 2vw, 19px);
@@ -188,6 +191,50 @@ body {
   color: rgba(255,255,255,.24); letter-spacing: .02em;
 }
 
+/* ── Ticket que se imprime y atraviesa el titular ──────────────── */
+/* La firma de la página: el POS imprime. El papel pisa la tipografía,
+   igual que el sujeto rompe el título en las referencias editoriales.   */
+.printer {
+  position: absolute; z-index: 3;
+  right: clamp(10px, 6vw, 104px);
+  top: clamp(84px, 15vh, 152px);
+  width: clamp(150px, 17vw, 216px);
+  transform: rotate(2.4deg);
+  filter: drop-shadow(0 34px 60px rgba(0,0,0,.6));
+  pointer-events: none;
+}
+@media (max-width: 900px) { .printer { right: 4px; top: 76px; width: clamp(116px, 32vw, 150px); opacity: .96; } }
+@media (max-width: 560px) { .printer { opacity: .5; right: -14px; } }
+.pr-slot {
+  height: 8px; background: var(--onyx-3);
+  border: 1px solid var(--rule-dark); border-bottom: 0;
+  border-radius: 3px 3px 0 0; position: relative;
+}
+.pr-slot::after {
+  content: ''; position: absolute; left: 8px; right: 8px; top: 3px;
+  height: 2px; background: #000; border-radius: 2px;
+}
+.pr-paper {
+  background: #fff; color: #0B0B14;
+  font-family: var(--font-mono); text-align: left;
+  padding: 14px 13px 11px; position: relative;
+  clip-path: inset(0 0 100% 0);
+  animation: printOut 1.5s .5s cubic-bezier(.33,1,.68,1) forwards;
+}
+.pr-paper::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -5px; height: 5px;
+  background: radial-gradient(circle at 4px 5px, transparent 3.8px, #fff 4.2px) 0 0/8px 5px repeat-x;
+}
+.pr-store { font-weight: 600; font-size: 10px; text-align: center; letter-spacing: .04em; }
+.pr-meta  { font-size: 7.5px; text-align: center; color: #8A8A99; margin-top: 2px; }
+.pr-sep   { border: 0; border-top: 1px dashed #C9C9D4; margin: 7px 0; }
+.pr-row   { display: flex; justify-content: space-between; font-size: 8px; padding: 2px 0; color: #3A3A48; }
+.pr-tot   { display: flex; justify-content: space-between; align-items: baseline; font-weight: 600; font-size: 12px; padding-top: 3px; }
+.pr-tot span:first-child { font-size: 8px; letter-spacing: .1em; color: #8A8A99; }
+.pr-tag   { margin-top: 7px; text-align: center; font-size: 6.5px; letter-spacing: .14em; border: 1px solid #0B0B14; padding: 2px 0; }
+.pr-brand { text-align: center; font-size: 5.5px; letter-spacing: .22em; color: #A0A0AE; margin-top: 6px; }
+@keyframes printOut { to { clip-path: inset(0 0 0 0); } }
+
 /* Scroll cue */
 .scroll-cue {
   position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
@@ -221,9 +268,10 @@ body {
   width: 1px; background: var(--rule-dark);
 }
 .stat-number {
-  font-family: var(--font-display);
-  font-size: clamp(48px, 6.5vw, 82px);
-  font-weight: 800; letter-spacing: -.042em;
+  font-family: var(--font-hero);
+  font-size: clamp(52px, 7vw, 92px);
+  font-weight: 800; letter-spacing: -.012em;
+  text-transform: uppercase;
   color: #fff; line-height: 1; margin-bottom: 10px;
   font-variant-numeric: tabular-nums;
 }
@@ -248,11 +296,12 @@ body {
   color: var(--violet-500); margin-bottom: 20px;
 }
 .s-h2 {
-  font-family: var(--font-display);
-  font-size: clamp(36px, 5.5vw, 62px);
-  font-weight: 800; letter-spacing: -.042em;
-  line-height: .98; color: var(--ink-900);
-  max-width: 640px; margin-bottom: 20px;
+  font-family: var(--font-hero);
+  font-size: clamp(44px, 6.5vw, 78px);
+  font-weight: 800; letter-spacing: -.012em;
+  text-transform: uppercase;
+  line-height: .9; color: var(--ink-900);
+  max-width: 680px; margin-bottom: 20px;
 }
 .s-lead {
   font-size: 17px; color: var(--ink-500);
@@ -518,10 +567,11 @@ body {
   pointer-events: none;
 }
 .cta-h2 {
-  font-family: var(--font-display);
-  font-size: clamp(52px, 7.5vw, 96px);
-  font-weight: 800; letter-spacing: -.046em;
-  color: var(--ink-900); line-height: .95;
+  font-family: var(--font-hero);
+  font-size: clamp(60px, 9vw, 122px);
+  font-weight: 800; letter-spacing: -.014em;
+  text-transform: uppercase;
+  color: var(--ink-900); line-height: .86;
   margin-bottom: 28px;
 }
 .cta-h2 em { font-style: normal; color: var(--violet-500); }
@@ -593,7 +643,7 @@ footer {
 <!-- ════════ NAV ════════════════════════════════════════════════ -->
 <nav class="nav" id="nav">
   <a href="#" aria-label="Tiketes inicio" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
-    <img src="assets/wordmark-light.svg" alt="Tikeles" class="nav-logo">
+    <img src="assets/wordmark-light.svg" alt="Tiketes" class="nav-logo">
   </a>
   <ul class="nav-links">
     <li><a href="#features">Funciones</a></li>
@@ -611,6 +661,23 @@ footer {
 <section class="hero">
   <div class="orb orb-a"></div>
   <div class="orb orb-b"></div>
+
+  <!-- Firma: el ticket se imprime y pisa el titular -->
+  <div class="printer" aria-hidden="true">
+    <div class="pr-slot"></div>
+    <div class="pr-paper">
+      <div class="pr-store">ABARROTES DOÑA MARI</div>
+      <div class="pr-meta">Venta #1042 · 14:35</div>
+      <hr class="pr-sep">
+      <div class="pr-row"><span>Coca Cola 600ml</span><span>$36.00</span></div>
+      <div class="pr-row"><span>Jamón 250 g</span><span>$30.00</span></div>
+      <div class="pr-row"><span>Sabritas</span><span>$17.00</span></div>
+      <hr class="pr-sep">
+      <div class="pr-tot"><span>TOTAL</span><span>$83.00</span></div>
+      <div class="pr-tag">EFECTIVO</div>
+      <div class="pr-brand">VÍA TIKETES</div>
+    </div>
+  </div>
 
   <div class="hero-eyebrow">Punto de venta · México y LATAM</div>
 
@@ -642,16 +709,16 @@ footer {
 <section class="stats-section">
   <div class="stats-inner">
     <div class="stat-item">
-      <div class="stat-number" id="stat-negocios">7,200+</div>
-      <div class="stat-label">Negocios activos</div>
+      <div class="stat-number">$0</div>
+      <div class="stat-label">Para empezar · sin tarjeta</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number" id="stat-ventas">2.4M+</div>
-      <div class="stat-label">Ventas procesadas</div>
+      <div class="stat-number" id="stat-productos">50</div>
+      <div class="stat-label">Productos gratis, para siempre</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number">&lt;&nbsp;3s</div>
-      <div class="stat-label">Por cobrar una venta</div>
+      <div class="stat-number">Ilimitadas</div>
+      <div class="stat-label">Ventas, incluso en el plan Free</div>
     </div>
   </div>
 </section>
@@ -1208,13 +1275,10 @@ const statsEl = document.querySelector('.stats-section');
 if (statsEl) {
   const statsObs = new IntersectionObserver((entries) => {
     if (!entries[0].isIntersecting) return;
+    // Solo animamos datos verificables del producto (límite real del plan Free).
     animateCounter(
-      document.getElementById('stat-negocios'), 7200,
-      v => v.toLocaleString('es-MX') + '+'
-    );
-    animateCounter(
-      document.getElementById('stat-ventas'), 2400000,
-      v => v >= 1000000 ? (v/1000000).toFixed(1).replace('.0','') + 'M+' : v.toLocaleString('es-MX') + '+'
+      document.getElementById('stat-productos'), 50,
+      v => String(v)
     );
     statsObs.disconnect();
   }, { threshold: 0.3 });

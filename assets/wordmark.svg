@@ -1,4 +1,4 @@
-<svg width="320" height="80" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Tikeles wordmark">
+<svg width="320" height="80" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Tiketes wordmark">
   <defs>
     <linearGradient id="wm-grad" x1="0" y1="0" x2="60" y2="80" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#6B4BFF"></stop>
@@ -15,5 +15,5 @@
     </g>
     <path d="M15 20 H47 a2 2 0 0 1 2 2 V30 a2 2 0 0 1 -2 2 H36 V54 a2 2 0 0 1 -2 2 H28 a2 2 0 0 1 -2 -2 V32 H15 a2 2 0 0 1 -2 -2 V22 a2 2 0 0 1 2 -2 Z" fill="#FFFFFF"></path>
   </g>
-  <text x="78" y="58" font-family="Sora, system-ui, sans-serif" font-weight="700" font-size="48" letter-spacing="-1.5" fill="#0A0B1F">Tikeles</text>
+  <text x="78" y="58" font-family="Sora, system-ui, sans-serif" font-weight="700" font-size="48" letter-spacing="-1.5" fill="#0A0B1F">Tiketes</text>
 </svg>
