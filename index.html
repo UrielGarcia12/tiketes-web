@@ -422,7 +422,51 @@ body {
 .product-section .s-eyebrow { color: rgba(255,255,255,.32); }
 .product-section .s-lead    { color: rgba(255,255,255,.40); }
 
-/* ── POR DENTRO: rejilla de pantallas reales ───────────────────── */
+/* ── FLUJO DE VENTA: 5 pasos, capturas reales ──────────────────── */
+/* Aquí sí numeramos: es una secuencia de verdad (el orden importa). */
+.flow-section {
+  background: var(--onyx-2);
+  border-top: 1px solid var(--rule-dark);
+  padding: clamp(72px, 11vh, 130px) 0;
+}
+.flow {
+  list-style: none; margin: clamp(40px, 6vh, 68px) 0 0;
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: clamp(14px, 1.8vw, 26px);
+}
+@media (max-width: 1100px) { .flow { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 720px)  { .flow { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 460px)  { .flow { grid-template-columns: 1fr; max-width: 300px; margin-inline: auto; } }
+
+.flow-step { display: flex; flex-direction: column; }
+.flow-shot, .tour-shot {
+  position: relative; border-radius: 20px; overflow: hidden;
+  border: 1.5px solid rgba(255,255,255,.10);
+  background: #07070F; line-height: 0;
+  box-shadow: 0 26px 52px rgba(0,0,0,.58);
+  transition: transform 400ms var(--ease-out), border-color 400ms, box-shadow 400ms;
+}
+.flow-shot img, .tour-shot img { width: 100%; height: auto; display: block; }
+.flow-step:hover .flow-shot,
+.tour-item:hover .tour-shot {
+  transform: translateY(-8px);
+  border-color: rgba(107,75,255,.38);
+  box-shadow: 0 40px 74px rgba(0,0,0,.66), 0 0 50px rgba(107,75,255,.12);
+}
+.flow-txt { padding-top: 16px; }
+.flow-n {
+  display: inline-block; font-family: var(--font-mono);
+  font-size: 10.5px; letter-spacing: .14em; color: var(--gold);
+  border: 1px solid var(--gold-dim); border-radius: 99px;
+  padding: 2px 8px; margin-bottom: 9px;
+}
+.flow-step h3 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 15px; color: #fff; letter-spacing: -.02em; margin-bottom: 6px;
+}
+.flow-step p { font-size: 12.5px; line-height: 1.6; color: rgba(255,255,255,.42); }
+
+/* ── TODO BAJO CONTROL: rejilla de pantallas reales ────────────── */
 .tour-section {
   background: var(--onyx);
   border-top: 1px solid var(--rule-dark);
@@ -437,24 +481,6 @@ body {
 @media (max-width: 620px)  { .tour-grid { grid-template-columns: 1fr; max-width: 340px; margin-inline: auto; } }
 
 .tour-item { display: flex; flex-direction: column; }
-.tour-phone {
-  position: relative; width: 100%; aspect-ratio: 390/844;
-  border-radius: 26px; overflow: hidden;
-  border: 1.5px solid rgba(255,255,255,.10);
-  background: #07070F;
-  box-shadow: 0 30px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04);
-  transition: transform 400ms var(--ease-out), box-shadow 400ms var(--ease-out), border-color 400ms;
-}
-.tour-item:hover .tour-phone {
-  transform: translateY(-8px);
-  border-color: rgba(107,75,255,.34);
-  box-shadow: 0 44px 80px rgba(0,0,0,.7), 0 0 54px rgba(107,75,255,.12);
-}
-.tour-phone iframe {
-  position: absolute; inset: 0;
-  width: 390px; height: 844px;
-  border: 0; pointer-events: none; transform-origin: top left;
-}
 .tour-t {
   font-family: var(--font-display); font-weight: 700;
   font-size: 17px; color: #fff; letter-spacing: -.02em;
@@ -1081,50 +1107,89 @@ footer {
 
 
 <!-- ════════ PLANS ════════════════════════════════════════════════ -->
-<!-- ════════ POR DENTRO ═══════════════════════════════════════════ -->
-<section class="tour-section" id="tour">
+<!-- ======== FLUJO DE UNA VENTA ======== -->
+<section class="flow-section" id="tour">
   <div class="section-inner">
     <div class="reveal">
-      <span class="s-eyebrow">Por dentro</span>
-      <h2 class="s-h2 rv">Así se ve<br>trabajar aquí.</h2>
-      <p class="s-lead rv rv-d1">Cada pantalla es la de verdad. Nada de maquetas bonitas que luego no existen.</p>
+      <span class="s-eyebrow">Una venta, de principio a fin</span>
+      <h2 class="s-h2 rv">Del código<br>al cambio.</h2>
+      <p class="s-lead rv rv-d1">Capturas reales de la app, sin maquillar. Así se ve cobrar en tu mostrador.</p>
+    </div>
+
+    <ol class="flow">
+      <li class="flow-step rv">
+        <div class="flow-shot"><img src="screens/img/06-nueva-venta.jpg" alt="Pantalla de nueva venta con opción de escanear y categorías" loading="lazy" width="540" height="1200"></div>
+        <div class="flow-txt"><span class="flow-n">01</span><h3>Escanea o toca</h3>
+        <p>El código de barras entra el producto solo. Si no tiene código, lo eliges de tus categorías.</p></div>
+      </li>
+      <li class="flow-step rv rv-d1">
+        <div class="flow-shot"><img src="screens/img/07-venta-en-curso.jpg" alt="Venta en curso con carrito y método de pago" loading="lazy" width="540" height="1200"></div>
+        <div class="flow-txt"><span class="flow-n">02</span><h3>Efectivo, tarjeta o fiado</h3>
+        <p>Aplicas descuento y, si es fiado, le asignas el cliente. El total se recalcula al momento.</p></div>
+      </li>
+      <li class="flow-step rv rv-d2">
+        <div class="flow-shot"><img src="screens/img/08-cuanto-pagan.jpg" alt="Calculadora de cambio: a cobrar, recibes y cambio" loading="lazy" width="540" height="1200"></div>
+        <div class="flow-txt"><span class="flow-n">03</span><h3>El cambio, solo</h3>
+        <p>Tocas $50, $100 o $200 y te dice cuánto devolver. Sin cuentas de cabeza, sin errores.</p></div>
+      </li>
+      <li class="flow-step rv">
+        <div class="flow-shot"><img src="screens/img/10-venta-completada.jpg" alt="Venta completada con confirmación y experiencia ganada" loading="lazy" width="540" height="1200"></div>
+        <div class="flow-txt"><span class="flow-n">04</span><h3>Venta registrada</h3>
+        <p>Queda en tu historial y tu inventario baja solo. De paso ganas XP y subes de nivel.</p></div>
+      </li>
+      <li class="flow-step rv rv-d1">
+        <div class="flow-shot"><img src="screens/img/09-vista-ticket.jpg" alt="Vista del ticket con QR digital, imprimir, compartir y guardar" loading="lazy" width="540" height="1200"></div>
+        <div class="flow-txt"><span class="flow-n">05</span><h3>Su ticket, como quiera</h3>
+        <p>QR para que lo vea en su teléfono, impreso en tu térmica, o por WhatsApp. Tú decides.</p></div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ======== TODO BAJO CONTROL ======== -->
+<section class="tour-section">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="s-eyebrow">Todo bajo control</span>
+      <h2 class="s-h2 rv">Tu negocio,<br>en números.</h2>
+      <p class="s-lead rv rv-d1">Lo que vendiste, lo que te queda y lo que se acaba. Sin abrir Excel.</p>
     </div>
 
     <div class="tour-grid">
       <article class="tour-item rv">
-        <div class="tour-phone"><iframe src="screens/43-scanner.html" title="Escanear un producto" scrolling="no" loading="lazy"></iframe></div>
-        <h3 class="tour-t">Escanea y cobra</h3>
-        <p class="tour-d">Apuntas al código de barras y el producto entra a la venta con su precio y su stock. Sin teclear nada.</p>
+        <div class="tour-shot"><img src="screens/img/01-inicio.jpg" alt="Pantalla de inicio con ventas del día en vivo y acciones rápidas" loading="lazy" width="540" height="1200"></div>
+        <h3 class="tour-t">Tu día, en vivo</h3>
+        <p class="tour-d">Lo vendido hoy se actualiza solo. Debajo, un atajo a cada cosa que usas a diario.</p>
       </article>
 
       <article class="tour-item rv rv-d1">
-        <div class="tour-phone"><iframe src="screens/40-ticket-view.html" title="Vista del ticket" scrolling="no" loading="lazy"></iframe></div>
-        <h3 class="tour-t">El ticket de tu cliente</h3>
-        <p class="tour-d">Se arma solo: productos, descuento, total y cambio. Lo imprimes, lo compartes por WhatsApp o le pasas el QR.</p>
+        <div class="tour-shot"><img src="screens/img/03-productos.jpg" alt="Inventario con categorías, precios y stock" loading="lazy" width="540" height="1200"></div>
+        <h3 class="tour-t">Inventario que se cuida solo</h3>
+        <p class="tour-d">Cada venta descuenta el stock. Y si ya tienes tu lista en Excel, la subes completa de una vez.</p>
       </article>
 
       <article class="tour-item rv rv-d2">
-        <div class="tour-phone"><iframe src="screens/45-alta-producto.html" title="Dar de alta un producto" scrolling="no" loading="lazy"></iframe></div>
-        <h3 class="tour-t">Da de alta en segundos</h3>
-        <p class="tour-d">Escaneas, pones precio y stock, eliges categoría. La foto es opcional. Listo para vender.</p>
+        <div class="tour-shot"><img src="screens/img/13-reportes.jpg" alt="Reportes con ingreso de 7 días, gráfica por día y top productos" loading="lazy" width="540" height="1200"></div>
+        <h3 class="tour-t">Qué se vende y qué no</h3>
+        <p class="tour-d">Tu mejor día, tu producto estrella y lo que está por agotarse. En una pantalla.</p>
       </article>
 
       <article class="tour-item rv">
-        <div class="tour-phone"><iframe src="screens/42-profile-logros.html" title="Perfil y logros" scrolling="no" loading="lazy"></iframe></div>
-        <h3 class="tour-t">Logros y rachas</h3>
-        <p class="tour-d">Tu primera venta, las 100, los $10,000. Subes de nivel conforme tu negocio crece. Se desbloquean solos.</p>
+        <div class="tour-shot"><img src="screens/img/12-caja.jpg" alt="Cierre de caja con ventas del periodo y fondo inicial" loading="lazy" width="540" height="1200"></div>
+        <h3 class="tour-t">El corte, sin pelear</h3>
+        <p class="tour-d">Cuadras efectivo, tarjeta y transferencia contra lo que hay en la caja. Cierras y listo.</p>
       </article>
 
       <article class="tour-item rv rv-d1">
-        <div class="tour-phone"><iframe src="screens/44-empleado.html" title="Modo empleado" scrolling="no" loading="lazy"></iframe></div>
-        <h3 class="tour-t">Modo empleado</h3>
-        <p class="tour-d">Tu cajero cobra y consulta inventario, pero no ve tus ganancias ni puede anular ventas sin tu permiso.</p>
+        <div class="tour-shot"><img src="screens/img/05-detalle-venta.jpg" alt="Detalle de una venta con ventana para anular" loading="lazy" width="540" height="1200"></div>
+        <h3 class="tour-t">Te equivocaste: se arregla</h3>
+        <p class="tour-d">Cada venta trae su ventana para anular. La ves en el reloj, y después queda como registro permanente.</p>
       </article>
 
       <article class="tour-item rv rv-d2">
-        <div class="tour-phone"><iframe src="screens/41-login.html" title="Iniciar sesión" scrolling="no" loading="lazy"></iframe></div>
-        <h3 class="tour-t">Entra desde donde sea</h3>
-        <p class="tour-d">Tu cuenta vive en la nube. Cambias de teléfono y tu inventario, tus ventas y tu equipo siguen ahí.</p>
+        <div class="tour-shot"><img src="screens/img/02-perfil-logros.jpg" alt="Perfil con logros, nivel y experiencia" loading="lazy" width="540" height="1200"></div>
+        <h3 class="tour-t">Vender, pero con logros</h3>
+        <p class="tour-d">Tu primera venta, las 100, los $1,000. Cada venta suma XP y sube tu nivel. Se desbloquean solos.</p>
       </article>
     </div>
   </div>
@@ -1391,7 +1456,7 @@ function comingSoon(){
 
 // ── Scale iframes to fit phone frames ────────────────────────────
 function scalePhoneIframes() {
-  document.querySelectorAll('.p-phone, .tour-phone').forEach(phone => {
+  document.querySelectorAll('.p-phone').forEach(phone => {
     const iframe = phone.querySelector('iframe');
     if (!iframe) return;
     const scaleX = phone.offsetWidth / 390;
