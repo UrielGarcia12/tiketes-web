@@ -592,7 +592,7 @@ footer {
 
 <!-- ════════ NAV ════════════════════════════════════════════════ -->
 <nav class="nav" id="nav">
-  <a href="#" aria-label="Tikeles inicio">
+  <a href="#" aria-label="Tiketes inicio" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
     <img src="assets/wordmark-light.svg" alt="Tikeles" class="nav-logo">
   </a>
   <ul class="nav-links">
@@ -625,7 +625,7 @@ footer {
   </p>
 
   <div class="hero-actions">
-    <button class="btn-hero-primary" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})">Comenzar gratis →</button>
+    <button class="btn-hero-primary" onclick="comingSoon()">Descargar app →</button>
     <button class="btn-hero-secondary" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})">Ver planes</button>
   </div>
 
@@ -926,7 +926,7 @@ footer {
             Soporte chatbot
           </li>
         </ul>
-        <button class="plan-cta">
+        <button class="plan-cta" onclick="comingSoon()">
           Comenzar gratis
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
@@ -966,7 +966,7 @@ footer {
             Backup 6 meses
           </li>
         </ul>
-        <button class="plan-cta">
+        <button class="plan-cta" onclick="comingSoon()">
           Suscribirme a Essential
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
@@ -1007,7 +1007,7 @@ footer {
             Soporte por WhatsApp
           </li>
         </ul>
-        <button class="plan-cta">
+        <button class="plan-cta" onclick="comingSoon()">
           Suscribirme a Pro
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
@@ -1055,7 +1055,7 @@ footer {
             Soporte prioritario
           </li>
         </ul>
-        <button class="plan-cta">
+        <button class="plan-cta" onclick="comingSoon()">
           Suscribirme a Premium
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
@@ -1075,7 +1075,7 @@ footer {
   <div style="position:relative;z-index:1">
     <h2 class="cta-h2">Empieza <em>hoy.</em><br>Es gratis.</h2>
     <p class="cta-sub">Sin tarjeta de crédito. Sin contratos. Cancela cuando quieras.</p>
-    <a href="#" class="btn-banner">
+    <a href="javascript:void(0)" class="btn-banner" onclick="comingSoon()">
       Comenzar gratis
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </a>
@@ -1088,7 +1088,7 @@ footer {
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">
-        <img src="assets/wordmark-light.svg" alt="Tikeles">
+        <img src="assets/wordmark-light.svg" alt="Tiketes">
         <p>La caja registradora que cabe en tu bolsillo. Para negocios en México y LATAM.</p>
       </div>
       <div class="footer-col">
@@ -1096,21 +1096,21 @@ footer {
         <ul>
           <li><a href="#features">Funciones</a></li>
           <li><a href="#plans">Precios</a></li>
-          <li><a href="#">Descargar</a></li>
+          <li><a href="javascript:void(0)" onclick="comingSoon()">Descargar</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Empresa</h4>
         <ul>
-          <li><a href="#">Acerca de</a></li>
-          <li><a href="#">Blog</a></li>
+          <li><a href="#product">La app</a></li>
+          <li><a href="#features">Funciones</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Soporte</h4>
         <ul>
           <li><a href="mailto:tiketes.soporteapp@gmail.com">Contacto</a></li>
-          <li><a href="#">Centro de ayuda</a></li>
+          <li><a href="mailto:tiketes.soporteapp@gmail.com">Centro de ayuda</a></li>
         </ul>
       </div>
     </div>
@@ -1126,6 +1126,21 @@ footer {
 
 
 <script>
+// ── "Próximamente en Google Play" toast (la app aún no está publicada) ──
+function comingSoon(){
+  let t=document.getElementById('cs-toast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='cs-toast';t.setAttribute('role','status');
+    t.style.cssText='position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#15152A;color:#fff;border:1px solid rgba(139,112,255,.4);padding:13px 22px;border-radius:14px;font:600 14px/1.3 system-ui,-apple-system,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.5);z-index:2000;opacity:0;transition:opacity .25s ease,transform .25s ease;max-width:90vw;text-align:center;';
+    t.textContent='Próximamente en Google Play';
+    document.body.appendChild(t);
+  }
+  requestAnimationFrame(()=>{t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';});
+  clearTimeout(window._csTimer);
+  window._csTimer=setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(20px)';},2600);
+}
+
 // ── Scale iframes to fit phone frames ────────────────────────────
 function scalePhoneIframes() {
   document.querySelectorAll('.p-phone').forEach(phone => {

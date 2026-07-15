@@ -73,6 +73,16 @@ body{
 
 .err{color:rgba(255,255,255,.44);text-align:center;padding:64px 32px;max-width:320px;}
 .err h2{font-size:20px;color:#fff;margin-bottom:8px;font-weight:700}
+
+/* Footer de marca + legales */
+.recibo-foot{margin:26px 16px 4px;text-align:center;opacity:0;animation:footIn .5s .5s forwards;}
+@keyframes footIn{to{opacity:1}}
+.recibo-brand{font-size:12px;color:rgba(255,255,255,.34);font-weight:600;letter-spacing:.02em;}
+.recibo-brand strong{color:rgba(255,255,255,.64);}
+.recibo-links{margin-top:9px;font-size:12px;display:flex;align-items:center;justify-content:center;gap:9px;}
+.recibo-links a{color:#A88EFF;text-decoration:none;}
+.recibo-links a:active{opacity:.7;}
+.recibo-links .dot{color:rgba(255,255,255,.25);}
 </style>
 </head>
 <body>
@@ -94,6 +104,15 @@ body{
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
   <span id="btnLabel">Guardar ticket</span>
 </button>
+
+<footer class="recibo-foot">
+  <div class="recibo-brand">Recibo digital vía <strong>Tiketes</strong></div>
+  <div class="recibo-links">
+    <a href="https://tiketes.com.mx/terms.html" target="_blank" rel="noopener">Términos</a>
+    <span class="dot">·</span>
+    <a href="https://tiketes.com.mx/privacy.html" target="_blank" rel="noopener">Privacidad</a>
+  </div>
+</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
