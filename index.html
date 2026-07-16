@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tiketes — Ventas rápidas. Inventario listo.</title>
-<meta name="description" content="La app de ventas e inventario diseñada para negocios reales en México y LATAM. Cobra en segundos, controla tu stock, crece con datos reales.">
+<title>Tiketes — Inventario y tickets para tu tienda</title>
+<meta name="description" content="Lleva tu inventario e imprime los tickets de tu tienda desde el celular. Para tiendas que están creciendo en México.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
@@ -81,6 +81,14 @@ body {
   background: rgba(7,7,15,.88);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-bottom-color: var(--rule-dark);
+}
+/* Marca = logo real (PNG con alfa) + el nombre como texto vivo, para que
+   quede nítido a cualquier tamaño y se pueda re-estilar sin tocar la imagen. */
+.brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; }
+.brand-mark { height: 27px; width: auto; display: block; }
+.brand-name {
+  font-family: var(--font-display); font-weight: 800; font-size: 18.5px;
+  color: #fff; letter-spacing: -.035em;
 }
 .nav-logo { height: 24px; display: block; }
 
@@ -440,25 +448,6 @@ body {
 .f-desc { font-size: 13px; color: rgba(255,255,255,.42); line-height: 1.65; }
 
 
-/* ── PRODUCT ──────────────────────────────────────────────────── */
-.product-section {
-  background: var(--onyx);
-  padding: 148px clamp(24px, 5vw, 80px);
-  position: relative; overflow: hidden;
-}
-.product-section::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(ellipse 55% 55% at 50% 100%, rgba(107,75,255,.10), transparent);
-}
-.product-section .s-h2  { color: #fff; }
-.product-section .s-eyebrow { color: rgba(255,255,255,.32); }
-.product-section .s-lead    { color: rgba(255,255,255,.40); }
-
-/* Los titulares de sección nacieron para fondo claro (--ink-900). En las
-   secciones oscuras hay que invertirlos o se pierden contra el fondo. */
-.flow-section .s-h2, .tour-section .s-h2 { color: #fff; }
-.flow-section .s-lead, .tour-section .s-lead { color: rgba(255,255,255,.44); }
-
 /* ── FLUJO DE VENTA: 5 pasos, capturas reales ──────────────────── */
 /* Aquí sí numeramos: es una secuencia de verdad (el orden importa). */
 .flow-section {
@@ -490,16 +479,26 @@ body {
   border-color: rgba(107,75,255,.38);
   box-shadow: 0 40px 74px rgba(0,0,0,.66), 0 0 50px rgba(107,75,255,.12);
 }
-.flow-txt { padding-top: 16px; }
+.flow-txt { padding-top: 18px; }
+/* El número manda: es lo que hace leer la secuencia de un vistazo. */
 .flow-n {
-  display: inline-block; font-family: var(--font-mono);
-  font-size: 10.5px; letter-spacing: .14em; color: var(--gold);
-  border: 1px solid var(--gold-dim); border-radius: 99px;
-  padding: 2px 8px; margin-bottom: 9px;
+  display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;
 }
+.flow-n i {
+  font-style: normal; font-family: var(--font-mono);
+  font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(255,255,255,.34);
+}
+.flow-n b {
+  font-family: var(--font-hero);
+  font-size: clamp(42px, 4vw, 58px); font-weight: 800;
+  line-height: .78; letter-spacing: -.03em; color: var(--gold);
+  transition: color 300ms var(--ease-out);
+}
+.flow-step:hover .flow-n b { color: var(--gold-light); }
 .flow-step h3 {
   font-family: var(--font-display); font-weight: 700;
-  font-size: 15px; color: #fff; letter-spacing: -.02em; margin-bottom: 6px;
+  font-size: 15.5px; color: #fff; letter-spacing: -.02em; margin-bottom: 6px;
 }
 .flow-step p { font-size: 12.5px; line-height: 1.6; color: rgba(255,255,255,.42); }
 
@@ -527,47 +526,6 @@ body {
   font-size: 13px; line-height: 1.62;
   color: rgba(255,255,255,.42);
 }
-
-/* Phone frames with iframe screens */
-.phones-wrap {
-  display: flex; justify-content: center; align-items: flex-end;
-  gap: clamp(12px, 2vw, 32px);
-  margin-top: 80px;
-  perspective: 1200px;
-}
-.p-phone {
-  position: relative;
-  width: clamp(155px, 19vw, 230px);
-  aspect-ratio: 390/844;
-  border-radius: clamp(22px, 2.8vw, 34px);
-  overflow: hidden;
-  border: 1.5px solid rgba(255,255,255,.10);
-  box-shadow: 0 48px 96px rgba(0,0,0,.72), 0 0 0 1px rgba(255,255,255,.05);
-  flex-shrink: 0;
-  background: #07070F;
-}
-.p-phone iframe {
-  position: absolute; inset: 0;
-  width: 390px; height: 844px;
-  border: none; pointer-events: none;
-  transform-origin: top left;
-}
-.p-phone-main { z-index: 2; }
-.p-phone-side {
-  opacity: .72; transform: scale(.92) translateY(28px);
-}
-.p-phone-back {
-  opacity: .48; transform: scale(.85) translateY(52px);
-}
-@media (max-width: 700px) {
-  .p-phone-back { display: none; }
-  .p-phone { width: clamp(140px, 40vw, 200px); }
-}
-@media (max-width: 480px) {
-  .p-phone-side { display: none; }
-  .p-phone { width: clamp(150px, 55vw, 210px); }
-}
-
 
 /* ── PLANS ────────────────────────────────────────────────────── */
 .plans-section {
@@ -797,7 +755,7 @@ footer {
   .footer-top { grid-template-columns: 1fr 1fr; }
   .footer-brand { grid-column: 1 / -1; }
 }
-.footer-brand img { height: 22px; margin-bottom: 16px; display: block; }
+.footer-brand .brand-mark { height: 24px; }
 .footer-brand p   { font-size: 13px; color: rgba(255,255,255,.28); line-height: 1.65; max-width: 220px; }
 .footer-col h4    { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .14em; color: rgba(255,255,255,.26); margin-bottom: 16px; }
 .footer-col ul    { list-style: none; display: flex; flex-direction: column; gap: 10px; }
@@ -826,13 +784,13 @@ footer {
 
 <!-- ════════ NAV ════════════════════════════════════════════════ -->
 <nav class="nav" id="nav">
-  <a href="#" aria-label="Tiketes inicio" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
-    <img src="assets/wordmark-light.svg" alt="Tiketes" class="nav-logo">
+  <a class="brand" href="#" aria-label="Tiketes inicio" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+    <img src="assets/logo-mark-web.png" alt="" class="brand-mark" width="195" height="256">
+    <span class="brand-name">Tiketes</span>
   </a>
   <ul class="nav-links">
     <li><a href="#features">Funciones</a></li>
-    <li><a href="#product">La app</a></li>
-    <li><a href="#tour">Por dentro</a></li>
+    <li><a href="#tour">La app por dentro</a></li>
     <li><a href="#plans">Planes</a></li>
   </ul>
   <div class="nav-actions">
@@ -848,7 +806,7 @@ footer {
   <div class="orb orb-b"></div>
 
   <div class="hero-text">
-    <div class="hero-eyebrow an an-1">Punto de venta · México y LATAM</div>
+    <div class="hero-eyebrow an an-1">Inventario y tickets · Hecho en México</div>
 
     <h1 class="hero-h1">
       <span class="ln"><i>Vende en</i></span>
@@ -857,8 +815,8 @@ footer {
     </h1>
 
     <p class="hero-lead an an-2">
-      La app de ventas e inventario diseñada para negocios reales.
-      Sin complicaciones, sin contratos, sin sorpresas.
+      Lleva tu inventario e imprime los tickets de tu tienda desde el celular.
+      Sin complicaciones y sin contratos.
     </p>
 
     <div class="hero-actions an an-3">
@@ -866,7 +824,7 @@ footer {
       <button class="btn-hero-secondary" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})">Ver planes</button>
     </div>
 
-    <p class="hero-caption an an-4">Sin tarjeta de crédito · Plan básico siempre gratis</p>
+    <p class="hero-caption an an-4">Gratis para siempre en el plan básico. Sin contratos.</p>
   </div>
 
   <!-- Firma: el ticket se imprime y pisa el titular -->
@@ -919,7 +877,7 @@ footer {
     <div class="reveal">
       <span class="s-eyebrow">Funciones</span>
       <h2 class="s-h2 rv">Todo lo que<br>necesitas.<br>Nada más.</h2>
-      <p class="s-lead rv rv-d1">Diseñada para que cualquier persona en tu negocio la use el primer día, sin capacitación.</p>
+      <p class="s-lead rv rv-d1">Si sabes usar WhatsApp, sabes usar esto. Tu cajero la agarra el primer día, sin que le expliques.</p>
     </div>
 
     <div class="features-grid" id="features-grid">
@@ -931,8 +889,8 @@ footer {
             <path d="M8 21h8M12 17v4"/>
           </svg>
         </div>
-        <div class="f-title">Punto de venta veloz</div>
-        <p class="f-desc">Busca productos, agrega al carrito y cobra en menos de 3 segundos. Efectivo, transferencia o fiado.</p>
+        <div class="f-title">Cobra sin batallar</div>
+        <p class="f-desc">Escaneas, cobras y entregas el ticket. Efectivo, transferencia o se lo fías: tú decides.</p>
       </div>
 
       <div class="f-card">
@@ -942,8 +900,8 @@ footer {
             <path d="M16 3v4M8 3v4M2 13h20"/>
           </svg>
         </div>
-        <div class="f-title">Inventario en tiempo real</div>
-        <p class="f-desc">Cada venta actualiza el stock automáticamente. Alertas cuando un producto está por agotarse.</p>
+        <div class="f-title">El inventario se cuida solo</div>
+        <p class="f-desc">Cada venta descuenta el stock sola. Y te avisa antes de que se te acabe algo, no después.</p>
       </div>
 
       <div class="f-card">
@@ -953,8 +911,8 @@ footer {
             <polyline points="18 9 12 15 8 11 3 16"/>
           </svg>
         </div>
-        <div class="f-title">Reportes de ventas</div>
-        <p class="f-desc">Ganancias del día, la semana y el mes de un vistazo. Historial completo siempre disponible.</p>
+        <div class="f-title">Sabes cómo va tu tienda</div>
+        <p class="f-desc">Cuánto vendiste hoy, esta semana y este mes. Y cuál es el producto que más te deja.</p>
       </div>
 
       <div class="f-card">
@@ -965,8 +923,8 @@ footer {
             <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
           </svg>
         </div>
-        <div class="f-title">Multi-empleado</div>
-        <p class="f-desc">Agrega a tu equipo, asigna ventas por empleado y ve el desempeño de cada uno.</p>
+        <div class="f-title">Tu equipo, sin sustos</div>
+        <p class="f-desc">Tu cajero cobra, pero no ve tus ganancias ni puede anular ventas sin tu permiso.</p>
       </div>
 
       <div class="f-card">
@@ -979,8 +937,8 @@ footer {
             <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
           </svg>
         </div>
-        <div class="f-title">Clientes y fiados</div>
-        <p class="f-desc">Registra clientes, vende a crédito y lleva el control de lo que te deben, sin hojas de papel.</p>
+        <div class="f-title">Los fiados, en orden</div>
+        <p class="f-desc">Se acabó el cuaderno. Apuntas quién te debe y cuánto, y lo consultas cuando pase a pagar.</p>
       </div>
 
       <div class="f-card">
@@ -989,8 +947,8 @@ footer {
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
           </svg>
         </div>
-        <div class="f-title">Logros y racha de ventas</div>
-        <p class="f-desc">Mantén la motivación con rachas de ventas diarias y logros desbloqueables en tu perfil.</p>
+        <div class="f-title">Vender se siente bien</div>
+        <p class="f-desc">Cada venta suma puntos y sube tu nivel. Tu primera venta, las 100, los $1,000: todos se desbloquean solos.</p>
       </div>
 
     </div>
@@ -999,185 +957,40 @@ footer {
 
 
 <!-- ════════ PRODUCT ══════════════════════════════════════════════ -->
-<section class="product-section" id="product">
-  <div class="section-inner">
-    <div class="reveal">
-      <span class="s-eyebrow">La app</span>
-      <h2 class="s-h2 rv">Una pantalla.<br>Mil decisiones.</h2>
-      <p class="s-lead rv rv-d1">Diseñada para que tus manos hagan el trabajo, no tu cabeza.</p>
-    </div>
-
-    <div class="phones-wrap" id="phones-wrap">
-
-      <!-- Inventario / Productos -->
-      <div class="p-phone p-phone-back" id="phone-back">
-        <iframe src="screens/24-products-screen.html" title="Pantalla de productos" scrolling="no" id="iframe-back"></iframe>
-      </div>
-
-      <!-- Nueva venta (principal) -->
-      <div class="p-phone p-phone-main" id="phone-main">
-        <iframe src="screens/25-new-sale-screen.html" title="Nueva venta" scrolling="no" id="iframe-main"></iframe>
-      </div>
-
-      <!-- Ticket / Recibo -->
-      <div class="p-phone p-phone-side" id="phone-side">
-        <iframe src="screens/33-ticket-editor.html" title="Ticket de venta" scrolling="no" id="iframe-side"></iframe>
-      </div>
-
-      <!-- ELIMINAR: viejo código inline comienza abajo → -->
-      <div style="display:none" aria-hidden="true">
-      <!-- Inventario (código anterior, oculto) -->
-      <div class="p-phone p-phone-main" style="background:#fff">
-        <div style="padding:14px;height:100%;display:flex;flex-direction:column">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-            <div style="font-family:Sora,sans-serif;font-weight:700;font-size:12px;color:#0A0B1F">Inventario</div>
-            <div style="background:#6B4BFF;border-radius:7px;padding:4px 10px;font-size:9px;font-weight:600;color:#fff">+ Producto</div>
-          </div>
-          <div style="display:flex;gap:6px;margin-bottom:10px">
-            <div style="flex:1;background:#F7F7FB;border:1px solid #EEEEF5;border-radius:9px;padding:7px 10px;display:flex;align-items:center;gap:6px">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#8A8AA3" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              <span style="font-size:10px;color:#8A8AA3">Buscar producto…</span>
-            </div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:6px;flex:1;overflow:hidden">
-            <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:#fff;border:1px solid #EEEEF5;border-radius:11px">
-              <div style="width:34px;height:34px;border-radius:9px;background:#F2EEFF;color:#6B4BFF;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:14px;flex-shrink:0">C</div>
-              <div style="flex:1;min-width:0">
-                <div style="font-size:11px;font-weight:500;color:#0A0B1F">Café Molido Premium</div>
-                <div style="font-size:9px;color:#8A8AA3;margin-top:1px;display:flex;gap:6px">
-                  <span style="font-family:JetBrains Mono,monospace">CAF-001</span><span>·</span><span>24 en stock</span>
-                </div>
-              </div>
-              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:11.5px;color:#0A0B1F;font-variant-numeric:tabular-nums">$80.00</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:#fff;border:1px solid #EEEEF5;border-radius:11px">
-              <div style="width:34px;height:34px;border-radius:9px;background:#FFF7E6;color:#A07300;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:14px;flex-shrink:0">A</div>
-              <div style="flex:1;min-width:0">
-                <div style="font-size:11px;font-weight:500;color:#0A0B1F">Azúcar 1kg</div>
-                <div style="font-size:9px;color:#8A8AA3;margin-top:1px;display:flex;gap:6px">
-                  <span style="font-family:JetBrains Mono,monospace">AZU-1K</span><span>·</span><span>16 en stock</span>
-                </div>
-              </div>
-              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:11.5px;color:#0A0B1F;font-variant-numeric:tabular-nums">$50.00</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:#fff;border:1px solid #EEEEF5;border-radius:11px">
-              <div style="width:34px;height:34px;border-radius:9px;background:#E6F0FF;color:#1E5BB8;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:14px;flex-shrink:0">L</div>
-              <div style="flex:1;min-width:0">
-                <div style="font-size:11px;font-weight:500;color:#0A0B1F">Leche Entera 1L</div>
-                <div style="font-size:9px;color:#8A8AA3;margin-top:1px;display:flex;gap:6px">
-                  <span style="font-family:JetBrains Mono,monospace">LEC-1L</span><span>·</span><span>32 en stock</span>
-                </div>
-              </div>
-              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:11.5px;color:#0A0B1F;font-variant-numeric:tabular-nums">$28.00</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:#fff;border:1px solid #EEEEF5;border-radius:11px">
-              <div style="width:34px;height:34px;border-radius:9px;background:#FFE6E6;color:#B8252B;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:14px;flex-shrink:0">G</div>
-              <div style="flex:1;min-width:0">
-                <div style="font-size:11px;font-weight:500;color:#0A0B1F">Galletas Chips Ahoy</div>
-                <div style="font-size:9px;color:#A02020;margin-top:1px;display:flex;gap:6px;font-weight:600">
-                  <span style="font-family:JetBrains Mono,monospace;color:#8A8AA3;font-weight:400">GAL-CHA</span>
-                  <span style="color:#8A8AA3;font-weight:400">·</span>
-                  <span>⚠ 8 en stock</span>
-                </div>
-              </div>
-              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:11.5px;color:#0A0B1F;font-variant-numeric:tabular-nums">$35.00</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:#fff;border:1px solid #EEEEF5;border-radius:11px">
-              <div style="width:34px;height:34px;border-radius:9px;background:#E9F8EF;color:#137333;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:14px;flex-shrink:0">R</div>
-              <div style="flex:1;min-width:0">
-                <div style="font-size:11px;font-weight:500;color:#0A0B1F">Refresco Cola 600ml</div>
-                <div style="font-size:9px;color:#8A8AA3;margin-top:1px;display:flex;gap:6px">
-                  <span style="font-family:JetBrains Mono,monospace">REF-600</span><span>·</span><span>41 en stock</span>
-                </div>
-              </div>
-              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:11.5px;color:#0A0B1F;font-variant-numeric:tabular-nums">$22.00</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Nueva venta -->
-      <div class="p-phone p-phone-side" style="background:#fff">
-        <div style="padding:14px;height:100%;display:flex;flex-direction:column">
-          <div style="font-family:Sora,sans-serif;font-weight:700;font-size:12px;color:#0A0B1F;margin-bottom:10px">Nueva venta</div>
-          <div style="display:flex;flex-direction:column;gap:6px;flex:1">
-            <div style="display:flex;align-items:center;gap:7px;padding:7px 8px;background:#F7F7FB;border:1px solid #EEEEF5;border-radius:9px">
-              <div style="width:28px;height:28px;border-radius:8px;background:#3A2417;color:#E9D7BB;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">☕</div>
-              <div style="flex:1"><div style="font-size:9.5px;font-weight:500;color:#0A0B1F">Café Molido</div><div style="font-size:8px;color:#8A8AA3">1 × $80.00</div></div>
-              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:10px;color:#0A0B1F;font-variant-numeric:tabular-nums">$80</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:7px;padding:7px 8px;background:#F7F7FB;border:1px solid #EEEEF5;border-radius:9px">
-              <div style="width:28px;height:28px;border-radius:8px;background:#FFF7E6;color:#A07300;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:11px;flex-shrink:0">A</div>
-              <div style="flex:1"><div style="font-size:9.5px;font-weight:500;color:#0A0B1F">Azúcar 1kg</div><div style="font-size:8px;color:#8A8AA3">1 × $50.00</div></div>
-              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:10px;color:#0A0B1F;font-variant-numeric:tabular-nums">$50</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:7px;padding:7px 8px;background:#F7F7FB;border:1px solid #EEEEF5;border-radius:9px">
-              <div style="width:28px;height:28px;border-radius:8px;background:#E6F0FF;color:#1E5BB8;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:11px;flex-shrink:0">L</div>
-              <div style="flex:1"><div style="font-size:9.5px;font-weight:500;color:#0A0B1F">Leche 1L ×2</div><div style="font-size:8px;color:#8A8AA3">2 × $28.00</div></div>
-              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:10px;color:#0A0B1F;font-variant-numeric:tabular-nums">$56</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:7px;padding:7px 8px;background:#F7F7FB;border:1px solid #EEEEF5;border-radius:9px">
-              <div style="width:28px;height:28px;border-radius:8px;background:#FFE6E6;color:#B8252B;display:flex;align-items:center;justify-content:center;font-family:Sora,sans-serif;font-weight:700;font-size:11px;flex-shrink:0">G</div>
-              <div style="flex:1"><div style="font-size:9.5px;font-weight:500;color:#0A0B1F">Galletas Chips</div><div style="font-size:8px;color:#8A8AA3">1 × $35.00</div></div>
-              <div style="font-family:Sora,sans-serif;font-weight:700;font-size:10px;color:#0A0B1F;font-variant-numeric:tabular-nums">$35</div>
-            </div>
-          </div>
-          <div style="border-top:1px dashed #DCDCE8;padding-top:10px;margin-top:8px">
-            <div style="display:flex;justify-content:space-between;font-size:9.5px;color:#5F5F7A;margin-bottom:3px"><span>Subtotal</span><span style="font-variant-numeric:tabular-nums;color:#0A0B1F">$185.13</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:9.5px;color:#5F5F7A;margin-bottom:8px"><span>IVA (16%)</span><span style="font-variant-numeric:tabular-nums;color:#0A0B1F">$29.62</span></div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
-              <span style="font-family:Sora,sans-serif;font-weight:700;font-size:12px;color:#0A0B1F">Total</span>
-              <span style="font-family:Sora,sans-serif;font-weight:800;font-size:18px;color:#0A0B1F;letter-spacing:-.03em;font-variant-numeric:tabular-nums">$215.76</span>
-            </div>
-            <div style="background:linear-gradient(135deg,#8B70FF,#4524D6);border-radius:11px;padding:10px;text-align:center;color:#fff;font-family:Inter,sans-serif;font-size:10.5px;font-weight:600;box-shadow:0 8px 20px rgba(107,75,255,.40)">
-              Cobrar $215.76
-            </div>
-          </div>
-        </div>
-      </div>
-      </div><!-- /display:none old phones -->
-
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ════════ PLANS ════════════════════════════════════════════════ -->
 <!-- ======== FLUJO DE UNA VENTA ======== -->
 <section class="flow-section" id="tour">
   <div class="section-inner">
     <div class="reveal">
-      <span class="s-eyebrow">Una venta, de principio a fin</span>
-      <h2 class="s-h2 rv">Del código<br>al cambio.</h2>
-      <p class="s-lead rv rv-d1">Capturas reales de la app, sin maquillar. Así se ve cobrar en tu mostrador.</p>
+      <span class="s-eyebrow">Una venta, paso a paso</span>
+      <h2 class="s-h2 rv">Así se cobra<br>en 5 pasos.</h2>
+      <p class="s-lead rv rv-d1">Estas son capturas de la app, tal cual. Así se ve un cobro en tu mostrador.</p>
     </div>
 
     <ol class="flow">
       <li class="flow-step rv">
         <div class="flow-shot"><img src="screens/img/06-nueva-venta.jpg" alt="Pantalla de nueva venta con opción de escanear y categorías" loading="lazy" width="540" height="1200"></div>
-        <div class="flow-txt"><span class="flow-n">01</span><h3>Escanea o toca</h3>
+        <div class="flow-txt"><span class="flow-n"><i>Paso</i><b>01</b></span><h3>Escanea o toca</h3>
         <p>El código de barras entra el producto solo. Si no tiene código, lo eliges de tus categorías.</p></div>
       </li>
       <li class="flow-step rv rv-d1">
         <div class="flow-shot"><img src="screens/img/07-venta-en-curso.jpg" alt="Venta en curso con carrito y método de pago" loading="lazy" width="540" height="1200"></div>
-        <div class="flow-txt"><span class="flow-n">02</span><h3>Efectivo, tarjeta o fiado</h3>
+        <div class="flow-txt"><span class="flow-n"><i>Paso</i><b>02</b></span><h3>Efectivo, tarjeta o fiado</h3>
         <p>Aplicas descuento y, si es fiado, le asignas el cliente. El total se recalcula al momento.</p></div>
       </li>
       <li class="flow-step rv rv-d2">
         <div class="flow-shot"><img src="screens/img/08-cuanto-pagan.jpg" alt="Calculadora de cambio: a cobrar, recibes y cambio" loading="lazy" width="540" height="1200"></div>
-        <div class="flow-txt"><span class="flow-n">03</span><h3>El cambio, solo</h3>
+        <div class="flow-txt"><span class="flow-n"><i>Paso</i><b>03</b></span><h3>El cambio, solo</h3>
         <p>Tocas $50, $100 o $200 y te dice cuánto devolver. Sin cuentas de cabeza, sin errores.</p></div>
       </li>
       <li class="flow-step rv">
-        <div class="flow-shot"><img src="screens/img/10-venta-completada.jpg" alt="Venta completada con confirmación y experiencia ganada" loading="lazy" width="540" height="1200"></div>
-        <div class="flow-txt"><span class="flow-n">04</span><h3>Venta registrada</h3>
-        <p>Queda en tu historial y tu inventario baja solo. De paso ganas XP y subes de nivel.</p></div>
+        <div class="flow-shot"><img src="screens/img/09-vista-ticket.jpg" alt="Vista del ticket con QR digital, imprimir, compartir y guardar" loading="lazy" width="540" height="1200"></div>
+        <div class="flow-txt"><span class="flow-n"><i>Paso</i><b>04</b></span><h3>Le das su ticket</h3>
+        <p>Un QR para que lo vea en su teléfono, impreso en tu térmica, o por WhatsApp. Como el cliente prefiera.</p></div>
       </li>
       <li class="flow-step rv rv-d1">
-        <div class="flow-shot"><img src="screens/img/09-vista-ticket.jpg" alt="Vista del ticket con QR digital, imprimir, compartir y guardar" loading="lazy" width="540" height="1200"></div>
-        <div class="flow-txt"><span class="flow-n">05</span><h3>Su ticket, como quiera</h3>
-        <p>QR para que lo vea en su teléfono, impreso en tu térmica, o por WhatsApp. Tú decides.</p></div>
+        <div class="flow-shot"><img src="screens/img/10-venta-completada.jpg" alt="Venta completada con confirmación y experiencia ganada" loading="lazy" width="540" height="1200"></div>
+        <div class="flow-txt"><span class="flow-n"><i>Paso</i><b>05</b></span><h3>Y listo</h3>
+        <p>La venta queda guardada y tu inventario baja solo. De pilón ganas puntos y subes de nivel.</p></div>
       </li>
     </ol>
   </div>
@@ -1237,7 +1050,7 @@ footer {
     <div class="reveal">
       <span class="s-eyebrow">Planes</span>
       <h2 class="s-h2 rv">El precio justo<br>para cada etapa.</h2>
-      <p class="s-lead rv rv-d1">Empieza gratis, crece cuando quieras. Sin contratos ni sorpresas.</p>
+      <p class="s-lead rv rv-d1">Empiezas gratis. Cuando tu tienda crezca, subes de plan. Ni contratos ni letras chiquitas.</p>
     </div>
 
     <div class="plans-grid" id="plans-grid">
@@ -1416,7 +1229,7 @@ footer {
 <section class="cta-banner">
   <div style="position:relative;z-index:1">
     <h2 class="cta-h2 rv">Empieza <em>hoy.</em><br>Es gratis.</h2>
-    <p class="cta-sub">Sin tarjeta de crédito. Sin contratos. Cancela cuando quieras.</p>
+    <p class="cta-sub">Empiezas gratis. Si algún día no te sirve, te sales y ya.</p>
     <a href="crear-cuenta.html" class="btn-banner">
       Comenzar gratis
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -1430,8 +1243,11 @@ footer {
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">
-        <img src="assets/wordmark-light.svg" alt="Tiketes">
-        <p>La caja registradora que cabe en tu bolsillo. Para negocios en México y LATAM.</p>
+        <a class="brand" href="#" aria-label="Tiketes inicio" style="margin-bottom:16px">
+          <img src="assets/logo-mark-web.png" alt="" class="brand-mark" width="195" height="256">
+          <span class="brand-name">Tiketes</span>
+        </a>
+        <p>Inventario y tickets para tiendas que están creciendo. Hecho en México.</p>
       </div>
       <div class="footer-col">
         <h4>Producto</h4>
@@ -1444,8 +1260,7 @@ footer {
       <div class="footer-col">
         <h4>Empresa</h4>
         <ul>
-          <li><a href="#product">La app</a></li>
-    <li><a href="#tour">Por dentro</a></li>
+          <li><a href="#tour">La app por dentro</a></li>
           <li><a href="#features">Funciones</a></li>
         </ul>
       </div>
@@ -1490,21 +1305,6 @@ function comingSoon(){
   clearTimeout(window._csTimer);
   window._csTimer=setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(20px)';},2600);
 }
-
-// ── Scale iframes to fit phone frames ────────────────────────────
-function scalePhoneIframes() {
-  document.querySelectorAll('.p-phone').forEach(phone => {
-    const iframe = phone.querySelector('iframe');
-    if (!iframe) return;
-    const scaleX = phone.offsetWidth / 390;
-    const scaleY = phone.offsetHeight / 844;
-    const scale  = Math.min(scaleX, scaleY);
-    iframe.style.transform = `scale(${scale})`;
-  });
-}
-window.addEventListener('resize', scalePhoneIframes, { passive: true });
-document.addEventListener('DOMContentLoaded', scalePhoneIframes);
-setTimeout(scalePhoneIframes, 100);
 
 // ── Nav ──────────────────────────────────────────────────────────
 const nav = document.getElementById('nav');

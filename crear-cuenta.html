@@ -37,7 +37,9 @@ body{
 .bar{width:100%;max-width:560px;display:flex;align-items:center;justify-content:space-between;padding:20px 2px 22px;position:relative;z-index:2}
 .bar a{font-family:var(--f-body);font-size:13px;font-weight:500;color:rgba(255,255,255,.5);text-decoration:none;transition:color .16s}
 .bar a:hover{color:#fff}
-.bar img{height:20px;display:block}
+.brand{display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.brand-mark{height:24px;width:auto;display:block}
+.brand-name{font-family:var(--f-display);font-weight:800;font-size:17px;color:#fff;letter-spacing:-.035em}
 
 /* Tarjeta */
 .card{width:100%;max-width:560px;position:relative;z-index:2}
@@ -185,7 +187,10 @@ input:focus-visible{outline:none}
 
 <div class="bar">
   <a href="/">← Volver</a>
-  <img src="assets/wordmark-light.svg" alt="Tiketes">
+  <span class="brand">
+    <img src="assets/logo-mark-web.png" alt="" class="brand-mark" width="195" height="256">
+    <span class="brand-name">Tiketes</span>
+  </span>
 </div>
 
 <main class="card">
