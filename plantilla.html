@@ -131,15 +131,15 @@ section{margin-top:clamp(48px,7vh,80px)}
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Descargar plantilla de Excel
       </a>
-      <span class="dl-note">Archivo .xlsx · abre en Excel, Google Sheets o Numbers · trae 6 ejemplos</span>
+      <span class="dl-note">Archivo .xlsx en blanco · abre en Excel, Google Sheets o Numbers · listo para llenar</span>
     </div>
   </div>
 
   <!-- Columnas -->
   <section>
     <span class="s-eyebrow">La estructura</span>
-    <h2 class="s-h2">Cinco columnas. Nada más.</h2>
-    <p class="s-lead">Deja los nombres de las columnas tal cual. La app lee la primera hoja del archivo. Puedes borrar los ejemplos y escribir los tuyos.</p>
+    <h2 class="s-h2">Los mismos campos<br>que la app.</h2>
+    <p class="s-lead">Deja los nombres de las columnas tal cual. Solo <b style="color:#fff">nombre</b> y <b style="color:#fff">precio</b> son obligatorios; lo demás puedes dejarlo vacío. La app lee la primera hoja del archivo.</p>
     <div class="cols">
       <div class="col">
         <div class="col-name">nombre <span class="req on">Obligatorio</span></div>
@@ -150,17 +150,45 @@ section{margin-top:clamp(48px,7vh,80px)}
         <div class="col-desc">Precio de venta, <b>mayor a 0</b>. Punto o coma: <b>20</b> o <b>20.50</b>.</div>
       </div>
       <div class="col">
+        <div class="col-name">costo <span class="req off">Opcional</span></div>
+        <div class="col-desc">Lo que te cuesta a ti. Sirve para calcular tu <b>ganancia</b>.</div>
+      </div>
+      <div class="col">
         <div class="col-name">stock <span class="req off">Opcional</span></div>
         <div class="col-desc">Cuántas piezas tienes. Número entero, 0 o más. Vacío = <b>0</b>.</div>
+      </div>
+      <div class="col">
+        <div class="col-name">stock_minimo <span class="req off">Opcional</span></div>
+        <div class="col-desc">Cuándo avisarte que ya casi se acaba. Número entero.</div>
       </div>
       <div class="col">
         <div class="col-name">categoria <span class="req off">Opcional</span></div>
         <div class="col-desc">Una de la lista de abajo. Si no coincide, entra como <b>otros</b>.</div>
       </div>
       <div class="col">
-        <div class="col-name">sku <span class="req off">Opcional</span></div>
-        <div class="col-desc">El <b>código de barras</b>. Déjalo vacío si no lo tienes; podrás escanearlo después en la app.</div>
+        <div class="col-name">unidad <span class="req off">Opcional</span></div>
+        <div class="col-desc">pza, kg, lt, caja… Si la dejas vacía, entra como <b>pza</b>.</div>
       </div>
+      <div class="col">
+        <div class="col-name">marca <span class="req off">Opcional</span></div>
+        <div class="col-desc">La marca del producto.</div>
+      </div>
+      <div class="col">
+        <div class="col-name">codigo_barras <span class="req off">Opcional</span></div>
+        <div class="col-desc">El <b>código de barras</b>. Vacío = lo escaneas después en la app.</div>
+      </div>
+      <div class="col">
+        <div class="col-name">sku <span class="req off">Opcional</span></div>
+        <div class="col-desc">Tu <b>clave interna</b>. Si lo dejas vacío, usa el código de barras.</div>
+      </div>
+      <div class="col">
+        <div class="col-name">descripcion <span class="req off">Opcional</span></div>
+        <div class="col-desc">Una nota o detalle del producto.</div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:20px">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <p>¿Ya tienes tu propio Excel? También sirve: la app <b>lee las columnas por su nombre</b>. Las que reconozca las carga; las que no, las ignora. Solo cuida que existan <b>nombre</b> y <b>precio</b>.</p>
     </div>
   </section>
 
