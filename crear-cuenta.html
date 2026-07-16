@@ -141,27 +141,61 @@ input:focus-visible{outline:none}
 .cycB[aria-pressed=true]{background:var(--violet500);color:#fff}
 .cycB:focus-visible{outline:2px solid var(--violet300);outline-offset:2px}
 .cycOff{color:var(--gold);font-weight:700;margin-left:4px}
-.planGrid{display:grid;gap:7px}
+.planGrid{display:grid;gap:10px}
+/* Cada tarjeta lleva --ac (su color) por estilo en línea, igual que la
+   sección de precios. color-mix tiñe el fondo y el borde sin fijar 4 colores
+   a mano por plan. */
 .planBtn{
-  display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);
-  border-radius:14px;padding:13px 14px;cursor:pointer;position:relative;
-  font-family:inherit;color:inherit;text-align:left;
-  transition:background .18s,border-color .18s,transform .12s;
+  position:relative;overflow:hidden;isolation:isolate;
+  display:grid;gap:12px;
+  border-radius:18px;padding:15px 16px;cursor:pointer;text-align:left;
+  font-family:inherit;color:inherit;
+  background:rgba(255,255,255,.03);
+  background:linear-gradient(158deg,color-mix(in srgb,var(--ac) 13%,transparent),color-mix(in srgb,var(--ac) 3%,transparent));
+  border:1px solid color-mix(in srgb,var(--ac) 28%,transparent);
+  transition:border-color .2s,box-shadow .25s,transform .12s,background .2s;
 }
-.planBtn:hover{background:rgba(255,255,255,.08)}
-.planBtn:active{transform:scale(.99)}
-.planBtn:focus-visible{outline:2px solid var(--violet300);outline-offset:2px}
+.planBtn:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--ac) 55%,transparent)}
+.planBtn:active{transform:scale(.995)}
+.planBtn:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 .planBtn[aria-pressed=true]{
-  background:rgba(139,112,255,.20);border-color:rgba(167,142,255,.72);
-  box-shadow:0 6px 12px rgba(107,75,255,.32);
+  border-color:var(--ac);
+  background:linear-gradient(158deg,color-mix(in srgb,var(--ac) 26%,transparent),color-mix(in srgb,var(--ac) 7%,transparent));
+  box-shadow:0 12px 34px -10px color-mix(in srgb,var(--ac) 60%,transparent);
 }
-.planNm{font-family:var(--f-display);font-weight:700;font-size:14.5px;color:#fff;display:flex;align-items:center;gap:7px}
-.planTag{font-family:var(--f-body);font-weight:700;font-size:8px;letter-spacing:.6px;text-transform:uppercase;color:var(--ink950);background:var(--gold);border-radius:99px;padding:2px 6px}
-.planDs{font-family:var(--f-body);font-size:11.5px;color:rgba(255,255,255,.5);margin-top:3px;line-height:1.4}
-.planLim{font-family:var(--f-body);font-size:10.5px;color:rgba(255,255,255,.34);margin-top:4px}
-.planPr{font-family:var(--f-display);font-weight:800;font-size:16px;color:#fff;white-space:nowrap;text-align:right}
-.planPr small{display:block;font-family:var(--f-body);font-weight:500;font-size:9.5px;color:rgba(255,255,255,.4);margin-top:2px}
+.planTop{display:flex;align-items:center;gap:11px}
+.planCrest{
+  width:38px;height:38px;flex:0 0 38px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb,var(--ac) 20%,transparent);
+  border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);
+}
+.planCrest svg{width:19px;height:19px;fill:none;stroke:var(--ac);stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.planId{flex:1;min-width:0}
+.planNm{font-family:var(--f-display);font-weight:800;font-size:18px;color:#fff;letter-spacing:-.3px;line-height:1.1}
+.planDs{font-family:var(--f-body);font-size:11.5px;color:rgba(255,255,255,.52);margin-top:2px;line-height:1.35}
+.planTag{
+  align-self:flex-start;flex:0 0 auto;
+  font-family:var(--f-body);font-weight:700;font-size:8px;letter-spacing:.7px;text-transform:uppercase;
+  color:var(--ac);background:color-mix(in srgb,var(--ac) 16%,transparent);
+  border:1px solid color-mix(in srgb,var(--ac) 34%,transparent);
+  border-radius:99px;padding:3px 8px;white-space:nowrap;
+}
+.planBottom{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:10px;
+  border-top:1px solid rgba(255,255,255,.09);padding-top:11px;
+}
+.planPr{font-family:var(--f-display);font-weight:800;font-size:23px;color:#fff;letter-spacing:-.5px;line-height:1}
+.planPr small{font-family:var(--f-body);font-weight:500;font-size:10px;color:rgba(255,255,255,.42);margin-left:3px;letter-spacing:0}
+.planLim{font-family:var(--f-body);font-size:10.5px;color:rgba(255,255,255,.4);text-align:right;line-height:1.4;max-width:46%}
+/* Palomita de seleccionado */
+.planPick{
+  position:absolute;top:13px;right:14px;width:22px;height:22px;border-radius:99px;
+  background:var(--ac);display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:scale(.5);transition:opacity .2s,transform .2s;
+}
+.planBtn[aria-pressed=true] .planPick{opacity:1;transform:scale(1)}
+.planBtn[aria-pressed=true] .planTag{opacity:0}
+.planPick svg{width:12px;height:12px;fill:none;stroke:var(--ink950);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 
 /* Credenciales en el éxito — lo que evita quedarse fuera de la app */
 .cred{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:2px 14px;margin:18px 0 10px;text-align:left}
@@ -411,11 +445,17 @@ var CHECKOUT = {
 var PLAN_NAME={essential:'Essential',pro:'Pro',premium:'Premium'};
 var PLAN_PRICE={essential:159,pro:399,premium:859};
 // Mismos planes, precios y límites que la app (PricingScreen.tsx)
+var CREST={
+  zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  check:'<polyline points="20 6 9 17 4 12"/>',
+  crown:'<path d="M2 18h20M3 18l1-10 5 5 3-7 3 7 5-5 1 10"/>'
+};
+// Mismos planes, precios, límites, colores y escudos que la app (PricingScreen.tsx)
 var PLANS=[
-  {key:'',          name:'Free',      price:0,   ds:'Vende hoy mismo, sin pagar nada.', lim:'50 productos · 1 sucursal'},
-  {key:'essential', name:'Essential', price:159, ds:'Para tiendas en crecimiento.',     lim:'500 productos · 1 sucursal'},
-  {key:'pro',       name:'Pro',       price:399, ds:'Inteligencia para escalar.',       lim:'2,500 productos · 3 sucursales', tag:'Más popular'},
-  {key:'premium',   name:'Premium',   price:859, ds:'Sin límites para tu negocio.',     lim:'Productos y sucursales ilimitados'}
+  {key:'',          name:'Free',      price:0,   ds:'Vende hoy mismo, sin pagar nada.', lim:'50 productos · 1 sucursal',            ac:'#22C55E', crest:'zap',   tag:'Empieza aquí'},
+  {key:'essential', name:'Essential', price:159, ds:'Para tiendas en crecimiento.',     lim:'500 productos · 1 sucursal',           ac:'#0EA5E9', crest:'check', tag:'Recomendado'},
+  {key:'pro',       name:'Pro',       price:399, ds:'Inteligencia para escalar.',       lim:'2,500 productos · 3 sucursales',       ac:'#8B70FF', crest:'crown', tag:'Mejor valor'},
+  {key:'premium',   name:'Premium',   price:859, ds:'Sin límites para tu negocio.',     lim:'Productos y sucursales ilimitados',    ac:'#F5C518', crest:'crown', tag:'Más popular'}
 ];
 
 var q=new URLSearchParams(location.search);
@@ -452,10 +492,17 @@ function paintPlans(){
   PLANS.forEach(function(p,i){
     var el=els[i];
     el.setAttribute('aria-pressed',String(p.key===wantPlan));
-    el.innerHTML='<div><div class="planNm">'+p.name+(p.tag?'<span class="planTag">'+p.tag+'</span>':'')+'</div>'+
-                 '<div class="planDs">'+p.ds+'</div>'+
-                 '<div class="planLim">'+p.lim+'</div></div>'+
-                 '<div class="planPr">$'+planPrice(p)+'<small>'+(p.price===0?'para siempre':'MXN/mes')+'</small></div>';
+    el.innerHTML=
+      '<span class="planPick"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>'+
+      '<div class="planTop">'+
+        '<span class="planCrest"><svg viewBox="0 0 24 24">'+CREST[p.crest]+'</svg></span>'+
+        '<div class="planId"><div class="planNm">'+p.name+'</div><div class="planDs">'+p.ds+'</div></div>'+
+        '<span class="planTag">'+p.tag+'</span>'+
+      '</div>'+
+      '<div class="planBottom">'+
+        '<div class="planPr">$'+planPrice(p)+'<small>'+(p.price===0?'para siempre':'MXN/mes')+'</small></div>'+
+        '<div class="planLim">'+p.lim+'</div>'+
+      '</div>';
   });
   $('nextP').textContent=wantPlan?('Continuar con '+PLAN_NAME[wantPlan]):'Continuar con Free';
 }
@@ -464,6 +511,7 @@ function paintPlans(){
   PLANS.forEach(function(p){
     var el=document.createElement('button');
     el.type='button';el.className='planBtn';
+    el.style.setProperty('--ac',p.ac);
     el.addEventListener('click',function(){wantPlan=p.key;paintPlans()});
     w.appendChild(el);
   });
