@@ -152,15 +152,50 @@ body{
 }
 .contact h2{font-family:var(--f-hero);font-weight:800;text-transform:uppercase;font-size:clamp(26px,4vw,38px);letter-spacing:-.01em}
 .contact p{font-size:13.5px;color:rgba(255,255,255,.5);margin-top:8px;line-height:1.6}
+/* Caja con el correo + copiar */
+.mailbox{
+  display:inline-flex;align-items:center;gap:10px;margin-top:20px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;padding:9px 9px 9px 16px;max-width:100%;
+}
+.mail-addr{
+  font-family:var(--font-mono,monospace);font-size:13px;color:#fff;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.mail-copy{
+  display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;
+  background:rgba(255,255,255,.08);border:0;border-radius:10px;
+  padding:8px 11px;cursor:pointer;
+  font-family:inherit;font-weight:600;font-size:12px;color:rgba(255,255,255,.72);
+  transition:background .18s,color .18s,transform .12s;
+}
+.mail-copy svg{width:13px;height:13px}
+.mail-copy:hover{background:rgba(255,255,255,.14);color:#fff}
+.mail-copy:active{transform:scale(.95)}
+.mail-copy.ok{background:#22C55E;color:#fff}
+.mail-copy:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+@media(max-width:460px){.mailbox{flex-direction:column;align-items:stretch;gap:8px;padding:12px}.mail-addr{text-align:center}}
+
+.mail-ways{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}
 .contact a.cta{
-  display:inline-flex;align-items:center;gap:8px;margin-top:18px;
+  display:inline-flex;align-items:center;gap:9px;
   background:linear-gradient(90deg,#8B70FF,#4524D6);color:#fff;
   border-radius:16px;padding:13px 22px;text-decoration:none;
   font-weight:700;font-size:14px;box-shadow:0 12px 24px rgba(107,75,255,.4);
   transition:transform .16s,opacity .16s;
 }
+.contact a.cta svg{width:16px;height:16px}
 .contact a.cta:hover{transform:translateY(-2px);opacity:.95}
-.contact .note{font-family:var(--font-mono,monospace);font-size:11px;color:rgba(255,255,255,.3);margin-top:12px}
+.contact a.ghost{
+  display:inline-flex;align-items:center;
+  border:1px solid rgba(255,255,255,.16);border-radius:16px;
+  padding:13px 20px;text-decoration:none;
+  font-weight:600;font-size:14px;color:rgba(255,255,255,.6);
+  transition:border-color .18s,color .18s;
+}
+.contact a.ghost:hover{border-color:rgba(255,255,255,.4);color:#fff}
+.contact a.cta:focus-visible,.contact a.ghost:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.contact .note{font-family:var(--font-mono,monospace);font-size:11px;color:rgba(255,255,255,.3);margin-top:14px}
 
 footer{border-top:1px solid var(--rule);padding:22px clamp(16px,4vw,44px);text-align:center}
 footer a{color:rgba(255,255,255,.4);text-decoration:none;font-size:12.5px}
@@ -198,13 +233,30 @@ footer span{color:rgba(255,255,255,.2);margin:0 8px}
   <div class="faq" id="faq"></div>
   <p class="empty" id="empty" hidden>No encontramos nada con eso. Prueba con otra palabra o escríbenos.</p>
 
-  <section class="contact">
+  <section class="contact" id="contacto">
     <h2>¿No estaba tu duda?</h2>
     <p>Escríbenos y te contesta una persona, no un robot.<br>Somos un equipo chico: te leemos todo.</p>
-    <a class="cta" href="mailto:tiketes.soporteapp@gmail.com?subject=Ayuda%20con%20Tiketes">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-      tiketes.soporteapp@gmail.com
-    </a>
+
+    <!-- El correo a la vista y tú eliges cómo escribir: forzar mailto abre
+         el cliente que Windows tenga por default (casi siempre Outlook). -->
+    <div class="mailbox">
+      <span class="mail-addr" id="addr">tiketes.soporteapp@gmail.com</span>
+      <button class="mail-copy" id="copy" type="button" aria-label="Copiar correo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span id="copyTx">Copiar</span>
+      </button>
+    </div>
+
+    <div class="mail-ways">
+      <a class="cta" target="_blank" rel="noopener"
+         href="https://mail.google.com/mail/?view=cm&fs=1&to=tiketes.soporteapp@gmail.com&su=Ayuda%20con%20Tiketes">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+        Escribir desde Gmail
+      </a>
+      <a class="ghost" href="mailto:tiketes.soporteapp@gmail.com?subject=Ayuda%20con%20Tiketes">
+        Usar mi app de correo
+      </a>
+    </div>
     <p class="note">Respondemos en menos de 48 horas hábiles</p>
   </section>
 </main>
@@ -334,6 +386,31 @@ function pinta(){
 
 q.addEventListener('input', pinta);
 pinta();
+
+// Copiar el correo. execCommand es el plan B: clipboard.writeText necesita
+// contexto seguro y no siempre está (webviews viejos, http).
+(function(){
+  var b = document.getElementById('copy'), tx = document.getElementById('copyTx');
+  var mail = document.getElementById('addr').textContent.trim();
+  if (!b) return;
+  b.addEventListener('click', function(){
+    function ok(){
+      b.classList.add('ok'); tx.textContent = '¡Copiado!';
+      setTimeout(function(){ b.classList.remove('ok'); tx.textContent = 'Copiar'; }, 1800);
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(mail).then(ok, plan_b);
+    } else { plan_b(); }
+    function plan_b(){
+      var t = document.createElement('textarea');
+      t.value = mail; t.setAttribute('readonly','');
+      t.style.cssText = 'position:absolute;left:-9999px';
+      document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); ok(); } catch(e) { tx.textContent = 'Copia manual'; }
+      document.body.removeChild(t);
+    }
+  });
+})();
 </script>
 </body>
 </html>
