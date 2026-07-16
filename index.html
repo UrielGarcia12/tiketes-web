@@ -266,8 +266,8 @@ body {
   position: relative; z-index: 3;
   width: clamp(180px, 21vw, 250px);
   margin-left: -14%;                /* pisa el titular, como la raqueta */
-  /* Lo sube para que caiga entre "segundos." y "controla todo." */
-  margin-bottom: clamp(70px, 17vh, 170px);
+  /* Lo sube para que quede a la altura de "segundos." / "controla todo." */
+  margin-bottom: clamp(120px, 27vh, 280px);
   transform: rotate(2.4deg);
   filter: drop-shadow(0 40px 70px rgba(0,0,0,.62));
   pointer-events: none;
@@ -455,6 +455,10 @@ body {
   border-top: 1px solid var(--rule-dark);
   padding: clamp(72px, 11vh, 130px) 0;
 }
+/* .s-h2 nace oscuro (--ink-900) porque nació en secciones blancas: en las
+   oscuras hay que invertirlo o el titular desaparece contra el fondo. */
+.flow-section .s-h2   { color: #fff; }
+.flow-section .s-lead { color: rgba(255,255,255,.44); }
 .flow {
   list-style: none; margin: clamp(40px, 6vh, 68px) 0 0;
   display: grid; grid-template-columns: repeat(5, 1fr);
@@ -508,6 +512,8 @@ body {
   border-top: 1px solid var(--rule-dark);
   padding: clamp(72px, 11vh, 130px) 0;
 }
+.tour-section .s-h2   { color: #fff; }
+.tour-section .s-lead { color: rgba(255,255,255,.44); }
 .tour-grid {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: clamp(20px, 3vw, 44px);
