@@ -551,31 +551,55 @@ body {
 .plans-section .s-lead { color: rgba(255,255,255,.44); }
 
 /* Toggle Mensual / Anual -20% */
+/* Toggle Mensual / Anual — vidrio sobre el onyx, con una pastilla que se
+   desliza entre las dos opciones en vez de encender/apagar de golpe. */
 .pc-toggle {
-  display: inline-flex; gap: 4px; padding: 4px;
-  background: #fff; border-radius: 99px; margin: clamp(26px,4vh,38px) auto 0;
-  box-shadow: 0 8px 22px rgba(0,0,0,.32);
+  position: relative; display: inline-flex; padding: 5px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-radius: 99px; margin: clamp(26px,4vh,38px) auto 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
 }
-.plans-section .section-inner { text-align: center; }
-.plans-section .s-eyebrow, .plans-section .s-h2, .plans-section .s-lead { text-align: left; }
+/* La pastilla que viaja */
+.pc-toggle::before {
+  content: ''; position: absolute; z-index: 0;
+  top: 5px; bottom: 5px; left: 5px;
+  width: var(--tgw, 120px);
+  transform: translateX(var(--tgx, 0));
+  border-radius: 99px;
+  background: linear-gradient(90deg, #8B70FF, #4524D6);
+  box-shadow: 0 6px 18px rgba(107,75,255,.5);
+  transition: transform 420ms cubic-bezier(.34,1.4,.5,1), width 420ms cubic-bezier(.34,1.4,.5,1);
+}
 .pc-tg {
-  border: 0; cursor: pointer; border-radius: 99px;
-  padding: 10px 22px; background: transparent;
+  position: relative; z-index: 1;
+  border: 0; cursor: pointer; border-radius: 99px; background: transparent;
+  padding: 10px 22px;
   font-family: var(--font-body); font-weight: 600; font-size: 14px;
-  color: var(--ink-500); display: inline-flex; align-items: center; gap: 7px;
-  transition: background 240ms var(--ease-out), color 240ms var(--ease-out);
+  color: rgba(255,255,255,.5);
+  display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+  transition: color 300ms var(--ease-out);
 }
-.pc-tg.on { background: linear-gradient(90deg,#8B70FF,#4524D6); color: #fff; }
-.pc-tg:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.pc-tg.on { color: #fff; }
+.pc-tg:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 .pc-off {
   background: #F5C518; color: #7A5500; border-radius: 99px;
   padding: 2px 7px; font-size: 10.5px; font-weight: 700;
+  transition: transform 300ms var(--ease-out);
 }
-.pc-tg.on .pc-off { background: #F5C518; color: #7A5500; }
+.pc-tg.on .pc-off { transform: scale(1.08); }
+
+/* Los precios cambian con un parpadeo corto, para que se note el cambio */
+.pc-amt { transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out); }
+.pc-amt.flip { opacity: 0; transform: translateY(-6px); }
+@media (prefers-reduced-motion: reduce) {
+  .pc-toggle::before, .pc-amt { transition: none; }
+}
 
 /* Rejilla */
 .pc-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(4, 1fr); padding-top: 14px;
   gap: clamp(12px, 1.6vw, 20px); margin-top: clamp(34px,5vh,50px);
   text-align: left; align-items: start;
 }
@@ -586,8 +610,8 @@ body {
    Nada de blanco: cada plan se reconoce por su tinte y deja ver el onyx. */
 .pc {
   position: relative; border-radius: 22px; padding: 22px 20px 24px;
-  /* Fallback primero: si el navegador no entiende color-mix ignora la línea
-     siguiente y la tarjeta se ve igual, solo sin el tinte del plan. */
+  /* Fallback primero: si el navegador no entiende color-mix, la tarjeta se ve
+     igual, solo sin el tinte del plan. */
   background: rgba(255,255,255,.05);
   border: 1px solid rgba(255,255,255,.14);
   background:
@@ -597,17 +621,32 @@ body {
       rgba(255,255,255,.02) 100%);
   border: 1px solid color-mix(in srgb, var(--ac) 34%, transparent);
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-  overflow: hidden; isolation: isolate;
   transition: transform 340ms var(--ease-out), box-shadow 340ms var(--ease-out),
               border-color 340ms var(--ease-out);
 }
-/* Halo del color del plan, arriba a la derecha */
-.pc::before {
-  content: ''; position: absolute; z-index: -1;
+/* Capa de efectos: ESTA recorta, no la tarjeta — así el badge "MÁS POPULAR"
+   puede sobresalir por arriba sin que se lo coman. */
+.pc-fx {
+  position: absolute; inset: 0; z-index: 0;
+  border-radius: 22px; overflow: hidden; pointer-events: none;
+}
+.pc > *:not(.pc-fx) { position: relative; z-index: 1; }
+
+/* Halo del color del plan */
+.pc-fx::before {
+  content: ''; position: absolute;
   top: -70px; right: -70px; width: 220px; height: 220px; border-radius: 50%;
   background: radial-gradient(closest-side, color-mix(in srgb, var(--ac) 34%, transparent), transparent 72%);
   transition: transform 600ms var(--ease-out), opacity 400ms;
   opacity: .8;
+}
+/* Barrido "holo" al pasar, como en la app */
+.pc-fx::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 38%,
+              color-mix(in srgb, var(--ac) 26%, transparent) 50%, transparent 62%);
+  transform: translateX(-130%);
+  transition: transform 900ms var(--ease-out);
 }
 .pc:hover {
   transform: translateY(-8px);
@@ -615,22 +654,13 @@ body {
   box-shadow: 0 34px 66px rgba(0,0,0,.5),
               0 0 60px color-mix(in srgb, var(--ac) 22%, transparent);
 }
-.pc:hover::before { transform: scale(1.35); opacity: 1; }
-
-/* Barrido "holo" al pasar, como en la app */
-.pc::after {
-  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: linear-gradient(105deg, transparent 38%,
-              color-mix(in srgb, var(--ac) 26%, transparent) 50%, transparent 62%);
-  transform: translateX(-130%);
-  transition: transform 900ms var(--ease-out);
-}
-.pc:hover::after { transform: translateX(130%); }
+.pc:hover .pc-fx::before { transform: scale(1.35); opacity: 1; }
+.pc:hover .pc-fx::after  { transform: translateX(130%); }
 
 .pc-dark { border-color: rgba(245,197,24,.34); }
 .pc-pop  { border-color: color-mix(in srgb, var(--ac) 55%, transparent); }
 .pc-pop-tag {
-  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  position: absolute; z-index: 3; top: -13px; left: 50%; transform: translateX(-50%);
   display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
   background: #F5C518; color: #7A5500; border-radius: 99px;
   padding: 5px 12px; font-family: var(--font-body); font-weight: 700;
@@ -1096,6 +1126,7 @@ footer {
 
     <div class="pc-grid">
       <article class="pc rv" style="--ac:#22C55E;--soft:#DCFCE7;--deep:#137333;--grad:linear-gradient(135deg, #15152A, #232338)">
+        <span class="pc-fx" aria-hidden="true"></span>
         
         <div class="pc-top">
           <div class="pc-crest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
@@ -1163,6 +1194,7 @@ footer {
       </article>
 
       <article class="pc rv" style="--ac:#0EA5E9;--soft:#E0F2FE;--deep:#0C3A5E;--grad:linear-gradient(135deg, #38BDF8, #0284C7)">
+        <span class="pc-fx" aria-hidden="true"></span>
         
         <div class="pc-top">
           <div class="pc-crest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -1238,6 +1270,7 @@ footer {
       </article>
 
       <article class="pc rv" style="--ac:#6B4BFF;--soft:#F2EEFF;--deep:#2A12A8;--grad:linear-gradient(135deg, #C7B6FF, #8B70FF, #4524D6)">
+        <span class="pc-fx" aria-hidden="true"></span>
         
         <div class="pc-top">
           <div class="pc-crest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h20M3 18l1-10 5 5 3-7 3 7 5-5 1 10"/></svg></div>
@@ -1321,6 +1354,7 @@ footer {
       </article>
 
       <article class="pc pc-dark pc-pop rv" style="--ac:#F5C518;--soft:rgba(245,197,24,.20);--deep:#7A5500;--grad:linear-gradient(135deg, #FDE68A, #F5C518, #B45309)">
+        <span class="pc-fx" aria-hidden="true"></span>
         <div class="pc-pop-tag"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> MÁS POPULAR</div>
         <div class="pc-top">
           <div class="pc-crest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h20M3 18l1-10 5 5 3-7 3 7 5-5 1 10"/></svg></div>
@@ -1549,28 +1583,47 @@ if (statsEl) {
 
 // ── Toggle Mensual / Anual (mismo cálculo que PricingScreen: -20%) ──
 (function(){
+  var wrap = document.querySelector('.pc-toggle');
   var m = document.getElementById('tgM'), y = document.getElementById('tgY');
-  if (!m || !y) return;
+  if (!wrap || !m || !y) return;
   var ciclo = 'monthly';
-  function pinta(){
+
+  // La pastilla se mide contra el botón activo, así nunca se desalinea
+  // aunque cambie el texto o el tamaño de fuente.
+  function pastilla(){
+    var on = ciclo === 'yearly' ? y : m;
+    wrap.style.setProperty('--tgw', on.offsetWidth + 'px');
+    wrap.style.setProperty('--tgx', (on.offsetLeft - m.offsetLeft) + 'px');
+  }
+
+  function pinta(anim){
     var anual = ciclo === 'yearly';
     m.classList.toggle('on', !anual); y.classList.toggle('on', anual);
     m.setAttribute('aria-pressed', String(!anual));
     y.setAttribute('aria-pressed', String(anual));
+    pastilla();
+
     document.querySelectorAll('.pc-amt').forEach(function(el){
-      var v = anual ? el.dataset.y : el.dataset.m;
-      el.textContent = '$' + v;
-      var per = el.parentElement.querySelector('.pc-per');
-      if (per && per.textContent.indexOf('siempre') === -1) {
-        per.textContent = anual ? '/mes · anual' : '/mes';
-      }
+      var pon = function(){
+        el.textContent = '$' + (anual ? el.dataset.y : el.dataset.m);
+        var per = el.parentElement.querySelector('.pc-per');
+        if (per && per.textContent.indexOf('siempre') === -1) {
+          per.textContent = anual ? '/mes · anual' : '/mes';
+        }
+      };
+      if (!anim) { pon(); return; }
+      el.classList.add('flip');
+      setTimeout(function(){ pon(); el.classList.remove('flip'); }, 180);
     });
-    // Los CTA de pago arrastran el ciclo hasta el checkout de Polar
     window.__cycle = ciclo;
   }
-  m.addEventListener('click', function(){ ciclo = 'monthly'; pinta(); });
-  y.addEventListener('click', function(){ ciclo = 'yearly';  pinta(); });
-  pinta();
+
+  m.addEventListener('click', function(){ if(ciclo!=='monthly'){ ciclo='monthly'; pinta(true);} });
+  y.addEventListener('click', function(){ if(ciclo!=='yearly'){  ciclo='yearly';  pinta(true);} });
+  addEventListener('resize', pastilla, { passive:true });
+  // Las fuentes cambian el ancho al cargar: recolocar cuando terminen
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(pastilla);
+  pinta(false);
 })();
 </script>
 
