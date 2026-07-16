@@ -117,6 +117,76 @@ input:focus-visible{outline:none}
 }
 .tip b{color:var(--violet300);font-weight:600}
 
+/* Contraseña con botón de ver. Sin esto el usuario no puede comprobar qué
+   escribió — y si Chrome autocompleta una contraseña generada, se entera
+   hasta que la app lo rechaza. */
+.pwd-wrap{position:relative}
+.pwd-wrap input{padding-right:50px}
+.pwd-eye{
+  position:absolute;right:5px;top:50%;transform:translateY(-50%);
+  background:none;border:0;cursor:pointer;padding:9px 10px;border-radius:10px;
+  color:rgba(255,255,255,.4);display:flex;transition:color .18s,background .18s;
+}
+.pwd-eye:hover{color:#fff;background:rgba(255,255,255,.07)}
+.pwd-eye:focus-visible{outline:2px solid var(--violet300);outline-offset:1px}
+.pwd-eye svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+/* Planes — mismo lenguaje visual que .bizBtn, pero en fila */
+.cyc{display:inline-flex;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:99px;padding:3px;margin-bottom:12px}
+.cycB{
+  background:none;border:0;border-radius:99px;padding:7px 15px;cursor:pointer;
+  font-family:var(--f-body);font-weight:600;font-size:12px;color:rgba(255,255,255,.5);
+  transition:background .2s,color .2s;
+}
+.cycB[aria-pressed=true]{background:var(--violet500);color:#fff}
+.cycB:focus-visible{outline:2px solid var(--violet300);outline-offset:2px}
+.cycOff{color:var(--gold);font-weight:700;margin-left:4px}
+.planGrid{display:grid;gap:7px}
+.planBtn{
+  display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);
+  border-radius:14px;padding:13px 14px;cursor:pointer;position:relative;
+  font-family:inherit;color:inherit;text-align:left;
+  transition:background .18s,border-color .18s,transform .12s;
+}
+.planBtn:hover{background:rgba(255,255,255,.08)}
+.planBtn:active{transform:scale(.99)}
+.planBtn:focus-visible{outline:2px solid var(--violet300);outline-offset:2px}
+.planBtn[aria-pressed=true]{
+  background:rgba(139,112,255,.20);border-color:rgba(167,142,255,.72);
+  box-shadow:0 6px 12px rgba(107,75,255,.32);
+}
+.planNm{font-family:var(--f-display);font-weight:700;font-size:14.5px;color:#fff;display:flex;align-items:center;gap:7px}
+.planTag{font-family:var(--f-body);font-weight:700;font-size:8px;letter-spacing:.6px;text-transform:uppercase;color:var(--ink950);background:var(--gold);border-radius:99px;padding:2px 6px}
+.planDs{font-family:var(--f-body);font-size:11.5px;color:rgba(255,255,255,.5);margin-top:3px;line-height:1.4}
+.planLim{font-family:var(--f-body);font-size:10.5px;color:rgba(255,255,255,.34);margin-top:4px}
+.planPr{font-family:var(--f-display);font-weight:800;font-size:16px;color:#fff;white-space:nowrap;text-align:right}
+.planPr small{display:block;font-family:var(--f-body);font-weight:500;font-size:9.5px;color:rgba(255,255,255,.4);margin-top:2px}
+
+/* Credenciales en el éxito — lo que evita quedarse fuera de la app */
+.cred{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:2px 14px;margin:18px 0 10px;text-align:left}
+.credRow{display:flex;align-items:center;gap:9px;padding:11px 0}
+.credRow+.credRow{border-top:1px solid rgba(255,255,255,.07)}
+.credRow>span{font-family:var(--f-body);font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.4);width:76px;flex:0 0 76px}
+.credRow>b{font-family:var(--f-body);font-size:13.5px;font-weight:600;color:#fff;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.credRow>b.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.4px}
+.credBtn{
+  background:rgba(255,255,255,.07);border:0;border-radius:9px;padding:7px 9px;cursor:pointer;
+  color:rgba(255,255,255,.6);display:flex;flex:0 0 auto;transition:background .16s,color .16s;
+}
+.credBtn:hover{background:rgba(255,255,255,.14);color:#fff}
+.credBtn:focus-visible{outline:2px solid var(--violet300);outline-offset:1px}
+.credBtn.ok{background:rgba(52,199,89,.2);color:#34C759}
+.credBtn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.credWarn{
+  display:flex;gap:8px;align-items:flex-start;
+  background:rgba(245,197,24,.10);border:1px solid rgba(245,197,24,.24);
+  border-radius:12px;padding:10px 11px;margin-bottom:16px;text-align:left;
+  font-family:var(--f-body);font-size:11.5px;color:rgba(255,255,255,.62);line-height:1.5;
+}
+.credWarn b{color:var(--gold);font-weight:600}
+.credWarn svg{width:15px;height:15px;flex:0 0 15px;margin-top:1px;fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round}
+
 /* Check */
 .check{display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-top:14px}
 .check input{
@@ -205,7 +275,7 @@ input:focus-visible{outline:none}
     <h1 id="title">Cuéntanos de <span class="ac">tu negocio</span></h1>
     <p class="sub" id="lede">Con esto preparamos tu inventario y tus categorías desde el primer día.</p>
 
-    <div class="steps" aria-hidden="true"><i class="on" id="s1"></i><i id="s2"></i></div>
+    <div class="steps" aria-hidden="true"><i class="on" id="s1"></i><i id="sP"></i><i id="s2"></i></div>
 
     <!-- Paso 1 -->
     <section id="step1">
@@ -241,7 +311,21 @@ input:focus-visible{outline:none}
       <div class="actions"><button class="btn btn-primary" id="next">Continuar</button></div>
     </section>
 
-    <!-- Paso 2 -->
+    <!-- Paso 2 — plan -->
+    <section id="stepP" class="hidden">
+      <div class="cyc" role="group" aria-label="Ciclo de cobro">
+        <button type="button" class="cycB" id="cycM" aria-pressed="true">Mensual</button>
+        <button type="button" class="cycB" id="cycY" aria-pressed="false">Anual <span class="cycOff">−20%</span></button>
+      </div>
+      <div class="planGrid" id="planes" role="group" aria-label="Plan"></div>
+      <div class="tip"><b>Sin tarjeta:</b> <span>el plan Free no pide datos de pago. Cambias de plan cuando quieras desde la app.</span></div>
+      <div class="actions">
+        <button class="btn btn-ghost" id="backP">Atrás</button>
+        <button class="btn btn-primary" id="nextP">Continuar</button>
+      </div>
+    </section>
+
+    <!-- Paso 3 -->
     <section id="step2" class="hidden">
       <div class="field">
         <label class="lb" for="email">Correo electrónico</label>
@@ -249,11 +333,17 @@ input:focus-visible{outline:none}
       </div>
       <div class="field">
         <label class="lb" for="pwd">Contraseña</label>
-        <input id="pwd" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password" maxlength="72">
+        <div class="pwd-wrap">
+          <input id="pwd" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password" maxlength="72">
+          <button type="button" class="pwd-eye" data-for="pwd" aria-label="Ver contraseña"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
       </div>
       <div class="field">
         <label class="lb" for="pwd2">Confirmar contraseña</label>
-        <input id="pwd2" type="password" placeholder="Repite tu contraseña" autocomplete="new-password" maxlength="72">
+        <div class="pwd-wrap">
+          <input id="pwd2" type="password" placeholder="Repite tu contraseña" autocomplete="new-password" maxlength="72">
+          <button type="button" class="pwd-eye" data-for="pwd2" aria-label="Ver contraseña"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
       </div>
 
       <label class="check">
@@ -278,6 +368,17 @@ input:focus-visible{outline:none}
     <div class="seal"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
     <h2 id="doneTitle">Tu cuenta quedó lista</h2>
     <p id="doneMsg">Ya puedes entrar desde la app con este correo y tu contraseña.</p>
+    <div class="cred">
+      <div class="credRow"><span>Correo</span><b id="cEmail"></b>
+        <button class="credBtn" id="cEmailCopy" aria-label="Copiar correo"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></div>
+      <div class="credRow"><span>Contraseña</span><b id="cPwd" class="mono">••••••••</b>
+        <button class="credBtn" id="cPwdEye" aria-label="Ver contraseña"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <button class="credBtn" id="cPwdCopy" aria-label="Copiar contraseña"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></div>
+    </div>
+    <div class="credWarn">
+      <svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+      <div><b>Guarda tu contraseña.</b> Es con la que entras a la app. Si tu navegador la generó por ti, cópiala ahora.</div>
+    </div>
     <div class="summary" id="summary"></div>
     <div class="actions"><button class="btn btn-primary" id="ctaApp">Descargar la app</button></div>
     <p class="foot" id="doneFoot">Tu inventario ya está configurado para tu giro.</p>
@@ -309,6 +410,13 @@ var CHECKOUT = {
 };
 var PLAN_NAME={essential:'Essential',pro:'Pro',premium:'Premium'};
 var PLAN_PRICE={essential:159,pro:399,premium:859};
+// Mismos planes, precios y límites que la app (PricingScreen.tsx)
+var PLANS=[
+  {key:'',          name:'Free',      price:0,   ds:'Vende hoy mismo, sin pagar nada.', lim:'50 productos · 1 sucursal'},
+  {key:'essential', name:'Essential', price:159, ds:'Para tiendas en crecimiento.',     lim:'500 productos · 1 sucursal'},
+  {key:'pro',       name:'Pro',       price:399, ds:'Inteligencia para escalar.',       lim:'2,500 productos · 3 sucursales', tag:'Más popular'},
+  {key:'premium',   name:'Premium',   price:859, ds:'Sin límites para tu negocio.',     lim:'Productos y sucursales ilimitados'}
+];
 
 var q=new URLSearchParams(location.search);
 var wantPlan=(q.get('plan')||'').toLowerCase();
@@ -336,30 +444,98 @@ var bizKey='tienda';
   });
 })();
 
-if(wantPlan){$('lede').textContent='Creas tu cuenta y enseguida pasas al pago del plan '+PLAN_NAME[wantPlan]+'. Tu plan queda activo en la app al entrar.';}
+
+// ── Planes ────────────────────────────────────────────────────────────────
+function planPrice(p){return p.price===0?0:(wantCycle==='yearly'?Math.round(p.price*0.8):p.price)}
+function paintPlans(){
+  var els=$('planes').querySelectorAll('.planBtn');
+  PLANS.forEach(function(p,i){
+    var el=els[i];
+    el.setAttribute('aria-pressed',String(p.key===wantPlan));
+    el.innerHTML='<div><div class="planNm">'+p.name+(p.tag?'<span class="planTag">'+p.tag+'</span>':'')+'</div>'+
+                 '<div class="planDs">'+p.ds+'</div>'+
+                 '<div class="planLim">'+p.lim+'</div></div>'+
+                 '<div class="planPr">$'+planPrice(p)+'<small>'+(p.price===0?'para siempre':'MXN/mes')+'</small></div>';
+  });
+  $('nextP').textContent=wantPlan?('Continuar con '+PLAN_NAME[wantPlan]):'Continuar con Free';
+}
+(function(){
+  var w=$('planes');
+  PLANS.forEach(function(p){
+    var el=document.createElement('button');
+    el.type='button';el.className='planBtn';
+    el.addEventListener('click',function(){wantPlan=p.key;paintPlans()});
+    w.appendChild(el);
+  });
+  function cyc(c){
+    wantCycle=c;
+    $('cycM').setAttribute('aria-pressed',String(c==='monthly'));
+    $('cycY').setAttribute('aria-pressed',String(c==='yearly'));
+    paintPlans();
+  }
+  $('cycM').addEventListener('click',function(){cyc('monthly')});
+  $('cycY').addEventListener('click',function(){cyc('yearly')});
+  cyc(wantCycle);
+})();
+
+// ── Ver contraseña ────────────────────────────────────────────────────────
+var IC_EYE='<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+var IC_OFF='<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+var IC_CHK='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+Array.prototype.forEach.call(document.querySelectorAll('.pwd-eye'),function(b){
+  b.addEventListener('click',function(){
+    var inp=$(b.getAttribute('data-for')),show=inp.type==='password';
+    inp.type=show?'text':'password';
+    b.innerHTML=show?IC_OFF:IC_EYE;
+    b.setAttribute('aria-label',show?'Ocultar contraseña':'Ver contraseña');
+    inp.focus();
+  });
+});
+
+// Copiar al portapapeles. clipboard API sólo existe en contexto seguro;
+// execCommand es el respaldo para navegadores viejos.
+function copyTo(btn,txt){
+  function done(){
+    var o=btn.innerHTML;btn.classList.add('ok');btn.innerHTML=IC_CHK;
+    setTimeout(function(){btn.classList.remove('ok');btn.innerHTML=o},1400);
+  }
+  function plan_b(){
+    var t=document.createElement('textarea');
+    t.value=txt;t.setAttribute('readonly','');
+    t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();
+    try{document.execCommand('copy');done()}catch(e){}
+    document.body.removeChild(t);
+  }
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(done,plan_b)}
+  else{plan_b()}
+}
 
 function showErr(t){$('msg').innerHTML='<div class="msg err">'+t+'</div>'}
 function clearErr(){$('msg').innerHTML=''}
 
+function goStep(s){
+  ['step1','stepP','step2'].forEach(function(x){$(x).classList.add('hidden')});
+  $(s).classList.remove('hidden');
+  $('sP').classList.toggle('on',s!=='step1');
+  $('s2').classList.toggle('on',s==='step2');
+  var t={
+    step1:['Registro · Paso 1 de 3','Cuéntanos de <span class="ac">tu negocio</span>','Con esto preparamos tu inventario y tus categorías desde el primer día.'],
+    stepP:['Registro · Paso 2 de 3','Elige <span class="ac">tu plan</span>','Puedes empezar gratis y subir de plan cuando lo necesites.'],
+    step2:['Registro · Paso 3 de 3','Crea tu <span class="ac">acceso</span>','Con este correo y contraseña entrarás a la app.']
+  }[s];
+  $('eyebrow').textContent=t[0];$('title').innerHTML=t[1];$('lede').textContent=t[2];
+  scrollTo({top:0,behavior:'smooth'});
+}
 $('next').addEventListener('click',function(){
   clearErr();
   if(!$('nombre').value.trim()){showErr('Escribe tu nombre para continuar.');$('nombre').focus();return}
   if(bizKey==='otro'&&!$('otroName').value.trim()){showErr('Dinos el nombre de tu giro.');$('otroName').focus();return}
-  $('step1').classList.add('hidden');$('step2').classList.remove('hidden');
-  $('s2').classList.add('on');
-  $('eyebrow').textContent='Registro · Paso 2 de 2';
-  $('title').innerHTML='Crea tu <span class="ac">acceso</span>';
-  $('lede').textContent='Con este correo y contraseña entrarás a la app.';
-  scrollTo({top:0,behavior:'smooth'});
+  goStep('stepP');
 });
-$('back').addEventListener('click',function(){
-  clearErr();
-  $('step2').classList.add('hidden');$('step1').classList.remove('hidden');
-  $('s2').classList.remove('on');
-  $('eyebrow').textContent='Registro · Paso 1 de 2';
-  $('title').innerHTML='Cuéntanos de <span class="ac">tu negocio</span>';
-  $('lede').textContent='Con esto preparamos tu inventario y tus categorías desde el primer día.';
-});
+$('nextP').addEventListener('click',function(){clearErr();goStep('step2')});
+$('backP').addEventListener('click',function(){clearErr();goStep('step1')});
+$('back').addEventListener('click',function(){clearErr();goStep('stepP')});
 
 function polarUrl(plan,cycle,userId,email){
   var u=new URL(CHECKOUT[plan][cycle]);
@@ -406,8 +582,18 @@ $('submit').addEventListener('click',async function(){
     $('doneWrap').classList.remove('hidden');
     $('doneWrap').classList.add('rise');
     var giroLabel=bizKey==='otro'?(otro||'Otro'):meta.label;
+    // Las credenciales a la vista: si el navegador generó la contraseña, ésta
+    // es la única oportunidad del usuario de conocerla antes de abrir la app.
+    $('cEmail').textContent=email;
+    $('cEmailCopy').addEventListener('click',function(){copyTo($('cEmailCopy'),email)});
+    $('cPwdCopy').addEventListener('click',function(){copyTo($('cPwdCopy'),pwd)});
+    $('cPwdEye').addEventListener('click',function(){
+      var shown=$('cPwd').textContent!=='••••••••';
+      $('cPwd').textContent=shown?'••••••••':pwd;
+      $('cPwdEye').innerHTML=shown?IC_EYE:IC_OFF;
+      $('cPwdEye').setAttribute('aria-label',shown?'Ver contraseña':'Ocultar contraseña');
+    });
     $('summary').innerHTML=
-      '<div><span>Correo</span><b>'+email.replace(/</g,'&lt;')+'</b></div>'+
       '<div><span>Giro</span><b>'+giroLabel.replace(/</g,'&lt;')+'</b></div>'+
       '<div><span>Plan</span><b>'+(wantPlan?PLAN_NAME[wantPlan]:'Free')+'</b></div>';
     if(wantPlan&&userId){
@@ -417,6 +603,9 @@ $('submit').addEventListener('click',async function(){
       $('doneFoot').textContent='El pago lo procesa Polar de forma segura.';
       $('ctaApp').addEventListener('click',function(){location.href=polarUrl(wantPlan,wantCycle,userId,email)});
     }else{
+      $('doneTitle').textContent='Tu cuenta quedó lista';
+      $('doneMsg').textContent='Ya puedes entrar a la app con este correo y esta contraseña. Tu plan Free no vence.';
+      $('doneFoot').textContent='Tu inventario ya está configurado para tu giro.';
       $('ctaApp').addEventListener('click',function(){alert('Próximamente en Google Play')});
     }
     scrollTo({top:0,behavior:'smooth'});
