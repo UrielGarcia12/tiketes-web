@@ -372,40 +372,72 @@ body {
 
 
 /* ── FEATURES ─────────────────────────────────────────────────── */
+/* ── FUNCIONES ─────────────────────────────────────────────────── */
+/* Antes: tarjetas blancas con el icono metido en un cuadrito redondeado —
+   el patrón que aparece en toda landing y que no dice nada de la marca.
+   Ahora: rejilla oscura con reglas de 1px (sin esquinas redondeadas), el
+   icono suelto sobre un halo, y una regla dorada que se dibuja al pasar.  */
 .features-section {
-  background: #F7F7FB;
-  padding: 148px clamp(24px, 5vw, 80px);
+  background: var(--onyx-2);
+  border-top: 1px solid var(--rule-dark);
+  padding: clamp(80px, 12vh, 148px) clamp(24px, 5vw, 80px);
 }
+.features-section .s-h2   { color: #fff; }
+.features-section .s-lead { color: rgba(255,255,255,.44); }
 
 .features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  background: var(--ink-200);
-  border: 1px solid var(--ink-200);
-  border-radius: var(--radius-xl);
-  overflow: hidden;
+  background: var(--rule-dark);
+  border: 1px solid var(--rule-dark);
   gap: 1px;
+  margin-top: clamp(40px, 6vh, 64px);
 }
 @media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2,1fr); } }
 @media (max-width: 560px) { .features-grid { grid-template-columns: 1fr; } }
 
 .f-card {
-  background: #fff; padding: 40px 36px;
+  background: var(--onyx);
+  padding: clamp(28px, 3vw, 42px) clamp(22px, 2.4vw, 34px);
+  position: relative; overflow: hidden;
   opacity: 0; transform: translateY(20px);
-  transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
+  transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out), background 300ms;
 }
 .f-card.vis { opacity: 1; transform: translateY(0); }
+.f-card:hover { background: var(--onyx-3); }
+
+/* Regla dorada que se dibuja de izquierda a derecha al pasar el mouse */
+.f-card::after {
+  content: ''; position: absolute; left: 0; bottom: 0; height: 1px; width: 100%;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 520ms var(--ease-out);
+}
+.f-card:hover::after { transform: scaleX(1); }
+
 .f-icon {
-  width: 44px; height: 44px;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--violet-50); border-radius: var(--radius-sm);
-  color: var(--violet-500); margin-bottom: 24px;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: flex-start;
+  color: var(--violet-500);
+  margin-bottom: 22px; position: relative;
+  transition: color 300ms var(--ease-out), transform 300ms var(--ease-out);
 }
+/* Halo detrás del icono, en vez de la cajita redondeada de siempre */
+.f-icon::before {
+  content: ''; position: absolute; left: -6px; top: -6px;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(107,75,255,.30), transparent 72%);
+  transition: background 300ms var(--ease-out), transform 420ms var(--ease-out);
+}
+.f-card:hover .f-icon { color: var(--gold-light); transform: translateY(-2px); }
+.f-card:hover .f-icon::before { background: radial-gradient(closest-side, rgba(201,169,110,.34), transparent 72%); transform: scale(1.25); }
+.f-icon svg { position: relative; z-index: 1; }
+
 .f-title {
-  font-family: var(--font-display); font-size: 16px; font-weight: 700;
-  letter-spacing: -.01em; color: var(--ink-900); margin-bottom: 8px;
+  font-family: var(--font-display); font-size: 17px; font-weight: 700;
+  letter-spacing: -.02em; color: #fff; margin-bottom: 9px;
 }
-.f-desc { font-size: 13.5px; color: var(--ink-500); line-height: 1.62; }
+.f-desc { font-size: 13px; color: rgba(255,255,255,.42); line-height: 1.65; }
 
 
 /* ── PRODUCT ──────────────────────────────────────────────────── */
@@ -421,6 +453,11 @@ body {
 .product-section .s-h2  { color: #fff; }
 .product-section .s-eyebrow { color: rgba(255,255,255,.32); }
 .product-section .s-lead    { color: rgba(255,255,255,.40); }
+
+/* Los titulares de sección nacieron para fondo claro (--ink-900). En las
+   secciones oscuras hay que invertirlos o se pierden contra el fondo. */
+.flow-section .s-h2, .tour-section .s-h2 { color: #fff; }
+.flow-section .s-lead, .tour-section .s-lead { color: rgba(255,255,255,.44); }
 
 /* ── FLUJO DE VENTA: 5 pasos, capturas reales ──────────────────── */
 /* Aquí sí numeramos: es una secuencia de verdad (el orden importa). */
