@@ -533,174 +533,156 @@ body {
   color: rgba(255,255,255,.42);
 }
 
-/* ── PLANS ────────────────────────────────────────────────────── */
+/* ── PLANES: réplica de PricingScreen.tsx ────────────────────────
+   Tarjetas claras con acento por plan y Premium en oscuro, crest, badge
+   de tag, barra de stats, grupos con palomita y el toggle Mensual/Anual.
+   Los datos salen del PLANS de la app, no se escriben a mano.          */
 .plans-section {
   background: var(--onyx);
-  padding: 148px clamp(24px, 5vw, 80px) 120px;
   border-top: 1px solid var(--rule-dark);
+  padding: clamp(80px, 12vh, 148px) clamp(24px, 5vw, 80px);
 }
-.plans-section .s-h2     { color: #fff; }
-.plans-section .s-eyebrow { color: rgba(255,255,255,.28); }
-.plans-section .s-lead    { color: rgba(255,255,255,.38); }
+.plans-section .s-h2   { color: #fff; }
+.plans-section .s-lead { color: rgba(255,255,255,.44); }
 
-.plans-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-top: 64px;
+/* Toggle Mensual / Anual -20% */
+.pc-toggle {
+  display: inline-flex; gap: 4px; padding: 4px;
+  background: #fff; border-radius: 99px; margin: clamp(26px,4vh,38px) auto 0;
+  box-shadow: 0 8px 22px rgba(0,0,0,.32);
 }
-@media (max-width: 1200px) {
-  .plans-grid { grid-template-columns: repeat(2, 1fr); }
+.plans-section .section-inner { text-align: center; }
+.plans-section .s-eyebrow, .plans-section .s-h2, .plans-section .s-lead { text-align: left; }
+.pc-tg {
+  border: 0; cursor: pointer; border-radius: 99px;
+  padding: 10px 22px; background: transparent;
+  font-family: var(--font-body); font-weight: 600; font-size: 14px;
+  color: var(--ink-500); display: inline-flex; align-items: center; gap: 7px;
+  transition: background 240ms var(--ease-out), color 240ms var(--ease-out);
 }
-@media (max-width: 640px) {
-  .plans-grid { grid-template-columns: 1fr; max-width: 440px; }
+.pc-tg.on { background: linear-gradient(90deg,#8B70FF,#4524D6); color: #fff; }
+.pc-tg:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.pc-off {
+  background: #F5C518; color: #7A5500; border-radius: 99px;
+  padding: 2px 7px; font-size: 10.5px; font-weight: 700;
 }
+.pc-tg.on .pc-off { background: #F5C518; color: #7A5500; }
 
-.plan {
-  border-radius: 20px; padding: 36px 28px;
-  display: flex; flex-direction: column; gap: 26px;
-  border: 1px solid rgba(255,255,255,.08);
-  position: relative; overflow: hidden;
-  opacity: 0; transform: translateY(24px);
-  transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out), border-color 220ms, box-shadow 220ms;
+/* Rejilla */
+.pc-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: clamp(12px, 1.6vw, 20px); margin-top: clamp(34px,5vh,50px);
+  text-align: left; align-items: start;
 }
-.plan.vis { opacity: 1; transform: translateY(0); }
+@media (max-width: 1100px) { .pc-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px)  { .pc-grid { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; } }
 
-/* Free */
-.plan.free { background: #0F0F1C; }
-.plan.free:hover { border-color: rgba(255,255,255,.18); }
+/* Tarjeta */
+.pc {
+  position: relative; border-radius: 22px; padding: 22px 20px 24px;
+  background: #fff; border: 1px solid var(--ink-100);
+  transition: transform 320ms var(--ease-out), box-shadow 320ms var(--ease-out);
+}
+.pc:hover { transform: translateY(-6px); box-shadow: 0 30px 60px rgba(0,0,0,.4); }
+.pc-dark { background: linear-gradient(160deg, #15152A, #0A0B1F); border-color: rgba(245,197,24,.3); }
+.pc-pop { border-color: color-mix(in srgb, var(--ac) 55%, transparent); }
+.pc-pop-tag {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+  background: #F5C518; color: #7A5500; border-radius: 99px;
+  padding: 5px 12px; font-family: var(--font-body); font-weight: 700;
+  font-size: 10px; letter-spacing: .06em;
+  box-shadow: 0 8px 18px rgba(245,197,24,.4);
+}
+.pc-pop-tag svg { width: 11px; height: 11px; }
 
-/* Essential */
-.plan.essential {
-  background: linear-gradient(155deg, #0B1018 0%, #0E1520 100%);
+.pc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.pc-crest {
+  width: 42px; height: 42px; border-radius: 13px;
+  background: var(--soft); color: var(--deep);
+  display: flex; align-items: center; justify-content: center;
 }
-.plan.essential:hover { border-color: rgba(56,189,248,.30); }
-.plan.essential::before {
-  content: ''; position: absolute;
-  top: -90px; right: -90px; width: 280px; height: 280px;
-  background: radial-gradient(closest-side, rgba(56,189,248,.10), transparent);
-  pointer-events: none;
+.pc-crest svg { width: 20px; height: 20px; }
+.pc-dark .pc-crest { background: rgba(245,197,24,.18); color: #F5C518; }
+.pc-tag {
+  background: var(--ac); color: #fff; border-radius: 99px;
+  padding: 4px 10px; font-family: var(--font-body);
+  font-weight: 700; font-size: 9.5px; letter-spacing: .06em;
 }
+.pc-dark .pc-tag { color: #7A5500; }
 
-/* Pro */
-.plan.pro {
-  background: linear-gradient(155deg, #0D0B22 0%, #111038 100%);
-}
-.plan.pro:hover { border-color: rgba(107,75,255,.38); }
-.plan.pro::before {
-  content: ''; position: absolute;
-  top: -90px; right: -90px; width: 300px; height: 300px;
-  background: radial-gradient(closest-side, rgba(107,75,255,.16), transparent);
-  pointer-events: none;
-}
+.pc-name { font-family: var(--font-display); font-weight: 800; font-size: 26px; letter-spacing: -.03em; color: var(--ink-900); }
+.pc-blurb { font-size: 13px; color: var(--ink-500); margin-top: 4px; line-height: 1.5; }
+.pc-dark .pc-name { color: #fff; }
+.pc-dark .pc-blurb { color: rgba(255,255,255,.5); }
 
-/* Premium */
-/* Premium usa el oro de la app (#F5C518 de PLAN_THEMES), no el oro del sitio */
-.plan.premium {
-  background: linear-gradient(155deg, #15152A 0%, #1B1609 100%);
-  border-color: rgba(245,197,24,.22);
-}
-.plan.premium:hover {
-  border-color: rgba(245,197,24,.55);
-  box-shadow: 0 0 64px rgba(245,197,24,.09);
-}
-.plan.premium::before {
-  content: ''; position: absolute;
-  top: -90px; right: -90px; width: 340px; height: 340px;
-  background: radial-gradient(closest-side, rgba(245,197,24,.16), transparent);
-  pointer-events: none;
-}
+.pc-price { display: flex; align-items: baseline; gap: 5px; margin: 16px 0 14px; flex-wrap: wrap; }
+.pc-amt { font-family: var(--font-display); font-weight: 800; font-size: 40px; letter-spacing: -.03em; color: var(--ink-900); font-variant-numeric: tabular-nums; }
+.pc-cur { font-family: var(--font-mono); font-size: 11px; color: var(--ink-400); }
+.pc-per { font-family: var(--font-mono); font-size: 11px; color: var(--ink-400); }
+.pc-dark .pc-amt { color: #fff; }
+.pc-dark .pc-cur, .pc-dark .pc-per { color: rgba(255,255,255,.45); }
 
-/* ── Barrido "holo" de la app (PLAN_THEMES.holoColors) ─────────── */
-/* En la app cada tarjeta tiene un destello que la recorre. Aquí se
-   dispara al pasar el mouse: mismo gesto, mismo color por plan.     */
-.plan::after {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(105deg, transparent 38%, var(--holo, rgba(255,255,255,.10)) 50%, transparent 62%);
-  transform: translateX(-120%);
-  transition: transform .9s cubic-bezier(.16,1,.3,1);
+.pc-cta {
+  width: 100%; border: 0; cursor: pointer; border-radius: 16px; padding: 14px;
+  background: var(--grad); color: #fff;
+  font-family: var(--font-body); font-weight: 700; font-size: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--ac) 40%, transparent);
+  transition: transform 160ms var(--ease-out), opacity 160ms;
 }
-.plan:hover::after { transform: translateX(120%); }
-.plan.free      { --holo: rgba(134,239,172,.20); }
-.plan.essential { --holo: rgba(125,211,252,.20); }
-.plan.pro       { --holo: rgba(199,182,255,.22); }
-.plan.premium   { --holo: rgba(253,230,138,.22); }
+.pc-cta svg { width: 13px; height: 13px; }
+.pc-cta:hover { transform: translateY(-1px); opacity: .95; }
+.pc-cta:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.pc:not(.pc-dark).pc-free .pc-cta { color: #fff; }
+.pc-dark .pc-cta { color: #7A5500; }
 
-.plan-badge {
-  position: absolute; top: 20px; right: 20px;
-  font-size: 9px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .14em;
-  padding: 5px 11px; border-radius: 999px;
-  background: var(--gold); color: #07070F;
+.pc-stats {
+  display: grid; grid-template-columns: 1fr auto 1fr auto; gap: 4px 8px;
+  align-items: center; margin-top: 14px; padding: 10px 12px;
+  background: var(--ink-50); border-radius: 12px;
 }
+.pc-stats span { font-family: var(--font-mono); font-size: 10px; color: var(--ink-400); }
+.pc-stats b { font-family: var(--font-display); font-weight: 800; font-size: 14px; color: var(--ink-900); }
+.pc-dark .pc-stats { background: rgba(255,255,255,.06); }
+.pc-dark .pc-stats span { color: rgba(255,255,255,.4); }
+.pc-dark .pc-stats b { color: #fff; }
 
-.plan-label {
-  font-size: 10px; font-weight: 600;
-  text-transform: uppercase; letter-spacing: .16em;
-  color: rgba(255,255,255,.28); margin-bottom: 6px;
-}
-.plan.premium .plan-label { color: var(--gold-dim); }
+.pc-rule { border: 0; border-top: 1px solid var(--ink-100); margin: 16px 0 14px; }
+.pc-dark .pc-rule { border-color: rgba(255,255,255,.09); }
 
-.plan-name {
-  font-family: var(--font-display); font-size: 28px; font-weight: 800;
-  letter-spacing: -.02em; color: #fff; line-height: 1;
+.pc-group + .pc-group { margin-top: 14px; }
+.pc-glabel {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-body); font-weight: 600; font-size: 9.5px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 7px;
 }
+.pc-glabel svg { width: 12px; height: 12px; }
+.pc-dark .pc-glabel { color: rgba(255,255,255,.38); }
 
-.plan-price {
-  font-family: var(--font-display); font-size: 54px; font-weight: 800;
-  letter-spacing: -.042em; line-height: 1; color: #fff;
-  display: flex; align-items: flex-start; gap: 5px;
-}
-.plan-price .cur {
-  font-size: 12px; font-weight: 600; letter-spacing: .10em;
-  color: rgba(255,255,255,.36); margin-top: 10px;
-}
-.plan-per  { font-size: 13px; color: rgba(255,255,255,.32); margin-top: 6px; }
+.pc-item { display: flex; align-items: flex-start; gap: 8px; padding: 3px 0; }
+.pc-check { width: 13px; height: 13px; flex: 0 0 13px; margin-top: 3px; color: var(--ac); }
+.pc-tx { font-size: 12.5px; color: var(--ink-800); line-height: 1.45; }
+.pc-tx.hi { font-weight: 700; color: var(--ink-900); }
+.pc-mut { display: block; font-size: 11px; color: var(--ink-400); margin-top: 1px; line-height: 1.4; }
+.pc-dark .pc-tx { color: rgba(255,255,255,.72); }
+.pc-dark .pc-tx.hi { color: #fff; }
+.pc-dark .pc-mut { color: rgba(255,255,255,.4); }
 
-.plan-rule { height: 1px; background: rgba(255,255,255,.06); }
-.plan.premium .plan-rule { background: rgba(245,197,24,.14); }
+.pc-badge {
+  display: inline-block; margin-left: 6px; border-radius: 99px;
+  padding: 1px 6px; font-size: 8.5px; font-weight: 700; vertical-align: middle;
+}
+.b-new  { background: #F2EEFF; color: #4524D6; }
+.b-ai   { background: #6B4BFF; color: #fff; }
+.b-live { background: #F5C518; color: #7A5500; }
 
-.plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; flex: 1; }
-.plan-features li {
-  font-size: 13.5px; color: rgba(255,255,255,.60);
-  display: flex; align-items: flex-start; gap: 10px; line-height: 1.45;
+.pc-secure {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: clamp(26px,4vh,38px);
+  font-size: 12.5px; color: rgba(255,255,255,.4);
 }
-.plan-features li svg { flex-shrink: 0; margin-top: 1px; }
-.plan.essential .plan-features li { color: rgba(255,255,255,.65); }
-.plan.premium .plan-features li { color: rgba(255,255,255,.74); }
-
-.plan-cta {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 14px 24px; border-radius: var(--radius-pill);
-  font-family: var(--font-body); font-size: 14px; font-weight: 600;
-  letter-spacing: -.01em; cursor: pointer; border: 0;
-  transition: all 200ms var(--ease-out);
-}
-.plan.free .plan-cta     { background: rgba(255,255,255,.08); color: rgba(255,255,255,.75); }
-.plan.free .plan-cta:hover { background: rgba(255,255,255,.14); }
-.plan.essential .plan-cta {
-  background: rgba(56,189,248,.14); color: #7DD3FC; border: 1px solid rgba(56,189,248,.20);
-}
-.plan.essential .plan-cta:hover { background: rgba(56,189,248,.22); border-color: rgba(56,189,248,.40); }
-.plan.pro .plan-cta {
-  background: var(--violet-500); color: #fff;
-  box-shadow: 0 8px 26px rgba(107,75,255,.34);
-}
-.plan.pro .plan-cta:hover { background: var(--violet-600); transform: translateY(-1px); box-shadow: 0 14px 38px rgba(107,75,255,.48); }
-/* Botón Premium con el oro de la app: #FDE68A → #F5C518, texto #7A5500 */
-.plan.premium .plan-cta {
-  background: linear-gradient(135deg, #FDE68A 0%, #F5C518 100%);
-  color: #7A5500;
-  box-shadow: 0 8px 30px rgba(245,197,24,.30);
-}
-.plan.premium .plan-cta:hover { transform: translateY(-1px); box-shadow: 0 16px 48px rgba(245,197,24,.46); }
-
-.plans-footnote {
-  text-align: center; margin-top: 44px;
-  font-size: 12px; color: rgba(255,255,255,.24); letter-spacing: .02em;
-}
-.plans-footnote a { color: rgba(255,255,255,.38); text-underline-offset: 3px; }
-
+.pc-secure svg { width: 14px; height: 14px; }
+.pc-secure b { color: rgba(255,255,255,.72); font-weight: 600; }
 
 /* ── CTA BANNER ───────────────────────────────────────────────── */
 .cta-banner {
@@ -1055,181 +1037,331 @@ footer {
   <div class="section-inner">
     <div class="reveal">
       <span class="s-eyebrow">Planes</span>
-      <h2 class="s-h2 rv">El precio justo<br>para cada etapa.</h2>
-      <p class="s-lead rv rv-d1">Empiezas gratis. Cuando tu tienda crezca, subes de plan. Ni contratos ni letras chiquitas.</p>
+      <h2 class="s-h2 rv">Elige tu plan.</h2>
+      <p class="s-lead rv rv-d1">Escala con tu negocio. Empiezas gratis y subes cuando lo necesites.</p>
     </div>
 
-    <div class="plans-grid" id="plans-grid">
-
-      <!-- FREE -->
-      <div class="plan free">
-        <div>
-          <div class="plan-label">Empieza aquí</div>
-          <div class="plan-name">Free</div>
-        </div>
-        <div>
-          <div class="plan-price">$0<span class="cur">MXN</span></div>
-          <div class="plan-per">para siempre</div>
-        </div>
-        <div class="plan-rule"></div>
-        <ul class="plan-features">
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Ventas ilimitadas
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Hasta 50 productos
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            1 usuario · 1 sucursal
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Soporte chatbot
-          </li>
-        </ul>
-        <button class="plan-cta" onclick="location.href='crear-cuenta.html'">
-          Comenzar gratis
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
-      </div>
-
-      <!-- ESSENTIAL -->
-      <div class="plan essential">
-        <div>
-          <div class="plan-label">Recomendado</div>
-          <div class="plan-name">Essential</div>
-        </div>
-        <div>
-          <div class="plan-price">$159<span class="cur">MXN</span></div>
-          <div class="plan-per">/mes</div>
-        </div>
-        <div class="plan-rule"></div>
-        <ul class="plan-features">
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Hasta 500 productos
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            2 usuarios
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Registro de gastos
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Reportes mensuales
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Backup 6 meses
-          </li>
-        </ul>
-        <button class="plan-cta" onclick="goSignup('essential')">
-          Suscribirme a Essential
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
-      </div>
-
-      <!-- PRO -->
-      <div class="plan pro">
-        <div class="plan-badge">Más popular</div>
-        <div>
-          <div class="plan-label">Mejor valor</div>
-          <div class="plan-name">Pro</div>
-        </div>
-        <div>
-          <div class="plan-price">$399<span class="cur">MXN</span></div>
-          <div class="plan-per">/mes</div>
-        </div>
-        <div class="plan-rule"></div>
-        <ul class="plan-features">
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B70FF" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Hasta 2,500 productos
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B70FF" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            10 usuarios
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B70FF" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Hasta 3 sucursales
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B70FF" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Reportes avanzados
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B70FF" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Soporte por WhatsApp
-          </li>
-        </ul>
-        <button class="plan-cta" onclick="goSignup('pro')">
-          Suscribirme a Pro
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
-      </div>
-
-      <!-- PREMIUM -->
-      <div class="plan premium">
-        <div>
-          <div class="plan-label">Premium</div>
-          <div class="plan-name">Premium</div>
-        </div>
-        <div>
-          <div class="plan-price">$859<span class="cur">MXN</span></div>
-          <div class="plan-per">/mes</div>
-        </div>
-        <div class="plan-rule"></div>
-        <ul class="plan-features">
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Hasta 25,000 productos
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            25 usuarios
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Sucursales ilimitadas
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Clientes y fiados (crédito)
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Logros · Racha de ventas
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Backup diario · 1 año
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Soporte prioritario
-          </li>
-        </ul>
-        <button class="plan-cta" onclick="goSignup('premium')">
-          Suscribirme a Premium
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
-      </div>
-
+    <div class="pc-toggle rv" role="group" aria-label="Ciclo de cobro">
+      <button class="pc-tg on" id="tgM" aria-pressed="true">Mensual</button>
+      <button class="pc-tg" id="tgY" aria-pressed="false">Anual <span class="pc-off">−20%</span></button>
     </div>
 
-    <p class="plans-footnote">
-      ¿Necesitas cambiar o cancelar? <a href="mailto:oscar.garciavevm@gmail.com">Escríbenos</a> y lo gestionamos en menos de 24 h.
+    <div class="pc-grid">
+      <article class="pc rv" style="--ac:#22C55E;--soft:#DCFCE7;--deep:#137333;--grad:linear-gradient(135deg, #15152A, #232338)">
+        
+        <div class="pc-top">
+          <div class="pc-crest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <span class="pc-tag">EMPIEZA AQUÍ</span>
+        </div>
+        <h3 class="pc-name">Free</h3>
+        <p class="pc-blurb">Vende hoy mismo, sin pagar nada.</p>
+        <div class="pc-price">
+          <span class="pc-amt" data-m="0" data-y="0">$0</span>
+          <span class="pc-cur">MXN</span>
+          <span class="pc-per">para siempre</span>
+        </div>
+        <button class="pc-cta" onclick="location.href='crear-cuenta.html'">
+          Comenzar gratis <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <div class="pc-stats">
+          <span>Productos</span><b>50</b>
+          <span>Sucursal</span><b>1</b>
+        </div>
+        <hr class="pc-rule">
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
+              Inventario
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Ventas ilimitadas</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">Hasta 50 productos</span><span class="pc-mut">3 categorías personalizadas · 1 sucursal</span></div>
+            </div>
+          </div>
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Reportes
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">Reportes del día y de la semana</span></div>
+            </div>
+          </div>
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6h.09A1.65 1.65 0 0 0 10.6 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1.51 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              Seguridad
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">Respaldo manual</span><span class="pc-mut">Descarga cada 2 días · 7 días de historial</span></div>
+            </div>
+          </div>
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Soporte &amp; Extras
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">Tickets con marca de agua</span></div>
+            </div>
+          </div>
+      </article>
+
+      <article class="pc rv" style="--ac:#0EA5E9;--soft:#E0F2FE;--deep:#0C3A5E;--grad:linear-gradient(135deg, #38BDF8, #0284C7)">
+        
+        <div class="pc-top">
+          <div class="pc-crest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="pc-tag">RECOMENDADO</span>
+        </div>
+        <h3 class="pc-name">Essential</h3>
+        <p class="pc-blurb">Para tiendas en crecimiento.</p>
+        <div class="pc-price">
+          <span class="pc-amt" data-m="159" data-y="127">$159</span>
+          <span class="pc-cur">MXN</span>
+          <span class="pc-per">/mes</span>
+        </div>
+        <button class="pc-cta" onclick="goSignup('essential')">
+          Probar Essential <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <div class="pc-stats">
+          <span>Productos</span><b>500</b>
+          <span>Sucursal</span><b>1</b>
+        </div>
+        <hr class="pc-rule">
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
+              Inventario
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Hasta 500 productos</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">15 categorías personalizadas · 1 sucursal</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">2 usuarios</span><span class="pc-mut">Dueño + 1 empleado</span></div>
+            </div>
+          </div>
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Reportes
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Reportes del día, semana y mes</span></div>
+            </div>
+          </div>
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6h.09A1.65 1.65 0 0 0 10.6 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1.51 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              Seguridad
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Respaldo automático</span><span class="pc-mut">3 veces cada 7 días</span></div>
+            </div>
+          </div>
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Soporte &amp; Extras
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">Soporte por correo</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Tickets sin marca de agua</span></div>
+            </div>
+          </div>
+      </article>
+
+      <article class="pc rv" style="--ac:#6B4BFF;--soft:#F2EEFF;--deep:#2A12A8;--grad:linear-gradient(135deg, #C7B6FF, #8B70FF, #4524D6)">
+        
+        <div class="pc-top">
+          <div class="pc-crest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h20M3 18l1-10 5 5 3-7 3 7 5-5 1 10"/></svg></div>
+          <span class="pc-tag">MEJOR VALOR</span>
+        </div>
+        <h3 class="pc-name">Pro</h3>
+        <p class="pc-blurb">Inteligencia para escalar.</p>
+        <div class="pc-price">
+          <span class="pc-amt" data-m="399" data-y="319">$399</span>
+          <span class="pc-cur">MXN</span>
+          <span class="pc-per">/mes</span>
+        </div>
+        <button class="pc-cta" onclick="goSignup('pro')">
+          Probar Pro <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <div class="pc-stats">
+          <span>Productos</span><b>2,500</b>
+          <span>Sucursales</span><b>3</b>
+        </div>
+        <hr class="pc-rule">
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
+              Inventario
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Hasta 2,500 productos</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">50 categorías personalizadas</span><span class="pc-mut">Multi-tienda · hasta 3 sucursales</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">10 usuarios</span><span class="pc-mut">Dueño + equipo de cajeros</span></div>
+            </div>
+          </div>
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Reportes
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Reportes automáticos exportables</span><span class="pc-mut">Cada 7, 15 días o mensuales</span></div>
+            </div>
+          </div>
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6h.09A1.65 1.65 0 0 0 10.6 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1.51 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              Seguridad
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">Respaldo automático</span><span class="pc-mut">4 veces cada 7 días</span></div>
+            </div>
+          </div>
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Soporte &amp; Extras
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Tickets personalizables</span><span class="pc-mut">Con tu logo y datos</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">Soporte por correo</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Soporte por WhatsApp</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">Sin anuncios</span></div>
+            </div>
+          </div>
+      </article>
+
+      <article class="pc pc-dark pc-pop rv" style="--ac:#F5C518;--soft:rgba(245,197,24,.20);--deep:#7A5500;--grad:linear-gradient(135deg, #FDE68A, #F5C518, #B45309)">
+        <div class="pc-pop-tag"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> MÁS POPULAR</div>
+        <div class="pc-top">
+          <div class="pc-crest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h20M3 18l1-10 5 5 3-7 3 7 5-5 1 10"/></svg></div>
+          <span class="pc-tag">PREMIUM</span>
+        </div>
+        <h3 class="pc-name">Premium</h3>
+        <p class="pc-blurb">Sin límites para tu negocio.</p>
+        <div class="pc-price">
+          <span class="pc-amt" data-m="859" data-y="687">$859</span>
+          <span class="pc-cur">MXN</span>
+          <span class="pc-per">/mes</span>
+        </div>
+        <button class="pc-cta" onclick="goSignup('premium')">
+          Probar Premium <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <div class="pc-stats">
+          <span>Productos</span><b>25,000</b>
+          <span>Sucursales</span><b>∞</b>
+        </div>
+        <hr class="pc-rule">
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
+              Inventario
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">Todo lo del Pro</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Hasta 25,000 productos</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">200 categorías personalizadas</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">25 usuarios</span><span class="pc-mut">Dueño + equipo extendido</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Multi-tienda ilimitada</span><span class="pc-mut">Sucursales sin límite</span></div>
+            </div>
+          </div>
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Reportes
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Reportes diarios + personalizables</span><span class="pc-badge b-live">Auto</span><span class="pc-mut">Eliges la frecuencia que quieras</span></div>
+            </div>
+          </div>
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6h.09A1.65 1.65 0 0 0 10.6 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1.51 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              Seguridad
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Respaldo automático diario</span><span class="pc-mut">Retención 1 año</span></div>
+            </div>
+          </div>
+          <div class="pc-group">
+            <div class="pc-glabel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Soporte &amp; Extras
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx">Soporte por correo + WhatsApp</span></div>
+            </div>
+            <div class="pc-item">
+              <svg class="pc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div><span class="pc-tx hi">Soporte prioritario</span></div>
+            </div>
+          </div>
+      </article>
+    </div>
+
+    <p class="pc-secure">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Pago seguro procesado por <b>Polar</b>. Nunca guardamos los datos de tu tarjeta.
     </p>
   </div>
 </section>
-
 
 <!-- ════════ CTA ══════════════════════════════════════════════════ -->
 <section class="cta-banner">
@@ -1294,7 +1426,8 @@ footer {
 // El pago se cobra en Polar con metadata[user_id], igual que en la app, así
 // que al entrar a la app el plan ya está activo.
 function goSignup(plan){
-  location.href = 'crear-cuenta.html?plan=' + encodeURIComponent(plan) + '&cycle=monthly';
+  var c = window.__cycle || 'monthly';
+  location.href = 'crear-cuenta.html?plan=' + encodeURIComponent(plan) + '&cycle=' + c;
 }
 
 // ── "Próximamente en Google Play" toast (la app aún no está publicada) ──
@@ -1365,6 +1498,32 @@ if (statsEl) {
   }, { threshold: 0.3 });
   statsObs.observe(statsEl);
 }
+
+// ── Toggle Mensual / Anual (mismo cálculo que PricingScreen: -20%) ──
+(function(){
+  var m = document.getElementById('tgM'), y = document.getElementById('tgY');
+  if (!m || !y) return;
+  var ciclo = 'monthly';
+  function pinta(){
+    var anual = ciclo === 'yearly';
+    m.classList.toggle('on', !anual); y.classList.toggle('on', anual);
+    m.setAttribute('aria-pressed', String(!anual));
+    y.setAttribute('aria-pressed', String(anual));
+    document.querySelectorAll('.pc-amt').forEach(function(el){
+      var v = anual ? el.dataset.y : el.dataset.m;
+      el.textContent = '$' + v;
+      var per = el.parentElement.querySelector('.pc-per');
+      if (per && per.textContent.indexOf('siempre') === -1) {
+        per.textContent = anual ? '/mes · anual' : '/mes';
+      }
+    });
+    // Los CTA de pago arrastran el ciclo hasta el checkout de Polar
+    window.__cycle = ciclo;
+  }
+  m.addEventListener('click', function(){ ciclo = 'monthly'; pinta(); });
+  y.addEventListener('click', function(){ ciclo = 'yearly';  pinta(); });
+  pinta();
+})();
 </script>
 
 </body>
