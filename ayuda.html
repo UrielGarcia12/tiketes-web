@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Centro de ayuda — Tiketes</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#07070F">
+<meta name="description" content="Respuestas a las dudas más comunes de Tiketes: impresión de tickets, QR digital, inventario, planes, empleados y más."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+:root{
+  --onyx:#07070F; --onyx-2:#0C0C1A; --onyx-3:#111120;
+  --gold:#C9A96E; --gold-light:#F0CB7A; --gold-dim:#8C6E3C;
+  --rule:rgba(255,255,255,.08);
+  --f-hero:'Big Shoulders Display','Sora',sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--onyx);color:#fff;font-family:var(--font-body,Inter,sans-serif);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+
+/* NAV */
+.nav{
+  position:sticky;top:0;z-index:50;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:14px clamp(16px,4vw,44px);
+  background:rgba(7,7,15,.9);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--rule);
+}
+.brand{display:inline-flex;align-items:center;gap:9px;text-decoration:none;justify-self:start}
+.brand-mark{height:24px;width:auto;display:block}
+.brand-name{font-family:var(--font-display,Sora,sans-serif);font-weight:800;font-size:17px;color:#fff;letter-spacing:-.035em}
+.nav .tag{
+  justify-self:center;font-family:var(--font-mono,monospace);font-size:10px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--gold);
+}
+.nav .back{justify-self:end;font-size:13px;font-weight:500;color:rgba(255,255,255,.5);text-decoration:none}
+.nav .back:hover{color:#fff}
+@media(max-width:640px){.nav .tag{display:none}}
+
+/* HERO + buscador */
+.hero{
+  position:relative;overflow:hidden;text-align:center;
+  padding:clamp(52px,9vh,92px) clamp(16px,4vw,44px) clamp(34px,5vh,56px);
+  border-bottom:1px solid var(--rule);
+}
+.hero::before{
+  content:'';position:absolute;top:-180px;left:50%;transform:translateX(-50%);
+  width:640px;height:380px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(107,75,255,.30),transparent 72%);
+  filter:blur(28px);
+}
+.hero > *{position:relative}
+.hero h1{
+  font-family:var(--f-hero);font-weight:800;text-transform:uppercase;
+  font-size:clamp(40px,7vw,84px);line-height:.88;letter-spacing:-.02em;
+}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p{font-size:14px;color:rgba(255,255,255,.45);margin-top:12px}
+
+.search{
+  position:relative;max-width:520px;margin:26px auto 0;
+}
+.search svg{
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  width:17px;height:17px;stroke:rgba(255,255,255,.38);fill:none;stroke-width:2.2;
+}
+#q{
+  width:100%;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.13);border-radius:99px;
+  padding:15px 18px 15px 44px;
+  font-family:inherit;font-size:14.5px;color:#fff;
+  transition:border-color .2s,background .2s;
+}
+#q::placeholder{color:rgba(255,255,255,.3)}
+#q:focus{outline:none;border-color:rgba(167,142,255,.7);background:rgba(139,112,255,.09)}
+
+/* Categorías */
+.wrap{max-width:860px;margin:0 auto;padding:clamp(30px,5vh,52px) clamp(16px,4vw,28px) 80px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:28px}
+.chip{
+  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);
+  border-radius:99px;padding:8px 14px;cursor:pointer;
+  font-family:inherit;font-weight:600;font-size:12.5px;color:rgba(255,255,255,.6);
+  display:inline-flex;align-items:center;gap:6px;
+  transition:background .2s,color .2s,border-color .2s,transform .12s;
+}
+.chip:hover{background:rgba(255,255,255,.08);color:#fff}
+.chip:active{transform:scale(.97)}
+.chip[aria-pressed=true]{background:rgba(139,112,255,.2);border-color:rgba(167,142,255,.65);color:#fff}
+.chip:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* Acordeón */
+.faq{border-top:1px solid var(--rule)}
+.qa{border-bottom:1px solid var(--rule);opacity:0;transform:translateY(14px);animation:in .5s var(--ease) forwards}
+@keyframes in{to{opacity:1;transform:none}}
+.qa[hidden]{display:none}
+.q{
+  width:100%;background:none;border:0;cursor:pointer;text-align:left;
+  display:flex;align-items:center;gap:14px;padding:18px 4px;
+  font-family:inherit;font-size:15px;font-weight:600;color:#fff;
+  transition:color .2s;
+}
+.q:hover{color:var(--gold-light)}
+.q:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;border-radius:6px}
+.q .ico{
+  width:26px;height:26px;flex:0 0 26px;border-radius:50%;
+  border:1px solid var(--gold-dim);color:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .34s var(--ease),background .24s,color .24s;
+}
+.q .ico svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.6;stroke-linecap:round}
+.qa.open .q .ico{transform:rotate(45deg);background:var(--gold);color:var(--onyx)}
+.qa.open .q{color:var(--gold-light)}
+.q span{flex:1}
+
+/* Truco: max-height animado + grid-rows para que se sienta fluido */
+.a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s var(--ease)}
+.qa.open .a{grid-template-rows:1fr}
+.a-in{overflow:hidden}
+.a p{
+  font-size:13.5px;line-height:1.72;color:rgba(255,255,255,.5);
+  padding:0 4px 20px 40px;
+}
+.a p+p{padding-top:10px}
+.a b{color:rgba(255,255,255,.82);font-weight:600}
+.a .tip{
+  margin:0 4px 20px 40px;padding:11px 13px;border-radius:12px;
+  background:rgba(167,142,255,.1);border:1px solid rgba(167,142,255,.22);
+  font-size:12.5px;line-height:1.55;color:rgba(255,255,255,.62);
+}
+.a .tip b{color:#A88EFF}
+
+.empty{text-align:center;padding:50px 20px;color:rgba(255,255,255,.35);font-size:14px}
+.empty[hidden]{display:none}
+
+/* Contacto */
+.contact{
+  margin-top:44px;border-radius:20px;padding:28px;text-align:center;
+  background:linear-gradient(150deg,rgba(107,75,255,.16),rgba(201,169,110,.07));
+  border:1px solid rgba(255,255,255,.1);
+}
+.contact h2{font-family:var(--f-hero);font-weight:800;text-transform:uppercase;font-size:clamp(26px,4vw,38px);letter-spacing:-.01em}
+.contact p{font-size:13.5px;color:rgba(255,255,255,.5);margin-top:8px;line-height:1.6}
+.contact a.cta{
+  display:inline-flex;align-items:center;gap:8px;margin-top:18px;
+  background:linear-gradient(90deg,#8B70FF,#4524D6);color:#fff;
+  border-radius:16px;padding:13px 22px;text-decoration:none;
+  font-weight:700;font-size:14px;box-shadow:0 12px 24px rgba(107,75,255,.4);
+  transition:transform .16s,opacity .16s;
+}
+.contact a.cta:hover{transform:translateY(-2px);opacity:.95}
+.contact .note{font-family:var(--font-mono,monospace);font-size:11px;color:rgba(255,255,255,.3);margin-top:12px}
+
+footer{border-top:1px solid var(--rule);padding:22px clamp(16px,4vw,44px);text-align:center}
+footer a{color:rgba(255,255,255,.4);text-decoration:none;font-size:12.5px}
+footer a:hover{color:#fff}
+footer span{color:rgba(255,255,255,.2);margin:0 8px}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .qa{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="/">
+    <img src="assets/logo-mark-web.png" alt="" class="brand-mark" width="195" height="256">
+    <span class="brand-name">Tiketes</span>
+  </a>
+  <span class="tag">Centro de ayuda</span>
+  <a class="back" href="/">← Volver</a>
+</nav>
+
+<header class="hero">
+  <h1>¿En qué te<br><em>echamos la mano?</em></h1>
+  <p>Las dudas que más nos llegan, resueltas aquí mismo.</p>
+  <div class="search">
+    <svg viewBox="0 0 24 24" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="q" type="search" placeholder="Busca tu duda: imprimir, QR, inventario…" autocomplete="off">
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="chips" id="chips" role="group" aria-label="Filtrar por tema"></div>
+  <div class="faq" id="faq"></div>
+  <p class="empty" id="empty" hidden>No encontramos nada con eso. Prueba con otra palabra o escríbenos.</p>
+
+  <section class="contact">
+    <h2>¿No estaba tu duda?</h2>
+    <p>Escríbenos y te contesta una persona, no un robot.<br>Somos un equipo chico: te leemos todo.</p>
+    <a class="cta" href="mailto:tiketes.soporteapp@gmail.com?subject=Ayuda%20con%20Tiketes">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      tiketes.soporteapp@gmail.com
+    </a>
+    <p class="note">Respondemos en menos de 48 horas hábiles</p>
+  </section>
+</main>
+
+<footer>
+  <a href="/">Inicio</a><span>·</span>
+  <a href="terms.html">Términos</a><span>·</span>
+  <a href="privacy.html">Privacidad</a>
+</footer>
+
+<script>
+// Las respuestas viven aquí: agregar una es agregar un objeto.
+var FAQ = [
+  { c:'Tickets', q:'¿Puedo imprimir con una impresora térmica?',
+    a:['Sí. Tiketes manda el ticket a cualquier <b>impresora térmica de 80 mm</b> que tu teléfono ya reconozca (por Bluetooth, Wi-Fi o la que tengas configurada en Android).',
+       'El ticket sale con el formato clásico de rollo: el nombre de tu tienda, los productos, el total y el cambio, en letra monoespaciada para que se lea bien en papel térmico.'],
+    tip:'Desde el plan <b>Pro</b> puedes personalizar el ticket con tu logo, tu dirección y tu mensaje, y quitar la marca de agua "Vía Tiketes".' },
+
+  { c:'Tickets', q:'¿El ticket impreso se ve igual que el QR digital?',
+    a:['No, y es a propósito: cada uno está hecho para su medio.',
+       'El <b>impreso</b> sale en blanco y negro sobre rollo térmico de 80 mm, en letra monoespaciada. Es lo que aguanta el papel térmico: sin colores, sin fotos.',
+       'El <b>QR digital</b> abre el ticket en el teléfono de tu cliente y se ve <b>exactamente igual que en tu app</b>: mismos colores, mismo diseño, mismo total y cambio. Lo puede guardar como imagen o compartirlo.'],
+    tip:'¿No tienes impresora? El QR es gratis y funciona desde el primer día: el cliente lo escanea y se lleva su comprobante en el teléfono.' },
+
+  { c:'Tickets', q:'¿Cómo le doy el ticket a mi cliente?',
+    a:['Tienes cuatro formas, y eliges en el momento: <b>QR digital</b> (lo escanea y lo ve en su teléfono), <b>Imprimir</b> (si tienes térmica), <b>Compartir</b> (WhatsApp o donde sea) o <b>Guardar</b> (queda como imagen en tu galería).'] },
+
+  { c:'Tickets', q:'¿Los tickets sirven para facturar?',
+    a:['No. Los tickets de Tiketes son <b>comprobantes de cortesía</b> para tu cliente, sin validez fiscal.',
+       'Si necesitas facturar (CFDI), eso se hace con un PAC autorizado o en el portal del SAT. Tiketes no es un emisor de facturas.'] },
+
+  { c:'Inventario', q:'¿Tengo que capturar mis productos uno por uno?',
+    a:['No. Si ya tienes tu lista en Excel, la subes completa con <b>Importar desde Excel</b> y quedan todos de una vez.',
+       'Y para dar de alta uno nuevo: escaneas su código de barras, le pones precio y stock, y listo.'] },
+
+  { c:'Inventario', q:'¿El stock se descuenta solo?',
+    a:['Sí. Cada venta baja el stock de los productos que vendiste, sin que hagas nada.',
+       'Cuando algo está por acabarse te avisa <b>antes</b>, para que lo pidas a tiempo.'] },
+
+  { c:'Ventas', q:'Me equivoqué en una venta, ¿la puedo cancelar?',
+    a:['Sí, dentro de una ventana de tiempo que depende de tu plan: <b>24 horas</b> en Free, <b>3 días</b> en Essential, <b>15 días</b> en Pro y <b>30 días</b> en Premium.',
+       'En el detalle de cada venta ves el reloj con el tiempo que te queda. Pasado ese plazo, la venta se queda como registro permanente.'] },
+
+  { c:'Ventas', q:'¿Puedo fiar y llevar el control?',
+    a:['Sí. Al cobrar, en lugar de efectivo eliges <b>fiado</b> y le asignas el cliente.',
+       'En la sección de Clientes ves quién te debe y cuánto, y lo marcas como pagado cuando salde. Se acabó el cuaderno.'] },
+
+  { c:'Equipo', q:'¿Mi cajero va a ver mis ganancias?',
+    a:['No. El <b>modo empleado</b> le deja cobrar, escanear y consultar el inventario, pero <b>no ve tus ganancias ni tus cortes de caja</b>.',
+       'Tampoco puede anular una venta sin tu permiso: te llega la solicitud y tú decides.'],
+    tip:'Los empleados entran escaneando un <b>código QR</b> que tú generas. Cuando alguien se va, lo quitas y pierde el acceso al instante.' },
+
+  { c:'Equipo', q:'¿Puedo tener varias sucursales?',
+    a:['Desde el plan <b>Pro</b>: hasta 3 sucursales. En <b>Premium</b> son ilimitadas.',
+       'Cada venta queda registrada en su sucursal, y desde tu inicio cambias entre ellas cuando quieras.'] },
+
+  { c:'Planes', q:'¿El plan gratis tiene truco?',
+    a:['No. El plan <b>Free</b> es gratis para siempre: hasta 50 productos, 1 sucursal y <b>ventas ilimitadas</b>. No pedimos tarjeta.',
+       'La única diferencia visible es que los tickets salen con una marca de agua discreta.'] },
+
+  { c:'Planes', q:'¿Qué pasa si dejo de pagar?',
+    a:['No se borra nada. Conservas todos tus productos y tu historial.',
+       'Simplemente no podrás registrar productos nuevos por encima del límite del plan Free hasta que vuelvas a subir de plan o borres algunos.'] },
+
+  { c:'Planes', q:'¿Cómo cancelo?',
+    a:['Escríbenos y lo procesamos en menos de 24 horas. La cancelación entra al final del ciclo que ya pagaste.',
+       'Los pagos los maneja <b>Polar</b>: nosotros nunca guardamos los datos de tu tarjeta.'] },
+
+  { c:'Cuenta', q:'Se me olvidó la contraseña',
+    a:['En la pantalla de inicio de sesión toca <b>"¿Olvidaste tu contraseña?"</b>. Te mandamos un código de 6 dígitos a tu correo, lo escribes y pones una nueva.'] },
+
+  { c:'Cuenta', q:'¿Puedo borrar mi cuenta y mis datos?',
+    a:['Sí, desde la propia app en <b>Ajustes</b>. Se elimina tu cuenta y todo lo que tengas guardado.',
+       'También puedes pedirlo por correo ejerciendo tus derechos ARCO.'] },
+
+  { c:'Cuenta', q:'¿Mis datos están seguros?',
+    a:['Tu información viaja cifrada y cada cuenta está aislada: <b>ningún otro usuario puede ver lo tuyo</b>.',
+       'Hacemos respaldos periódicos, y según tu plan puedes exportar tu información cuando quieras para tener tu propia copia.'] },
+];
+
+var faq = document.getElementById('faq');
+var chips = document.getElementById('chips');
+var empty = document.getElementById('empty');
+var q = document.getElementById('q');
+var filtro = 'Todo';
+
+var cats = ['Todo'].concat(FAQ.map(function(f){return f.c}).filter(function(v,i,a){return a.indexOf(v)===i}));
+
+cats.forEach(function(c){
+  var b = document.createElement('button');
+  b.className = 'chip'; b.type = 'button';
+  b.setAttribute('aria-pressed', String(c === filtro));
+  b.textContent = c;
+  b.addEventListener('click', function(){
+    filtro = c;
+    chips.querySelectorAll('.chip').forEach(function(x){ x.setAttribute('aria-pressed', String(x.textContent === c)); });
+    pinta();
+  });
+  chips.appendChild(b);
+});
+
+function pinta(){
+  var t = q.value.trim().toLowerCase();
+  faq.innerHTML = '';
+  var n = 0;
+  FAQ.forEach(function(f, idx){
+    var texto = (f.q + ' ' + f.a.join(' ') + ' ' + (f.tip||'') + ' ' + f.c).toLowerCase();
+    if (filtro !== 'Todo' && f.c !== filtro) return;
+    if (t && texto.indexOf(t) === -1) return;
+    n++;
+    var d = document.createElement('div');
+    d.className = 'qa';
+    d.style.animationDelay = (n * 0.03) + 's';
+    d.innerHTML =
+      '<button class="q" aria-expanded="false"><span class="ico"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span><span>' + f.q + '</span></button>' +
+      '<div class="a"><div class="a-in">' + f.a.map(function(p){return '<p>'+p+'</p>'}).join('') +
+      (f.tip ? '<div class="tip">' + f.tip + '</div>' : '') + '</div></div>';
+    var btn = d.querySelector('.q');
+    btn.addEventListener('click', function(){
+      var abierto = d.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(abierto));
+    });
+    faq.appendChild(d);
+  });
+  empty.hidden = n > 0;
+}
+
+q.addEventListener('input', pinta);
+pinta();
+</script>
+</body>
+</html>

@@ -827,6 +827,20 @@ footer {
 .footer-col ul    { list-style: none; display: flex; flex-direction: column; gap: 10px; }
 .footer-col a     { font-size: 13px; color: rgba(255,255,255,.40); text-decoration: none; transition: color 140ms; }
 .footer-col a:hover { color: rgba(255,255,255,.80); }
+
+/* Fila legal: los enlaces que la gente busca abajo de todo */
+.footer-legal {
+  display: flex; flex-wrap: wrap; gap: 10px 26px;
+  padding: 22px 0 18px; border-top: 1px solid var(--rule-dark);
+}
+.footer-legal a {
+  font-size: 12.5px; color: rgba(255,255,255,.45); text-decoration: none;
+  transition: color 160ms var(--ease-out);
+}
+.footer-legal a:hover { color: #fff; text-decoration: underline; }
+.fb-note { color: rgba(255,255,255,.22); }
+@media (max-width: 640px) { .footer-legal { gap: 10px 18px; } }
+
 .footer-bottom {
   display: flex; justify-content: space-between; align-items: center;
   font-size: 12px; color: rgba(255,255,255,.20); letter-spacing: .02em;
@@ -858,6 +872,7 @@ footer {
     <li><a href="#features">Funciones</a></li>
     <li><a href="#tour">La app por dentro</a></li>
     <li><a href="#plans">Planes</a></li>
+    <li><a href="ayuda.html">Ayuda</a></li>
   </ul>
   <div class="nav-actions">
     <button class="btn-nav-ghost" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})">Ver planes</button>
@@ -1487,17 +1502,21 @@ footer {
       <div class="footer-col">
         <h4>Soporte</h4>
         <ul>
-          <li><a href="mailto:tiketes.soporteapp@gmail.com">Contacto</a></li>
-          <li><a href="mailto:tiketes.soporteapp@gmail.com">Centro de ayuda</a></li>
+          <li><a href="ayuda.html">Preguntas frecuentes</a></li>
+          <li><a href="mailto:tiketes.soporteapp@gmail.com">Contáctanos</a></li>
+          <li><a href="ayuda.html">Centro de ayuda</a></li>
         </ul>
       </div>
     </div>
+    <div class="footer-legal">
+      <a href="terms.html">Términos y Condiciones</a>
+      <a href="privacy.html">Aviso de Privacidad</a>
+      <a href="ayuda.html">Centro de Ayuda</a>
+      <a href="mailto:tiketes.soporteapp@gmail.com">Contacto</a>
+    </div>
     <div class="footer-bottom">
-      <span>© 2026 Tiketes &nbsp;·&nbsp; Hecho en México</span>
-      <div style="display:flex;align-items:center;gap:24px">
-        <a href="privacy.html">Privacidad</a>
-        <a href="terms.html">Términos</a>
-      </div>
+      <span>© 2026 Tiketes · Hecho en México</span>
+      <span class="fb-note">Los tickets de Tiketes no tienen validez fiscal.</span>
     </div>
   </div>
 </footer>
