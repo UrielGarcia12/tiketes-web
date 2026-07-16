@@ -221,6 +221,22 @@ input:focus-visible{outline:none}
 .credWarn b{color:var(--gold);font-weight:600}
 .credWarn svg{width:15px;height:15px;flex:0 0 15px;margin-top:1px;fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round}
 
+/* Paso de verificación de correo (OTP) */
+.verify{max-width:560px}
+.verify .seal{
+  width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:rgba(139,112,255,.14);border:1.5px solid rgba(167,142,255,.4);margin-bottom:16px;
+}
+.verify .seal svg{width:26px;height:26px;fill:none;stroke:var(--violet300);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.vCode{
+  width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:14px;
+  padding:15px 16px;color:#fff;text-align:center;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:28px;letter-spacing:12px;
+}
+.vCode:focus{outline:none;border-color:rgba(167,142,255,.7);background:rgba(139,112,255,.09)}
+.vResend{background:none;border:0;color:var(--violet300);font-family:var(--f-body);font-weight:600;font-size:13px;cursor:pointer;margin-top:14px}
+.vResend:hover{text-decoration:underline}
+
 /* Check */
 .check{display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-top:14px}
 .check input{
@@ -256,6 +272,7 @@ input:focus-visible{outline:none}
 
 .msg{font-family:var(--f-body);font-size:12.5px;line-height:1.5;margin-top:14px;padding:11px 13px;border-radius:12px}
 .msg.err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#FCA5A5}
+.msg.ok{background:rgba(52,199,89,.12);border:1px solid rgba(52,199,89,.3);color:#86EFAC}
 
 .foot{text-align:center;margin-top:20px;font-family:var(--f-body);font-size:12.5px;color:rgba(255,255,255,.35)}
 .foot a{color:var(--violet300);text-decoration:none}
@@ -418,6 +435,21 @@ input:focus-visible{outline:none}
     <p class="foot" id="doneFoot">Tu inventario ya está configurado para tu giro.</p>
   </div>
 </main>
+
+  <!-- ══ VERIFICAR CORREO ══ -->
+  <main class="card verify" id="verifyWrap" style="display:none">
+    <div class="seal"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+    <div class="eyebrow">Un paso más</div>
+    <h1>Verifica tu <span class="ac">correo</span></h1>
+    <p class="sub">Te enviamos un código a <b id="vEmail" style="color:#fff"></b>. Escríbelo para confirmar que el correo es tuyo. Revisa también tu carpeta de spam.</p>
+    <div class="field" style="margin-top:22px">
+      <label class="lb" for="vCode">Código de verificación</label>
+      <input id="vCode" class="vCode" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="000000" maxlength="8">
+      <div style="text-align:center"><button type="button" class="vResend" id="vResend">¿No llegó? Reenviar código</button></div>
+    </div>
+    <div id="vMsg"></div>
+    <div class="actions"><button class="btn btn-primary" id="vBtn">Verificar y continuar</button></div>
+  </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
@@ -624,14 +656,36 @@ $('submit').addEventListener('click',async function(){
       return;
     }
     var userId=res.data&&res.data.user?res.data.user.id:null;
-    if(userId){try{await sb.from('profiles').upsert(Object.assign({id:userId},profileData),{onConflict:'id'})}catch(e){}}
-
-    $('formWrap').classList.add('hidden');
-    $('doneWrap').classList.remove('hidden');
-    $('doneWrap').classList.add('rise');
     var giroLabel=bizKey==='otro'?(otro||'Otro'):meta.label;
-    // Las credenciales a la vista: si el navegador generó la contraseña, ésta
-    // es la única oportunidad del usuario de conocerla antes de abrir la app.
+
+    // finish(): pinta el éxito. Se llama directo si ya hay sesión, o tras
+    // verificar el código si Supabase exigió confirmar el correo. El upsert
+    // vive aquí porque necesita sesión (RLS) — y aquí siempre la hay.
+    async function finish(){
+      if(userId){try{await sb.from('profiles').upsert(Object.assign({id:userId},profileData),{onConflict:'id'})}catch(e){}}
+      $('formWrap').classList.add('hidden');
+      $('verifyWrap').style.display='none';
+      $('doneWrap').classList.remove('hidden');
+      $('doneWrap').classList.add('rise');
+      renderDone(giroLabel,userId);
+      scrollTo({top:0,behavior:'smooth'});
+    }
+
+    // Sin sesión = "Confirm email" activo → pedimos el código antes del éxito.
+    if(!res.data.session){
+      startVerify(email,finish);
+      return;
+    }
+    await finish();
+  }catch(e){
+    btn.disabled=false;btn.textContent='Crear mi cuenta';
+    showErr('No pudimos conectar. Revisa tu internet e intenta de nuevo.');
+  }
+});
+
+// Pinta la pantalla de éxito (credenciales + resumen + CTA).
+function renderDone(giroLabel,userId){
+    var email=$('email').value.trim().toLowerCase(),pwd=$('pwd').value;
     $('cEmail').textContent=email;
     $('cEmailCopy').addEventListener('click',function(){copyTo($('cEmailCopy'),email)});
     $('cPwdCopy').addEventListener('click',function(){copyTo($('cPwdCopy'),pwd)});
@@ -657,11 +711,36 @@ $('submit').addEventListener('click',async function(){
       $('ctaApp').addEventListener('click',function(){alert('Próximamente en Google Play')});
     }
     scrollTo({top:0,behavior:'smooth'});
-  }catch(e){
-    btn.disabled=false;btn.textContent='Crear mi cuenta';
-    showErr('No pudimos conectar. Revisa tu internet e intenta de nuevo.');
-  }
-});
+}
+
+// ── Verificación de correo por código (Supabase OTP type:'signup') ─────────
+// Sólo se usa cuando signUp no trae sesión (Confirm email activo en Supabase).
+function startVerify(mail,onOk){
+  $('formWrap').classList.add('hidden');
+  $('verifyWrap').style.display='block';
+  $('verifyWrap').classList.add('rise');
+  $('vEmail').textContent=mail;
+  $('vCode').value='';
+  setTimeout(function(){$('vCode').focus()},250);
+  function vMsg(t,ok){$('vMsg').innerHTML=t?('<div class="msg '+(ok?'ok':'err')+'">'+t+'</div>'):''}
+  $('vCode').oninput=function(){$('vCode').value=$('vCode').value.replace(/\D/g,'').slice(0,8)};
+  $('vBtn').onclick=async function(){
+    vMsg('');
+    var t=$('vCode').value.replace(/\D/g,'');
+    if(t.length<6){vMsg('Escribe el código completo que te llegó al correo.');$('vCode').focus();return}
+    $('vBtn').disabled=true;$('vBtn').textContent='Verificando…';
+    var r=await sb.auth.verifyOtp({email:mail,token:t,type:'signup'});
+    $('vBtn').disabled=false;$('vBtn').textContent='Verificar y continuar';
+    if(r.error){vMsg(/expired|invalid/i.test(r.error.message)?'Código incorrecto o vencido. Revisa el correo más reciente o pide otro.':r.error.message);return}
+    onOk();
+  };
+  $('vResend').onclick=async function(){
+    vMsg('');
+    var r=await sb.auth.resend({type:'signup',email:mail});
+    if(r.error){vMsg(/rate|seconds/i.test(r.error.message)?'Espera un momento antes de pedir otro código.':r.error.message);return}
+    vMsg('Te reenviamos el código a '+mail+'.',true);
+  };
+}
 $('nombre').addEventListener('keydown',function(e){if(e.key==='Enter')$('next').click()});
 $('pwd2').addEventListener('keydown',function(e){if(e.key==='Enter')$('submit').click()});
 </script>
