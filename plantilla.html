@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Importar productos con Excel — Tiketes</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#07070F">
+<meta name="description" content="Descarga la plantilla de Excel de Tiketes y sube cientos de productos de una vez, sin escanear uno por uno."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+:root{
+  --onyx:#07070F; --onyx-2:#0C0C1A; --onyx-3:#111120;
+  --gold:#C9A96E; --gold-light:#F0CB7A; --gold-dim:#8C6E3C;
+  --violet:#8B70FF;
+  --rule:rgba(255,255,255,.08);
+  --f-hero:'Big Shoulders Display','Sora',sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--onyx);color:#fff;font-family:var(--font-body,Inter,sans-serif);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:50;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:14px clamp(16px,4vw,44px);background:rgba(7,7,15,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--rule)}
+.brand{display:inline-flex;align-items:center;gap:9px;text-decoration:none;justify-self:start}
+.brand-mark{height:24px;width:auto;display:block}
+.brand-name{font-family:var(--font-display,Sora,sans-serif);font-weight:800;font-size:17px;color:#fff;letter-spacing:-.035em}
+.nav .tag{justify-self:center;font-family:var(--font-mono,monospace);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.nav .back{justify-self:end;font-size:13px;font-weight:500;color:rgba(255,255,255,.5);text-decoration:none}
+.nav .back:hover{color:#fff}
+@media(max-width:640px){.nav .tag{display:none}}
+
+.wrap{max-width:820px;margin:0 auto;padding:clamp(40px,7vh,80px) clamp(16px,4vw,28px) 90px}
+
+/* HERO */
+.hero{text-align:center;position:relative}
+.hero::before{content:'';position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:560px;height:320px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(201,169,110,.16),transparent 72%);filter:blur(30px);pointer-events:none}
+.eyebrow{font-family:var(--font-mono,monospace);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);position:relative}
+.hero h1{font-family:var(--f-hero);font-weight:800;text-transform:uppercase;font-size:clamp(38px,6.6vw,74px);line-height:.9;letter-spacing:-.02em;margin-top:14px;position:relative}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p{max-width:520px;margin:16px auto 0;font-size:15px;line-height:1.6;color:rgba(255,255,255,.55);position:relative}
+
+/* Descarga */
+.dl{display:flex;flex-direction:column;align-items:center;gap:12px;margin:34px 0 8px;position:relative}
+.dl-btn{display:inline-flex;align-items:center;gap:11px;text-decoration:none;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#1A1406;
+  font-family:var(--font-display,Sora,sans-serif);font-weight:800;font-size:15.5px;
+  padding:16px 26px;border-radius:15px;transition:transform .14s var(--ease),box-shadow .2s;
+  box-shadow:0 12px 34px -10px rgba(201,169,110,.6)}
+.dl-btn:hover{transform:translateY(-2px);box-shadow:0 18px 44px -12px rgba(201,169,110,.75)}
+.dl-btn svg{width:19px;height:19px;fill:none;stroke:#1A1406;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.dl-note{font-size:12px;color:rgba(255,255,255,.4)}
+
+/* Secciones */
+section{margin-top:clamp(48px,7vh,80px)}
+.s-eyebrow{font-family:var(--font-mono,monospace);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:10px}
+.s-h2{font-family:var(--f-hero);font-weight:800;text-transform:uppercase;font-size:clamp(26px,4vw,40px);line-height:.95;letter-spacing:-.01em;color:#fff}
+.s-lead{font-size:14px;color:rgba(255,255,255,.5);margin-top:10px;line-height:1.6;max-width:600px}
+
+/* Tabla de columnas */
+.cols{margin-top:24px;border:1px solid var(--rule);border-radius:16px;overflow:hidden}
+.col{display:grid;grid-template-columns:120px 1fr;gap:14px;padding:16px 18px;border-bottom:1px solid var(--rule)}
+.col:last-child{border-bottom:0}
+.col-name{font-family:var(--font-mono,monospace);font-size:14px;color:var(--gold);display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap}
+.req{font-family:var(--font-body,Inter);font-size:8.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:2px 6px;border-radius:99px;align-self:flex-start}
+.req.on{background:rgba(240,203,122,.16);color:var(--gold-light);border:1px solid rgba(240,203,122,.3)}
+.req.off{background:rgba(255,255,255,.06);color:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.12)}
+.col-desc{font-size:13px;line-height:1.55;color:rgba(255,255,255,.62)}
+.col-desc b{color:#fff;font-weight:600}
+@media(max-width:520px){.col{grid-template-columns:1fr;gap:6px}}
+
+/* Categorías */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.chip{font-family:var(--font-mono,monospace);font-size:12.5px;color:rgba(255,255,255,.8);
+  background:rgba(255,255,255,.04);border:1px solid var(--rule);border-radius:99px;padding:8px 14px}
+
+/* Límites */
+.limits{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}
+.lim{border:1px solid var(--rule);border-radius:14px;padding:16px 14px;text-align:center;background:rgba(255,255,255,.02)}
+.lim .p{font-family:var(--font-display,Sora,sans-serif);font-weight:700;font-size:13px;color:#fff}
+.lim .n{font-family:var(--f-hero);font-weight:800;font-size:clamp(22px,4vw,30px);color:var(--gold);margin-top:6px;line-height:1}
+.lim .u{font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;text-transform:uppercase;letter-spacing:.08em}
+@media(max-width:520px){.limits{grid-template-columns:repeat(2,1fr)}}
+
+/* Nota (fotos / pasos) */
+.note{display:flex;gap:13px;align-items:flex-start;margin-top:22px;padding:16px 18px;border-radius:14px;
+  background:rgba(139,112,255,.09);border:1px solid rgba(139,112,255,.22)}
+.note svg{width:20px;height:20px;flex:0 0 20px;margin-top:1px;fill:none;stroke:var(--violet);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.note p{font-size:13px;line-height:1.6;color:rgba(255,255,255,.66)}
+.note b{color:#fff;font-weight:600}
+
+/* Pasos */
+.steps{margin-top:22px;display:grid;gap:12px}
+.step{display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:center}
+.step-n{width:34px;height:34px;border-radius:10px;border:1px solid var(--gold-dim);color:var(--gold);
+  display:flex;align-items:center;justify-content:center;font-family:var(--f-hero);font-weight:800;font-size:16px}
+.step p{font-size:13.5px;line-height:1.5;color:rgba(255,255,255,.72)}
+.step b{color:#fff;font-weight:600}
+
+.foot{margin-top:60px;padding-top:26px;border-top:1px solid var(--rule);text-align:center;font-size:12.5px;color:rgba(255,255,255,.4)}
+.foot a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+
+<nav class="nav">
+  <a class="brand" href="/">
+    <img src="assets/logo-mark-web.png" alt="" class="brand-mark" width="195" height="256">
+    <span class="brand-name">Tiketes</span>
+  </a>
+  <span class="tag">Importar productos</span>
+  <a class="back" href="ayuda.html">← Ayuda</a>
+</nav>
+
+<div class="wrap">
+  <div class="hero">
+    <span class="eyebrow">Carga masiva</span>
+    <h1>Sube cientos de<br><em>productos</em> de una vez</h1>
+    <p>Llena una hoja de Excel y súbela en la app. Tu inventario entra completo, sin escanear producto por producto.</p>
+    <div class="dl">
+      <a class="dl-btn" href="plantilla-productos-tiketes.xlsx" download>
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar plantilla de Excel
+      </a>
+      <span class="dl-note">Archivo .xlsx · abre en Excel, Google Sheets o Numbers · trae 6 ejemplos</span>
+    </div>
+  </div>
+
+  <!-- Columnas -->
+  <section>
+    <span class="s-eyebrow">La estructura</span>
+    <h2 class="s-h2">Cinco columnas. Nada más.</h2>
+    <p class="s-lead">Deja los nombres de las columnas tal cual. La app lee la primera hoja del archivo. Puedes borrar los ejemplos y escribir los tuyos.</p>
+    <div class="cols">
+      <div class="col">
+        <div class="col-name">nombre <span class="req on">Obligatorio</span></div>
+        <div class="col-desc">El nombre del producto. Máximo <b>100 caracteres</b>.</div>
+      </div>
+      <div class="col">
+        <div class="col-name">precio <span class="req on">Obligatorio</span></div>
+        <div class="col-desc">Precio de venta, <b>mayor a 0</b>. Punto o coma: <b>20</b> o <b>20.50</b>.</div>
+      </div>
+      <div class="col">
+        <div class="col-name">stock <span class="req off">Opcional</span></div>
+        <div class="col-desc">Cuántas piezas tienes. Número entero, 0 o más. Vacío = <b>0</b>.</div>
+      </div>
+      <div class="col">
+        <div class="col-name">categoria <span class="req off">Opcional</span></div>
+        <div class="col-desc">Una de la lista de abajo. Si no coincide, entra como <b>otros</b>.</div>
+      </div>
+      <div class="col">
+        <div class="col-name">sku <span class="req off">Opcional</span></div>
+        <div class="col-desc">El <b>código de barras</b>. Déjalo vacío si no lo tienes; podrás escanearlo después en la app.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categorías -->
+  <section>
+    <span class="s-eyebrow">Valores válidos</span>
+    <h2 class="s-h2">Categorías</h2>
+    <p class="s-lead">Escribe exactamente una de estas, en minúsculas. Cualquier otra cosa entra como “otros”.</p>
+    <div class="chips">
+      <span class="chip">abarrotes</span><span class="chip">bebidas</span><span class="chip">lacteos</span>
+      <span class="chip">snacks</span><span class="chip">panaderia</span><span class="chip">dulces</span>
+      <span class="chip">limpieza</span><span class="chip">cuidado</span><span class="chip">mascotas</span>
+      <span class="chip">galletas</span><span class="chip">papas</span><span class="chip">otros</span>
+    </div>
+  </section>
+
+  <!-- Límites -->
+  <section>
+    <span class="s-eyebrow">Cuántos caben</span>
+    <h2 class="s-h2">Según tu plan</h2>
+    <p class="s-lead">Tu plan define cuántos productos puedes tener en total. Si tu Excel trae más, la app importa hasta tu límite y te avisa — no se pierde nada, solo mejoras tu plan para subir el resto.</p>
+    <div class="limits">
+      <div class="lim"><div class="p">Free</div><div class="n">50</div><div class="u">productos</div></div>
+      <div class="lim"><div class="p">Essential</div><div class="n">500</div><div class="u">productos</div></div>
+      <div class="lim"><div class="p">Pro</div><div class="n">2,500</div><div class="u">productos</div></div>
+      <div class="lim"><div class="p">Premium</div><div class="n">25,000</div><div class="u">productos</div></div>
+    </div>
+  </section>
+
+  <!-- Fotos -->
+  <section>
+    <span class="s-eyebrow">La verdad sobre las fotos</span>
+    <h2 class="s-h2">Las fotos van en la app</h2>
+    <div class="note">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <p>Una hoja de Excel no puede cargar las fotos dentro de la app. El camino rápido: <b>sube primero todos tus productos con este archivo</b> (sin escanear uno por uno) y luego, ya en la app, <b>agrégale la foto a los productos que quieras</b>. Los demás muestran la inicial de su nombre, con su color de categoría — se ven bien igual.</p>
+    </div>
+  </section>
+
+  <!-- Cómo importar -->
+  <section>
+    <span class="s-eyebrow">En 3 pasos</span>
+    <h2 class="s-h2">Cómo subirlo</h2>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><p>Descarga la plantilla y llénala en Excel, Google Sheets o Numbers. Guarda como <b>.xlsx</b>.</p></div>
+      <div class="step"><div class="step-n">2</div><p>En la app, entra a <b>Productos → Importar</b>.</p></div>
+      <div class="step"><div class="step-n">3</div><p>Elige tu archivo. La app te muestra una <b>vista previa</b> antes de guardar. Confirma y listo.</p></div>
+    </div>
+  </section>
+
+  <div class="foot">
+    ¿Dudas? Visita el <a href="ayuda.html">Centro de ayuda</a> o vuelve al <a href="/">inicio</a>.
+  </div>
+</div>
+<!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
+</body>
+</html>
