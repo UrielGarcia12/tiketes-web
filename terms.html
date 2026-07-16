@@ -1,288 +1,189 @@
-<!doctype html>
-<html lang="es-MX">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Términos y Condiciones — Tiketes</title>
-  <meta name="theme-color" content="#050617" />
-  <link rel="icon" type="image/png" href="./icon.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@700;800&display=swap" rel="stylesheet" />
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #050617;
-      color: rgba(255,255,255,0.86);
-      font-family: 'Inter', system-ui, sans-serif;
-      line-height: 1.65;
-      padding: 60px 24px;
-    }
-    .wrap { max-width: 760px; margin: 0 auto; }
-    .back {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 13px;
-      color: rgba(168,142,255,0.85);
-      margin-bottom: 32px;
-      text-decoration: none;
-    }
-    .back:hover { color: #fff; }
-    h1 {
-      font-family: 'Sora', sans-serif;
-      font-weight: 800;
-      font-size: 38px;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-      color: #fff;
-    }
-    .updated {
-      font-size: 13px;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 40px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    h2 {
-      font-family: 'Sora', sans-serif;
-      font-weight: 700;
-      font-size: 22px;
-      color: #fff;
-      margin: 36px 0 14px;
-    }
-    h3 {
-      font-family: 'Sora', sans-serif;
-      font-weight: 600;
-      font-size: 17px;
-      color: rgba(255,255,255,0.92);
-      margin: 22px 0 8px;
-    }
-    p { margin-bottom: 14px; font-size: 15px; }
-    ul, ol { margin: 8px 0 14px 22px; }
-    li { margin-bottom: 6px; font-size: 15px; }
-    strong { color: #fff; }
-    a.inline { color: rgba(168,142,255,0.9); text-decoration: underline; }
-    .warn-box {
-      background: rgba(245,158,11,0.10);
-      border-left: 3px solid #F59E0B;
-      padding: 16px 18px;
-      border-radius: 8px;
-      margin: 20px 0;
-      font-size: 14px;
-    }
-    footer {
-      margin-top: 60px;
-      padding-top: 30px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      font-size: 12px;
-      color: rgba(255,255,255,0.45);
-      text-align: center;
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Términos y Condiciones — Tiketes</title>
+<meta name="description" content="Términos y Condiciones de Tiketes. Los mismos que aceptas dentro de la app."/>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:#F7F7FB;color:var(--ink-900,#0A0B1F);
+  font-family:var(--font-body,Inter,system-ui,sans-serif);
+  -webkit-font-smoothing:antialiased;
+}
+.bar{
+  position:sticky;top:0;z-index:10;background:rgba(7,7,15,.92);
+  backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.07);
+  padding:14px clamp(16px,4vw,44px);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{display:inline-flex;align-items:center;gap:9px;text-decoration:none}
+.brand-mark{height:24px;width:auto;display:block}
+.brand-name{font-family:var(--font-display,Sora,sans-serif);font-weight:800;font-size:17px;color:#fff;letter-spacing:-.035em}
+.bar a.back{font-size:13px;font-weight:500;color:rgba(255,255,255,.5);text-decoration:none}
+.bar a.back:hover{color:#fff}
+
+.wrap{max-width:760px;margin:0 auto;padding:clamp(28px,5vw,56px) clamp(16px,4vw,28px) 90px}
+
+.head{text-align:center;margin-bottom:clamp(26px,4vh,40px)}
+h1{font-family:var(--font-display,Sora,sans-serif);font-weight:800;font-size:clamp(28px,5vw,40px);letter-spacing:-.03em}
+.sub{font-family:var(--font-mono,monospace);font-size:10.5px;color:var(--fg-muted,#6B7280);letter-spacing:.6px;margin-top:6px}
+.chip{
+  display:inline-block;margin-top:14px;background:#fff;border:1px solid var(--ink-100,#EEEEF5);
+  border-radius:99px;padding:5px 11px;
+  font-family:var(--font-mono,monospace);font-size:9.5px;color:var(--fg-muted,#6B7280);letter-spacing:1.2px;
+}
+
+/* Mismo patrón que LegalScreen: número en badge + tarjeta */
+.sec{margin-bottom:14px}
+.sec-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.sec-n{
+  width:26px;height:26px;flex:0 0 26px;border-radius:8px;
+  background:var(--violet-50,#F2EEFF);color:var(--violet-700,#4524D6);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display,Sora,sans-serif);font-weight:700;font-size:12px;
+}
+.sec-t{font-family:var(--font-display,Sora,sans-serif);font-weight:700;font-size:14px;letter-spacing:-.2px}
+.sec-body{
+  background:#fff;border:1px solid var(--ink-100,#EEEEF5);
+  border-radius:14px;padding:14px;
+}
+.sec-body p{font-size:12.5px;line-height:1.62;color:var(--ink-800,#1F2937)}
+.sec-body p+p{margin-top:8px}
+
+/* Secciones marcadas como importantes en la app */
+.sec.hl .sec-n{background:#EF4444;color:#fff}
+.sec.hl .sec-t{color:#7F1D1D}
+.sec.hl .sec-body{background:#FEF2F2;border-color:rgba(239,68,68,.32)}
+
+.foot{
+  margin-top:22px;border-radius:16px;padding:18px;text-align:center;
+  background:linear-gradient(135deg,#F2EEFF,#FAFAFE);
+}
+.foot h2{font-family:var(--font-display,Sora,sans-serif);font-weight:700;font-size:13.5px;color:var(--violet-700,#4524D6)}
+.foot p{font-size:12px;line-height:1.55;color:var(--ink-700,#374151);margin-top:6px}
+.foot a{font-weight:700;color:var(--violet-700,#4524D6);text-decoration:none}
+.foot a:hover{text-decoration:underline}
+.legal-links{text-align:center;margin-top:26px;font-size:12.5px}
+.legal-links a{color:var(--violet-700,#4524D6);text-decoration:none}
+.legal-links a:hover{text-decoration:underline}
+.legal-links span{color:var(--ink-300,#DCDCE8);margin:0 8px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <a class="back" href="./index.html">← Volver al inicio</a>
 
+<div class="bar">
+  <a class="brand" href="/">
+    <img src="assets/logo-mark-web.png" alt="" class="brand-mark" width="195" height="256">
+    <span class="brand-name">Tiketes</span>
+  </a>
+  <a class="back" href="/">← Volver al inicio</a>
+</div>
+
+<main class="wrap">
+  <div class="head">
     <h1>Términos y Condiciones</h1>
-    <p class="updated">Última actualización: 7 de junio de 2026</p>
-
-    <p>
-      Bienvenido a <strong>Tiketes</strong>. Al usar nuestra app, aceptas
-      estos términos. Por favor léelos cuidadosamente.
-    </p>
-
-    <h2>1. Quiénes somos</h2>
-    <p>
-      Tiketes es operado por <strong>Oscar Uriel García Vera</strong>
-      (en adelante, "Tiketes", "nosotros"), con domicilio en México.
-      Contacto: <a class="inline" href="mailto:legal@tiketes.app">legal@tiketes.app</a>
-    </p>
-
-    <h2>2. Servicio</h2>
-    <p>
-      Tiketes es un <strong>sistema de inventario, tickets, comandas y
-      reportes</strong> para pequeñas y medianas empresas. Es una herramienta
-      operativa — <strong>NO procesamos cobros con tarjeta</strong>.
-    </p>
-
-    <div class="warn-box">
-      <strong>Importante:</strong> Tiketes <strong>NO ES un Punto de Venta
-      (POS) de tarjetas</strong>. Cuando tus clientes te pagan con tarjeta,
-      tú usas tu propia terminal externa (Clip, Mercado Pago, BBVA, etc.).
-      Tiketes solo registra que la venta sucedió. Nosotros nunca tocamos
-      el dinero de tus ventas.
-    </div>
-
-    <h2>3. Cuenta de usuario</h2>
-    <p>
-      Para usar Tiketes necesitas crear una cuenta. Te comprometes a:
-    </p>
-    <ul>
-      <li>Proporcionar información veraz y actual</li>
-      <li>Mantener tu contraseña segura y no compartirla</li>
-      <li>Notificarnos inmediatamente si sospechas acceso no autorizado</li>
-      <li>Ser mayor de 18 años o representante legal de un negocio</li>
-    </ul>
-    <p>
-      Eres responsable de toda actividad que ocurra en tu cuenta.
-    </p>
-
-    <h2>4. Planes y pagos</h2>
-
-    <h3>4.1 Plan Free</h3>
-    <p>
-      El plan Free es gratis para siempre, con las limitaciones descritas
-      en nuestra <a class="inline" href="./index.html#precios">página de precios</a>.
-    </p>
-
-    <h3>4.2 Planes pagados (Essential, Pro, Premium)</h3>
-    <ul>
-      <li>El pago se procesa a través de <strong>Polar Software, Inc.</strong></li>
-      <li>Los precios están en pesos mexicanos (MXN) con IVA incluido</li>
-      <li>Cobramos por adelantado mensual o anual</li>
-      <li>La renovación es automática hasta que canceles</li>
-      <li>NO cobramos comisión por cada venta que hagas — solo la suscripción fija</li>
-    </ul>
-
-    <h3>4.3 Cancelación y reembolsos</h3>
-    <p>
-      Puedes cancelar tu suscripción en cualquier momento desde la
-      configuración de tu cuenta o desde el portal de Polar. Cuando cancelas:
-    </p>
-    <ul>
-      <li>Tu plan sigue activo hasta el final del periodo pagado</li>
-      <li>Después de esa fecha pasas automáticamente al plan Free</li>
-      <li><strong>NO se hacen reembolsos del periodo en curso</strong></li>
-      <li>Tus datos NO se borran — solo regresas a los límites del plan Free</li>
-    </ul>
-    <p>
-      Excepciones: si el servicio presenta una falla grave atribuible a
-      Tiketes y no se resuelve en 5 días, te reembolsamos pro-rata.
-    </p>
-
-    <h2>5. Uso aceptable</h2>
-    <p>Al usar Tiketes te comprometes a NO:</p>
-    <ul>
-      <li>Usar el servicio para actividades ilegales</li>
-      <li>Intentar hackear, copiar o aplicar ingeniería inversa a la app</li>
-      <li>Sobrecargar nuestros servidores intencionalmente</li>
-      <li>Revender el acceso a Tiketes a terceros</li>
-      <li>Suplantar la identidad de otros usuarios o de Tiketes</li>
-      <li>Almacenar datos sensibles de terceros sin su consentimiento</li>
-    </ul>
-    <p>
-      Si violas estas reglas, podemos suspender o terminar tu cuenta
-      <strong>sin reembolso</strong>.
-    </p>
-
-    <h2>6. Tu contenido y tus datos</h2>
-    <p>
-      Eres <strong>dueño absoluto</strong> de los datos que ingresas a Tiketes:
-      tu catálogo de productos, ventas, clientes, etc. Tiketes solo los
-      almacena para que la app funcione.
-    </p>
-    <p>
-      Puedes exportar tus datos en cualquier momento desde la app.
-      Te garantizamos el derecho a la <strong>portabilidad de datos</strong>.
-    </p>
-
-    <h2>7. Propiedad intelectual de Tiketes</h2>
-    <p>
-      El nombre "Tiketes", el logo, el código fuente de la app y todo el
-      diseño visual son propiedad exclusiva de Tiketes. NO puedes:
-    </p>
-    <ul>
-      <li>Usar nuestra marca sin permiso escrito</li>
-      <li>Copiar el código o el diseño para crear un producto competidor</li>
-      <li>Aplicar ingeniería inversa a la app</li>
-    </ul>
-
-    <h2>8. Disponibilidad del servicio</h2>
-    <p>
-      Hacemos todo lo posible para mantener Tiketes funcionando 24/7,
-      pero NO garantizamos disponibilidad ininterrumpida. Pueden haber
-      mantenimientos programados (te avisamos con anticipación) o caídas
-      inesperadas.
-    </p>
-    <p>
-      En caso de caída, tus datos están a salvo — Tiketes funciona offline
-      y sincroniza al reconectarse.
-    </p>
-
-    <h2>9. Limitación de responsabilidad</h2>
-    <p>
-      Tiketes se proporciona <strong>"tal cual"</strong>, sin garantías
-      expresas o implícitas más allá de lo establecido por ley mexicana.
-    </p>
-    <p>
-      En ningún caso Tiketes será responsable por:
-    </p>
-    <ul>
-      <li>Pérdida de ingresos derivada de caídas del servicio</li>
-      <li>Errores humanos al ingresar datos (precios incorrectos, etc.)</li>
-      <li>Daños indirectos, incidentales o consecuenciales</li>
-      <li>Fallas de terceros (Stripe, Polar, Supabase, Google, etc.)</li>
-    </ul>
-    <p>
-      Nuestra responsabilidad máxima nunca excederá el monto que hayas
-      pagado en los últimos 12 meses de suscripción.
-    </p>
-
-    <h2>10. Servicios de terceros</h2>
-    <p>
-      Tiketes se integra con servicios externos:
-    </p>
-    <ul>
-      <li><strong>Polar / Stripe</strong>: procesamiento de pagos de suscripción</li>
-      <li><strong>Google</strong>: Sign-In opcional</li>
-      <li><strong>Uber Eats, Rappi, DiDi Food</strong>: recepción de pedidos delivery (Premium)</li>
-    </ul>
-    <p>
-      Cada uno tiene sus propios términos. Al usar esas integraciones,
-      aceptas también sus condiciones.
-    </p>
-
-    <h2>11. Cumplimiento fiscal</h2>
-    <p>
-      Tiketes es una herramienta operativa. <strong>NO somos sustituto del
-      contador ni del SAT</strong>. Las ventas que registres en Tiketes
-      tienes que reportarlas tú al SAT por tu cuenta (o con tu contador).
-    </p>
-    <p>
-      <strong>Tiketes NO genera facturas CFDI 4.0.</strong> Si necesitas
-      facturas fiscales, usa un servicio de facturación externo (ej. Facturama).
-    </p>
-
-    <h2>12. Modificaciones a estos términos</h2>
-    <p>
-      Si cambiamos estos términos de forma material, te lo notificaremos
-      por correo o dentro de la app con al menos 15 días de anticipación.
-      Si no estás de acuerdo, puedes cancelar tu cuenta antes de que entren
-      en vigor.
-    </p>
-
-    <h2>13. Jurisdicción</h2>
-    <p>
-      Estos términos se rigen por las leyes de los Estados Unidos Mexicanos.
-      Cualquier controversia será resuelta ante los tribunales competentes
-      de la Ciudad de México, renunciando a cualquier otro fuero.
-    </p>
-
-    <h2>14. Contacto</h2>
-    <p>
-      Para preguntas legales o de términos:
-    </p>
-    <ul>
-      <li><strong>Correo legal:</strong> <a class="inline" href="mailto:legal@tiketes.app">legal@tiketes.app</a></li>
-      <li><strong>Soporte:</strong> <a class="inline" href="mailto:soporte@tiketes.app">soporte@tiketes.app</a></li>
-    </ul>
-
-    <footer>
-      Términos y Condiciones — Tiketes v1.0 · 7 de junio de 2026<br/>
-      © 2026 Tiketes — Hecho en México
-    </footer>
+    <div class="sub">Tiketes · México</div>
+    <div class="chip">ÚLTIMA ACTUALIZACIÓN · 10 DE JULIO DE 2026</div>
   </div>
+
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">1</span><h2 class="sec-t">Aceptación y aplicación</h2></div>
+      <div class="sec-body">
+        <p>Al crear una cuenta o utilizar Tiketes (&quot;la App&quot;), aceptas estos Términos y Condiciones en su totalidad. Si no estás de acuerdo, debes abstenerte de usar la App.</p>
+        <p>Tiketes es un software de gestión de inventario, registro de ventas y emisión de tickets de cortesía dirigido a tiendas, misceláneas, farmacias y comercios pequeños que venden productos con código de barras. La App NO es un sistema de pagos, NO procesa cobros a tus clientes, NO es un emisor de comprobantes fiscales (CFDI) y NO sustituye los servicios de contabilidad fiscal.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">2</span><h2 class="sec-t">Definiciones</h2></div>
+      <div class="sec-body">
+        <p>&quot;Usuario&quot; es la persona física o moral que crea una cuenta y utiliza la App.</p>
+        <p>&quot;Contenido del Usuario&quot; es toda información que captures: productos, precios, registros de ventas, gastos, datos de empleados, clientes, etc.</p>
+        <p>&quot;Tickets&quot; son los comprobantes de cortesía generados por la App con fines exclusivamente informativos para tus clientes.</p>
+      </div>
+    </section>
+    <section class="sec hl">
+      <div class="sec-head"><span class="sec-n">3</span><h2 class="sec-t">Naturaleza del servicio (importante)</h2></div>
+      <div class="sec-body">
+        <p>Tiketes es ÚNICAMENTE una herramienta para que tú lleves el control de tu inventario, registres tus ventas y emitas tickets informativos. La App no procesa pagos de tus clientes, no transfiere dinero entre usuarios y no actúa como intermediario financiero. Tú cobras con tu propia terminal, efectivo o app de tu banco; Tiketes solo registra la operación.</p>
+        <p>Los tickets emitidos NO tienen validez fiscal. Si necesitas facturar (CFDI) debes contratar a un Proveedor Autorizado de Certificación (PAC) o emitir tus comprobantes a través del portal del SAT.</p>
+        <p>El Usuario es el ÚNICO responsable de la veracidad, exactitud y legalidad del Contenido capturado en la App.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">4</span><h2 class="sec-t">Cuentas, edad y registro</h2></div>
+      <div class="sec-body">
+        <p>Para usar la App debes registrarte con un correo electrónico válido y una contraseña. Eres responsable de mantener la confidencialidad de tu contraseña y de toda actividad realizada desde tu cuenta.</p>
+        <p>Tiketes es un servicio dirigido EXCLUSIVAMENTE a personas mayores de edad (18 años o más). Al registrarte confirmas que eres mayor de edad. Si detectamos una cuenta creada por un menor, será cancelada.</p>
+        <p>Puedes invitar empleados a tu cuenta mediante un código QR. Como titular, eres responsable del uso que tu equipo haga de la App y de los permisos que les otorgues.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">5</span><h2 class="sec-t">Planes, pagos y renovaciones</h2></div>
+      <div class="sec-body">
+        <p>Tiketes ofrece cuatro planes: Free, Essential, Pro y Premium. Cada plan tiene límites distintos de productos, sucursales, usuarios, reportes y funcionalidades, indicados en la pantalla de Planes dentro de la App. También puedes contratar espacio de productos adicional como complemento.</p>
+        <p>Los pagos de los planes pagados y sus complementos se procesan de forma segura a través de Polar (Polar Software, Inc.) como representante comercial (merchant of record). Tiketes no almacena los datos completos de tu tarjeta.</p>
+        <p>Los planes pagados se renuevan automáticamente al final de cada ciclo (mensual o anual), salvo que canceles antes. La cancelación entra en vigor al final del ciclo en curso; no hay devoluciones por períodos parciales. Puedes cambiar o cancelar tu plan desde el portal de Polar o escribiéndonos.</p>
+        <p>Si tu plan pagado termina o bajas al plan Free, conservas tus productos existentes, pero no podrás registrar nuevos por encima del límite del plan Free hasta que vuelvas a subir de plan o elimines productos. Ninguna información se borra por un cambio de plan.</p>
+      </div>
+    </section>
+    <section class="sec hl">
+      <div class="sec-head"><span class="sec-n">6</span><h2 class="sec-t">Uso permitido</h2></div>
+      <div class="sec-body">
+        <p>Te comprometes a usar Tiketes exclusivamente para fines lícitos relacionados con la operación de tu comercio legítimo.</p>
+        <p>Queda PROHIBIDO usar la App para: registrar operaciones ficticias o inexistentes; emitir tickets con información falsa; ocultar, justificar o disimular el origen de recursos; cualquier conducta tipificada como delito en la legislación mexicana, incluyendo la Ley Federal para la Prevención e Identificación de Operaciones con Recursos de Procedencia Ilícita (LFPIORPI).</p>
+        <p>Tiketes se reserva el derecho de suspender o cancelar cuentas que muestren patrones de uso anómalos o sospechosos sin previo aviso.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">7</span><h2 class="sec-t">Respaldos y exportación de tus datos</h2></div>
+      <div class="sec-body">
+        <p>La App genera respaldos de tu información en la nube. Según tu plan, también puedes realizar respaldos manuales y respaldos automáticos, y exportar tu información (productos, ventas y reportes) para conservar tu propia copia.</p>
+        <p>Aunque procuramos mantener tus datos disponibles y respaldados, te recomendamos exportar tu información periódicamente. Tiketes no será responsable por la pérdida de datos derivada de fuerza mayor, fallas de terceros proveedores o del mal uso de tu cuenta.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">8</span><h2 class="sec-t">Propiedad intelectual</h2></div>
+      <div class="sec-body">
+        <p>El código fuente, diseño, marca, logotipos y materiales de Tiketes son propiedad de sus titulares y están protegidos por las leyes de derechos de autor y propiedad industrial aplicables.</p>
+        <p>Conservas todos los derechos sobre el Contenido del Usuario que captures. Nos otorgas una licencia limitada y no exclusiva para almacenar, procesar y mostrarte ese contenido únicamente dentro de la App.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">9</span><h2 class="sec-t">Limitación de responsabilidad</h2></div>
+      <div class="sec-body">
+        <p>La App se ofrece &quot;tal como está&quot;. No garantizamos disponibilidad ininterrumpida, ausencia de errores ni que cubrirá necesidades específicas fuera de las descritas.</p>
+        <p>En ningún caso Tiketes será responsable por pérdidas indirectas, lucro cesante, daños fiscales derivados del uso indebido de la App, ni por la conducta de terceros (clientes, empleados, proveedores o plataformas de terceros como Polar, Supabase o Google).</p>
+        <p>Nuestra responsabilidad máxima agregada por cualquier reclamación está limitada al monto pagado por el Usuario en los 12 meses previos al evento que la origine.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">10</span><h2 class="sec-t">Modificaciones</h2></div>
+      <div class="sec-body">
+        <p>Podemos modificar estos Términos en cualquier momento. Las modificaciones materiales te serán notificadas dentro de la App al menos 15 días antes de su entrada en vigor. El uso continuado de la App tras la entrada en vigor constituye aceptación.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">11</span><h2 class="sec-t">Jurisdicción</h2></div>
+      <div class="sec-body">
+        <p>Estos Términos se rigen por las leyes de los Estados Unidos Mexicanos. Cualquier controversia será resuelta ante los tribunales competentes de la Ciudad de México, renunciando las partes a cualquier otro fuero que les pudiera corresponder.</p>
+      </div>
+    </section>
+
+  <div class="foot">
+    <h2>¿Tienes dudas?</h2>
+    <p>Escríbenos a <a href="mailto:tiketes.soporteapp@gmail.com">tiketes.soporteapp@gmail.com</a>
+    y te responderemos en menos de 48 horas hábiles.</p>
+  </div>
+
+  <div class="legal-links">
+    <a href="privacy.html">Aviso de Privacidad</a><span>·</span><a href="/">Inicio</a>
+  </div>
+</main>
+
 </body>
 </html>

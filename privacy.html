@@ -1,260 +1,180 @@
-<!doctype html>
-<html lang="es-MX">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Aviso de Privacidad — Tiketes</title>
-  <meta name="theme-color" content="#050617" />
-  <link rel="icon" type="image/png" href="./icon.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@700;800&display=swap" rel="stylesheet" />
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #050617;
-      color: rgba(255,255,255,0.86);
-      font-family: 'Inter', system-ui, sans-serif;
-      line-height: 1.65;
-      padding: 60px 24px;
-    }
-    .wrap { max-width: 760px; margin: 0 auto; }
-    .back {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 13px;
-      color: rgba(168,142,255,0.85);
-      margin-bottom: 32px;
-      text-decoration: none;
-    }
-    .back:hover { color: #fff; }
-    h1 {
-      font-family: 'Sora', sans-serif;
-      font-weight: 800;
-      font-size: 38px;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-      color: #fff;
-    }
-    .updated {
-      font-size: 13px;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 40px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    h2 {
-      font-family: 'Sora', sans-serif;
-      font-weight: 700;
-      font-size: 22px;
-      color: #fff;
-      margin: 36px 0 14px;
-    }
-    h3 {
-      font-family: 'Sora', sans-serif;
-      font-weight: 600;
-      font-size: 17px;
-      color: rgba(255,255,255,0.92);
-      margin: 22px 0 8px;
-    }
-    p { margin-bottom: 14px; font-size: 15px; }
-    ul, ol { margin: 8px 0 14px 22px; }
-    li { margin-bottom: 6px; font-size: 15px; }
-    strong { color: #fff; }
-    a.inline { color: rgba(168,142,255,0.9); text-decoration: underline; }
-    .info-box {
-      background: rgba(168,142,255,0.08);
-      border-left: 3px solid #A88EFF;
-      padding: 16px 18px;
-      border-radius: 8px;
-      margin: 20px 0;
-      font-size: 14px;
-    }
-    footer {
-      margin-top: 60px;
-      padding-top: 30px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      font-size: 12px;
-      color: rgba(255,255,255,0.45);
-      text-align: center;
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Aviso de Privacidad — Tiketes</title>
+<meta name="description" content="Aviso de Privacidad de Tiketes conforme a la LFPDPPP. El mismo que aparece dentro de la app."/>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:#F7F7FB;color:var(--ink-900,#0A0B1F);
+  font-family:var(--font-body,Inter,system-ui,sans-serif);
+  -webkit-font-smoothing:antialiased;
+}
+.bar{
+  position:sticky;top:0;z-index:10;background:rgba(7,7,15,.92);
+  backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.07);
+  padding:14px clamp(16px,4vw,44px);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{display:inline-flex;align-items:center;gap:9px;text-decoration:none}
+.brand-mark{height:24px;width:auto;display:block}
+.brand-name{font-family:var(--font-display,Sora,sans-serif);font-weight:800;font-size:17px;color:#fff;letter-spacing:-.035em}
+.bar a.back{font-size:13px;font-weight:500;color:rgba(255,255,255,.5);text-decoration:none}
+.bar a.back:hover{color:#fff}
+
+.wrap{max-width:760px;margin:0 auto;padding:clamp(28px,5vw,56px) clamp(16px,4vw,28px) 90px}
+
+.head{text-align:center;margin-bottom:clamp(26px,4vh,40px)}
+h1{font-family:var(--font-display,Sora,sans-serif);font-weight:800;font-size:clamp(28px,5vw,40px);letter-spacing:-.03em}
+.sub{font-family:var(--font-mono,monospace);font-size:10.5px;color:var(--fg-muted,#6B7280);letter-spacing:.6px;margin-top:6px}
+.chip{
+  display:inline-block;margin-top:14px;background:#fff;border:1px solid var(--ink-100,#EEEEF5);
+  border-radius:99px;padding:5px 11px;
+  font-family:var(--font-mono,monospace);font-size:9.5px;color:var(--fg-muted,#6B7280);letter-spacing:1.2px;
+}
+
+/* Mismo patrón que LegalScreen: número en badge + tarjeta */
+.sec{margin-bottom:14px}
+.sec-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.sec-n{
+  width:26px;height:26px;flex:0 0 26px;border-radius:8px;
+  background:var(--violet-50,#F2EEFF);color:var(--violet-700,#4524D6);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display,Sora,sans-serif);font-weight:700;font-size:12px;
+}
+.sec-t{font-family:var(--font-display,Sora,sans-serif);font-weight:700;font-size:14px;letter-spacing:-.2px}
+.sec-body{
+  background:#fff;border:1px solid var(--ink-100,#EEEEF5);
+  border-radius:14px;padding:14px;
+}
+.sec-body p{font-size:12.5px;line-height:1.62;color:var(--ink-800,#1F2937)}
+.sec-body p+p{margin-top:8px}
+
+/* Secciones marcadas como importantes en la app */
+.sec.hl .sec-n{background:#EF4444;color:#fff}
+.sec.hl .sec-t{color:#7F1D1D}
+.sec.hl .sec-body{background:#FEF2F2;border-color:rgba(239,68,68,.32)}
+
+.foot{
+  margin-top:22px;border-radius:16px;padding:18px;text-align:center;
+  background:linear-gradient(135deg,#F2EEFF,#FAFAFE);
+}
+.foot h2{font-family:var(--font-display,Sora,sans-serif);font-weight:700;font-size:13.5px;color:var(--violet-700,#4524D6)}
+.foot p{font-size:12px;line-height:1.55;color:var(--ink-700,#374151);margin-top:6px}
+.foot a{font-weight:700;color:var(--violet-700,#4524D6);text-decoration:none}
+.foot a:hover{text-decoration:underline}
+.legal-links{text-align:center;margin-top:26px;font-size:12.5px}
+.legal-links a{color:var(--violet-700,#4524D6);text-decoration:none}
+.legal-links a:hover{text-decoration:underline}
+.legal-links span{color:var(--ink-300,#DCDCE8);margin:0 8px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <a class="back" href="./index.html">← Volver al inicio</a>
 
+<div class="bar">
+  <a class="brand" href="/">
+    <img src="assets/logo-mark-web.png" alt="" class="brand-mark" width="195" height="256">
+    <span class="brand-name">Tiketes</span>
+  </a>
+  <a class="back" href="/">← Volver al inicio</a>
+</div>
+
+<main class="wrap">
+  <div class="head">
     <h1>Aviso de Privacidad</h1>
-    <p class="updated">Última actualización: 7 de junio de 2026</p>
-
-    <div class="info-box">
-      <strong>Tiketes</strong> respeta tu privacidad. Este documento explica
-      qué datos recolectamos, cómo los usamos y cómo los protegemos, en
-      cumplimiento con la <strong>Ley Federal de Protección de Datos Personales
-      en Posesión de los Particulares (LFPDPPP)</strong> de México y el
-      <strong>Reglamento General de Protección de Datos (RGPD)</strong> de la
-      Unión Europea cuando aplica.
-    </div>
-
-    <h2>1. Responsable del tratamiento</h2>
-    <p>
-      <strong>Oscar Uriel García Vera</strong> (en adelante, "Tiketes"), con
-      domicilio en México, es el responsable del tratamiento de tus datos
-      personales obtenidos a través de nuestra aplicación móvil y página web.
-    </p>
-    <p>
-      Para cualquier asunto relacionado con tus datos personales, contáctanos
-      en: <a class="inline" href="mailto:legal@tiketes.app">legal@tiketes.app</a>
-    </p>
-
-    <h2>2. Datos personales que recolectamos</h2>
-
-    <h3>2.1 Datos de la cuenta</h3>
-    <ul>
-      <li>Nombre completo y correo electrónico</li>
-      <li>Contraseña (almacenada cifrada — nunca podemos leerla)</li>
-      <li>Teléfono móvil (opcional, para soporte)</li>
-      <li>Foto de perfil (opcional, subida por ti)</li>
-    </ul>
-
-    <h3>2.2 Datos del negocio</h3>
-    <ul>
-      <li>Nombre del negocio y dirección</li>
-      <li>Tipo de giro (restaurante, tienda, etc.)</li>
-      <li>Catálogo de productos y precios</li>
-      <li>Ventas, tickets, clientes y proveedores que registras en la app</li>
-    </ul>
-
-    <h3>2.3 Datos técnicos automáticos</h3>
-    <ul>
-      <li>Modelo de dispositivo y sistema operativo</li>
-      <li>Dirección IP aproximada (para detectar tu país y mostrar lada)</li>
-      <li>Errores de la app (para arreglarlos — vía Sentry)</li>
-      <li>Eventos de uso anónimos (qué pantallas visitas — vía PostHog)</li>
-    </ul>
-
-    <h3>2.4 Datos de pago</h3>
-    <p>
-      Cuando contratas un plan pagado, el procesamiento de tu tarjeta lo
-      realiza <strong>Polar Software, Inc.</strong> (procesador certificado
-      PCI-DSS). <strong>Tiketes nunca ve ni almacena los datos de tu
-      tarjeta.</strong> Solo recibimos confirmación de pago.
-    </p>
-
-    <h2>3. Finalidades del tratamiento</h2>
-
-    <h3>Finalidades primarias (necesarias)</h3>
-    <ul>
-      <li>Crear y mantener tu cuenta</li>
-      <li>Operar las funciones de la app (ventas, inventario, tickets, etc.)</li>
-      <li>Procesar pagos de suscripción vía Polar</li>
-      <li>Enviarte notificaciones esenciales (ventas exitosas, cambios de plan)</li>
-      <li>Brindarte soporte técnico</li>
-      <li>Cumplir obligaciones legales y fiscales</li>
-    </ul>
-
-    <h3>Finalidades secundarias (puedes oponerte)</h3>
-    <ul>
-      <li>Mejorar la app analizando uso agregado y anónimo</li>
-      <li>Enviarte comunicaciones sobre nuevas funciones</li>
-      <li>Encuestas de satisfacción ocasionales</li>
-    </ul>
-    <p>
-      Si no quieres que usemos tus datos para finalidades secundarias,
-      escríbenos a <a class="inline" href="mailto:legal@tiketes.app">legal@tiketes.app</a>.
-    </p>
-
-    <h2>4. Con quién compartimos tus datos</h2>
-    <p>
-      <strong>Nunca vendemos tus datos.</strong> Solo los compartimos con
-      proveedores estrictamente necesarios para operar el servicio:
-    </p>
-    <ul>
-      <li><strong>Supabase</strong> (EE.UU.) — almacenamiento de tu base de datos. Cumple con GDPR y SOC 2.</li>
-      <li><strong>Polar Software, Inc.</strong> (EE.UU.) — procesamiento de pagos de suscripción.</li>
-      <li><strong>Stripe Inc.</strong> (EE.UU.) — vía Polar, procesa tarjetas. PCI-DSS Nivel 1.</li>
-      <li><strong>Google Cloud</strong> — para Google Sign-In (si decides usarlo).</li>
-      <li><strong>Sentry</strong> (EE.UU.) — registros de errores (sin datos sensibles).</li>
-      <li><strong>PostHog</strong> (EE.UU.) — analytics anonimizados.</li>
-      <li><strong>Uber Eats, Rappi, DiDi Food</strong> (México) — si activas integraciones de delivery (Premium).</li>
-    </ul>
-
-    <h2>5. Transferencias internacionales</h2>
-    <p>
-      Algunos de nuestros proveedores están fuera de México. Al usar Tiketes,
-      consientes la transferencia de tus datos a esos países, los cuales
-      cuentan con niveles de protección equivalentes o superiores a México.
-    </p>
-
-    <h2>6. Tiempo que conservamos tus datos</h2>
-    <ul>
-      <li>Datos de cuenta activa: mientras tengas cuenta abierta</li>
-      <li>Datos de ventas: hasta 7 años (cumplimiento fiscal SAT)</li>
-      <li>Datos de pago: según retenciones legales (5 años mínimo)</li>
-      <li>Logs y analytics: máximo 90 días</li>
-    </ul>
-    <p>
-      Si eliminas tu cuenta, borramos tus datos personales en un plazo de
-      <strong>30 días</strong>, excepto lo que la ley nos obligue a conservar.
-    </p>
-
-    <h2>7. Tus derechos ARCO</h2>
-    <p>
-      Tienes derecho a <strong>Acceder, Rectificar, Cancelar y Oponerte</strong>
-      al tratamiento de tus datos. También puedes revocar tu consentimiento
-      en cualquier momento.
-    </p>
-    <p>
-      Para ejercer estos derechos, envíanos un correo a
-      <a class="inline" href="mailto:legal@tiketes.app">legal@tiketes.app</a>
-      con:
-    </p>
-    <ul>
-      <li>Tu nombre completo y correo de la cuenta</li>
-      <li>Identificación oficial (copia)</li>
-      <li>Descripción clara del derecho que quieres ejercer</li>
-    </ul>
-    <p>Responderemos en máximo 20 días hábiles.</p>
-
-    <h2>8. Seguridad</h2>
-    <p>
-      Implementamos medidas técnicas de seguridad estándar de la industria:
-    </p>
-    <ul>
-      <li>Cifrado en tránsito (TLS 1.3) y en reposo (AES-256)</li>
-      <li>Row-Level Security en base de datos (cada usuario solo ve lo suyo)</li>
-      <li>Rate limiting en endpoints sensibles</li>
-      <li>Validación HMAC-SHA256 en webhooks de pago</li>
-      <li>Hosting en infraestructura certificada SOC 2</li>
-    </ul>
-
-    <h2>9. Menores de edad</h2>
-    <p>
-      Tiketes no está dirigido a menores de 18 años. Si descubres que un
-      menor ha creado cuenta, escríbenos para eliminarla.
-    </p>
-
-    <h2>10. Cambios al aviso</h2>
-    <p>
-      Si modificamos este Aviso de Privacidad de forma material, te lo
-      notificaremos por correo o dentro de la app con al menos 15 días de
-      anticipación.
-    </p>
-
-    <h2>11. Contacto</h2>
-    <p>
-      Para cualquier duda sobre privacidad o tus datos personales:
-    </p>
-    <ul>
-      <li><strong>Correo:</strong> <a class="inline" href="mailto:legal@tiketes.app">legal@tiketes.app</a></li>
-      <li><strong>Soporte general:</strong> <a class="inline" href="mailto:soporte@tiketes.app">soporte@tiketes.app</a></li>
-    </ul>
-
-    <footer>
-      Aviso de Privacidad — Tiketes v1.0 · 7 de junio de 2026<br/>
-      © 2026 Tiketes — Hecho en México
-    </footer>
+    <div class="sub">Tiketes · México</div>
+    <div class="chip">ÚLTIMA ACTUALIZACIÓN · 10 DE JULIO DE 2026</div>
   </div>
+
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">1</span><h2 class="sec-t">Quiénes somos</h2></div>
+      <div class="sec-body">
+        <p>Esta Política de Privacidad describe cómo Tiketes (en adelante &quot;nosotros&quot;) recaba, usa y protege tus datos personales conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) y su Reglamento.</p>
+        <p>Responsable del tratamiento: Tiketes · tiketes.soporteapp@gmail.com · México.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">2</span><h2 class="sec-t">Datos que recabamos</h2></div>
+      <div class="sec-body">
+        <p>Datos de identificación: nombre, correo electrónico, teléfono opcional y foto de perfil (si la subes).</p>
+        <p>Datos de tu negocio: nombre de la tienda, dirección, tipo de negocio y, si aplica, datos de tus empleados y clientes que tú captures.</p>
+        <p>Datos fiscales OPCIONALES (RFC y/o CURP): son campos totalmente opcionales, NO se piden al crear tu cuenta y NO son necesarios para usar la App. El RFC solo se guarda si tú decides incluirlo en el diseño de tus propios tickets. El RFC o CURP de un empleado solo se guarda si tú los capturas al darlo de alta, con el único fin de que TÚ identifiques a tu personal en tu control interno. No verificamos estas identificaciones con ninguna autoridad, no las usamos para otro fin ni las compartimos con terceros. Puedes dejarlas en blanco y eliminarlas cuando quieras.</p>
+        <p>Datos operativos: productos, precios, inventario, registros de ventas, gastos, cortes de caja y tickets emitidos.</p>
+        <p>Datos técnicos y de uso: modelo del dispositivo, sistema operativo, identificador anónimo de instalación, eventos de uso dentro de la App y fechas de acceso. Se usan para diagnóstico, mejora del producto y prevención de fraude.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">3</span><h2 class="sec-t">Para qué los usamos</h2></div>
+      <div class="sec-body">
+        <p>Proveer, operar y mejorar las funcionalidades de la App.</p>
+        <p>Procesar los pagos de tus planes y complementos a través de Polar (no almacenamos los datos completos de tu tarjeta).</p>
+        <p>Enviar notificaciones operativas (cambios de plan, alertas de stock, recordatorios) mediante servicios de mensajería push.</p>
+        <p>Generar y mantener respaldos de tu información, y permitirte exportarla.</p>
+        <p>Detectar y prevenir fraude o uso indebido conforme a la cláusula 6 de los Términos.</p>
+        <p>Cumplir requerimientos legales de autoridades competentes mediante orden fundada y motivada.</p>
+      </div>
+    </section>
+    <section class="sec hl">
+      <div class="sec-head"><span class="sec-n">4</span><h2 class="sec-t">Tus derechos ARCO</h2></div>
+      <div class="sec-body">
+        <p>Tienes derecho a Acceder, Rectificar, Cancelar u Oponerte al tratamiento de tus datos personales (derechos ARCO), así como a revocar tu consentimiento o solicitar una copia exportable de tu información.</p>
+        <p>Cómo ejercerlos: escríbenos a tiketes.soporteapp@gmail.com con el asunto &quot;Derechos ARCO&quot; e incluye: (1) tu nombre completo, (2) el correo con el que te registraste, (3) el derecho que deseas ejercer (acceso, rectificación, cancelación u oposición) y (4) una descripción clara de tu solicitud. Para proteger tu cuenta, podríamos pedirte que confirmes tu identidad antes de continuar.</p>
+        <p>Responderemos tu solicitud en un plazo máximo de 20 días hábiles y, de resultar procedente, la haremos efectiva dentro de los 15 días hábiles siguientes, conforme a la LFPDPPP. Este trámite es gratuito. También puedes eliminar tu cuenta y todos tus datos desde la propia App en Ajustes.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">5</span><h2 class="sec-t">Con quién los compartimos</h2></div>
+      <div class="sec-body">
+        <p>No vendemos tus datos. Los compartimos únicamente con los proveedores tecnológicos estrictamente necesarios para operar la App:</p>
+        <p>• Supabase — hospedaje de la base de datos, autenticación y almacenamiento de archivos (fotos). Servidores en Estados Unidos.</p>
+        <p>• Polar (Polar Software, Inc.) — procesamiento de pagos de planes y complementos como representante comercial (merchant of record).</p>
+        <p>• Google — notificaciones push (Firebase Cloud Messaging) y distribución de la App a través de Google Play.</p>
+        <p>• PostHog — analítica de uso (eventos anónimos dentro de la App) para diagnóstico y mejora del producto. Servidores en Estados Unidos.</p>
+        <p>Cada proveedor trata tus datos solo para prestarnos su servicio y bajo estándares de seguridad equivalentes a los exigidos por la LFPDPPP.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">6</span><h2 class="sec-t">Seguridad y respaldos</h2></div>
+      <div class="sec-body">
+        <p>Tus datos se almacenan cifrados en tránsito (TLS) y en reposo. Aplicamos control de acceso por usuario (Row Level Security) para que ningún otro Usuario pueda ver tu información.</p>
+        <p>Realizamos respaldos periódicos de la base de datos. Según tu plan, puedes generar respaldos manuales o automáticos y exportar tu información para conservar tu propia copia.</p>
+        <p>A pesar de aplicar medidas razonables, ningún sistema es 100% seguro. En caso de una vulneración te lo notificaremos dentro de los plazos exigidos por la LFPDPPP.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">7</span><h2 class="sec-t">Conservación</h2></div>
+      <div class="sec-body">
+        <p>Conservamos tu información mientras tu cuenta esté activa y por hasta 24 meses después de su cancelación, salvo que la legislación nos exija conservarla por más tiempo (ej. obligaciones fiscales o requerimientos de autoridad). Puedes solicitar la eliminación anticipada mediante tus derechos ARCO.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">8</span><h2 class="sec-t">Menores de edad</h2></div>
+      <div class="sec-body">
+        <p>Tiketes está dirigido EXCLUSIVAMENTE a personas mayores de edad (18 años o más). Durante el registro te pedimos confirmar que eres mayor de edad. Si detectamos una cuenta abierta por un menor, será cancelada sin previo aviso.</p>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><span class="sec-n">9</span><h2 class="sec-t">Cambios a esta política</h2></div>
+      <div class="sec-body">
+        <p>Podemos actualizar esta Política de Privacidad para reflejar cambios en la App o en la legislación aplicable. Te notificaremos los cambios materiales dentro de la App. La fecha de la última actualización aparece al inicio de esta pantalla.</p>
+      </div>
+    </section>
+
+  <div class="foot">
+    <h2>¿Tienes dudas?</h2>
+    <p>Escríbenos a <a href="mailto:tiketes.soporteapp@gmail.com">tiketes.soporteapp@gmail.com</a>
+    y te responderemos en menos de 48 horas hábiles.</p>
+  </div>
+
+  <div class="legal-links">
+    <a href="terms.html">Términos y Condiciones</a><span>·</span><a href="/">Inicio</a>
+  </div>
+</main>
+
 </body>
 </html>
