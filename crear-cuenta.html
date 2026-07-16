@@ -69,6 +69,15 @@ h1 .ac{color:var(--violet300)}
   letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.66);margin-bottom:7px;
 }
 .lb .opt{color:rgba(255,255,255,.3);font-weight:500;letter-spacing:.3px;text-transform:none}
+.field2{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;margin-bottom:15px}
+.sel{
+  width:100%;appearance:none;-webkit-appearance:none;
+  background:rgba(255,255,255,.05) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A88EFF' stroke-width='2.5'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 14px center;
+  border:1px solid rgba(255,255,255,.10);border-radius:14px;
+  padding:13px 38px 13px 14px;font-family:var(--f-body);font-size:14px;color:#fff;
+}
+.sel:focus{outline:none;border-color:rgba(167,142,255,.72);background-color:rgba(139,112,255,.10)}
+.sel option{color:#111;background:#fff}
 input[type=text],input[type=email],input[type=password],input[type=tel]{
   width:100%;background:rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.10);border-radius:14px;
@@ -347,8 +356,26 @@ input:focus-visible{outline:none}
       </div>
 
       <div class="field">
-        <label class="lb" for="direccion">Dirección <span class="opt">— opcional</span></label>
-        <input id="direccion" type="text" placeholder="Av. Juárez 123, Puebla" maxlength="120" autocomplete="street-address">
+        <label class="lb">Dirección del local <span class="opt">— para tu ticket</span></label>
+        <select id="estado" class="sel"><option value="">Elige tu estado</option><option>Aguascalientes</option><option>Baja California</option><option>Baja California Sur</option><option>Campeche</option><option>Chiapas</option><option>Chihuahua</option><option>Ciudad de México</option><option>Coahuila</option><option>Colima</option><option>Durango</option><option>Estado de México</option><option>Guanajuato</option><option>Guerrero</option><option>Hidalgo</option><option>Jalisco</option><option>Michoacán</option><option>Morelos</option><option>Nayarit</option><option>Nuevo León</option><option>Oaxaca</option><option>Puebla</option><option>Querétaro</option><option>Quintana Roo</option><option>San Luis Potosí</option><option>Sinaloa</option><option>Sonora</option><option>Tabasco</option><option>Tamaulipas</option><option>Tlaxcala</option><option>Veracruz</option><option>Yucatán</option><option>Zacatecas</option></select>
+      </div>
+      <div class="field2">
+        <div>
+          <label class="lb" for="cp">C.P.</label>
+          <input id="cp" type="text" inputmode="numeric" placeholder="72000" maxlength="5">
+        </div>
+        <div>
+          <label class="lb" for="municipio">Municipio</label>
+          <input id="municipio" type="text" placeholder="Puebla" maxlength="60">
+        </div>
+      </div>
+      <div class="field">
+        <label class="lb" for="calle">Calle y número</label>
+        <input id="calle" type="text" placeholder="Av. Juárez 123" maxlength="90" autocomplete="street-address">
+      </div>
+      <div class="field">
+        <label class="lb" for="colonia">Colonia</label>
+        <input id="colonia" type="text" placeholder="Centro" maxlength="70">
       </div>
 
       <div class="field">
@@ -496,6 +523,18 @@ var wantCycle=(q.get('cycle')==='yearly')?'yearly':'monthly';
 if(!CHECKOUT[wantPlan]) wantPlan='';
 
 var $=function(id){return document.getElementById(id)};
+// Junta la dirección en una línea para el ticket, saltando lo vacío.
+function composeAddress(){
+  var calle=$('calle').value.trim(), col=$('colonia').value.trim(),
+      cp=$('cp').value.trim(), mun=$('municipio').value.trim(), edo=$('estado').value;
+  var parts=[];
+  if(calle) parts.push(calle);
+  if(col)   parts.push('Col. '+col);
+  if(mun)   parts.push(mun);
+  if(edo)   parts.push(edo);
+  if(cp)    parts.push('C.P. '+cp);
+  return parts.length?parts.join(', '):null;
+}
 var bizKey='tienda';
 
 (function(){
@@ -640,7 +679,12 @@ $('submit').addEventListener('click',async function(){
   var profileData={
     full_name:$('nombre').value.trim()||null,
     store_name:bizKey==='otro'?(otro||null):null,
-    store_address:$('direccion').value.trim()||null,
+    store_state:$('estado').value||null,
+    store_municipality:$('municipio').value.trim()||null,
+    store_postal_code:$('cp').value.trim()||null,
+    store_street:$('calle').value.trim()||null,
+    store_neighborhood:$('colonia').value.trim()||null,
+    store_address:composeAddress(),
     phone:tel?('+52 '+tel):null,
     biz_type:bizKey==='otro'?(otro||'Otro'):bizKey,
     uses_scanner:true
