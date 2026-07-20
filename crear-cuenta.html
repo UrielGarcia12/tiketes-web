@@ -362,7 +362,18 @@ input:focus-visible{outline:none}
       <div class="field">
         <label class="lb" for="negocio">Nombre de tu negocio</label>
         <input id="negocio" type="text" placeholder="Ej. Abarrotes María" maxlength="60">
-        <div class="tip"><b>Listo:</b> <span>así aparecerá el nombre de tu tienda en el ticket. El tipo de negocio lo eliges en la app.</span></div>
+        <div class="tip"><b>Listo:</b> <span>así aparecerá el nombre de tu tienda en el ticket.</span></div>
+      </div>
+
+      <div class="field">
+        <label class="lb">Tipo de negocio</label>
+        <div class="bizGrid" id="giros" role="group" aria-label="Tipo de negocio"></div>
+        <div class="tip" id="tip"><b>Listo:</b> <span id="tipTx">preparamos tus categorías de tienda automáticamente en la app.</span></div>
+      </div>
+
+      <div class="field hidden" id="otroWrap">
+        <label class="lb" for="otroName">¿Qué vendes?</label>
+        <input id="otroName" type="text" placeholder="Ej. Refaccionaria" maxlength="40">
       </div>
 
       <div class="field">
@@ -494,6 +505,15 @@ var SUPABASE_URL  = 'https://wwukfbadzhowpvruumrp.supabase.co';
 var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3dWtmYmFkemhvd3B2cnV1bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNDk1MjksImV4cCI6MjA5NDcyNTUyOX0.2-cPfqjoEkFkzVcWEvIzQHL4SWbvdJnNlCeUSEyzXk8';
 var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
+// Tipo de negocio → la app arma las categorías predeterminadas (categoryPresets.ts)
+var BIZ = [
+  { key:'tienda',     label:'Tienda',        emoji:'🛒', tip:'preparamos tus categorías de tienda automáticamente en la app.' },
+  { key:'farmacia',   label:'Farmacia',      emoji:'💊', tip:'preparamos categorías de farmacia automáticamente en la app.' },
+  { key:'belleza',    label:'Belleza',       emoji:'💄', tip:'preparamos categorías de belleza automáticamente en la app.' },
+  { key:'ferreteria', label:'Ferretería',    emoji:'🔧', tip:'preparamos categorías de ferretería automáticamente en la app.' },
+  { key:'ropa',       label:'Ropa/Calzado',  emoji:'👕', tip:'preparamos categorías de ropa automáticamente en la app.' },
+  { key:'otro',       label:'Otro',          emoji:'📦', tip:'creas tus propias categorías desde cero.' }
+];
 var CHECKOUT = {
   essential:{ monthly:'https://buy.polar.sh/polar_cl_BoypVJJCYKo0lOpPld3tElviwqGBLKkZvEu5F3rs69f',
               yearly: 'https://buy.polar.sh/polar_cl_JZv29xAvaioiYIrvZELctHwJUqTu7yYmoC2TB1bcWdz' },
@@ -544,6 +564,25 @@ function composeAddress(){
   if(cp)    parts.push('C.P. '+cp);
   return parts.length?parts.join(', '):null;
 }
+
+var bizKey='tienda';
+(function(){
+  var w=$('giros');
+  BIZ.forEach(function(b){
+    var el=document.createElement('button');
+    el.type='button';el.className='bizBtn';
+    el.setAttribute('aria-pressed',String(b.key===bizKey));
+    el.setAttribute('aria-label',b.label);
+    el.innerHTML='<span class="bizIco">'+b.emoji+'</span><span class="bizName">'+b.label+'</span>';
+    el.addEventListener('click',function(){
+      bizKey=b.key;
+      w.querySelectorAll('.bizBtn').forEach(function(x,i){x.setAttribute('aria-pressed',String(BIZ[i].key===bizKey))});
+      $('otroWrap').classList.toggle('hidden',bizKey!=='otro');
+      $('tipTx').textContent=b.tip;
+    });
+    w.appendChild(el);
+  });
+})();
 
 
 // ── Planes ────────────────────────────────────────────────────────────────
@@ -640,6 +679,7 @@ $('next').addEventListener('click',function(){
   clearErr();
   if(!$('nombre').value.trim()){showErr('Escribe tu nombre para continuar.');$('nombre').focus();return}
   if(!$('negocio').value.trim()){showErr('Escribe el nombre de tu negocio.');$('negocio').focus();return}
+  if(bizKey==='otro'&&!$('otroName').value.trim()){showErr('Dinos qué vendes.');$('otroName').focus();return}
   goStep('stepP');
 });
 $('nextP').addEventListener('click',function(){clearErr();goStep('step2')});
@@ -675,6 +715,7 @@ $('submit').addEventListener('click',async function(){
     store_neighborhood:$('colonia').value.trim()||null,
     store_address:composeAddress(),
     phone:tel?('+52 '+tel):null,
+    biz_type:bizKey==='otro'?($('otroName').value.trim()||'Otro'):bizKey,
     uses_scanner:true
   };
   try{
