@@ -3,24 +3,25 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Iniciar sesión — Tiketes</title>
+<title>Inicia sesión — Tiketes</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#07070F">
-<meta name="description" content="Inicia sesión en tu cuenta de Tiketes con tu correo y contraseña."/>
+<meta name="theme-color" content="#050617">
+<meta name="description" content="Inicia sesión en Tiketes con tu correo o con Google."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="colors_and_type.css">
 <style>
 /* ════════════════════════════════════════════════════════════════
-   Mismos tokens que la app (src/constants/colors.ts + Fonts).
-   Fondo #050617, orbes violeta+oro, inputs r14, CTA r18 con glow.
+   Port fiel de la pantalla de login de la app (LoginScreen.tsx):
+   fondo #050617, orbes animados, chispas, wordmark, tarjeta glass,
+   Google + correo. Responsivo para celular, tablet y PC.
    ════════════════════════════════════════════════════════════════ */
 :root{
-  --ink950:#050617; --ink900:#0A0B1F;
-  --violet500:#6B4BFF; --violet700:#4524D6; --violet300:#A88EFF; --violet400:#8B70FF;
+  --ink950:#050617;
+  --violet500:#6B4BFF; --violet400:#8B70FF; --violet300:#A88EFF; --violet700:#4524D6;
   --gold:#F5C518;
   --f-display:'Sora',system-ui,sans-serif;
   --f-body:'Inter',system-ui,sans-serif;
@@ -29,128 +30,205 @@
 html{scroll-behavior:smooth}
 body{
   background:var(--ink950);color:#fff;font-family:var(--f-body);
-  min-height:100dvh;overflow-x:hidden;-webkit-font-smoothing:antialiased;
-  display:flex;flex-direction:column;align-items:center;padding:0 18px 56px;
+  min-height:100dvh;width:100%;max-width:100%;overflow-x:hidden;-webkit-font-smoothing:antialiased;
 }
-/* Orbes de fondo — mismos colores/posiciones que SignupScreen */
-.orb{position:fixed;border-radius:999px;pointer-events:none;z-index:0;filter:blur(38px)}
-.orb-a{top:-90px;left:-70px;width:300px;height:300px;background:rgba(107,75,255,.45)}
-.orb-b{top:260px;right:-90px;width:250px;height:250px;background:rgba(245,197,24,.18)}
-.orb-c{bottom:-120px;left:10%;width:260px;height:260px;background:rgba(107,75,255,.22)}
+a{color:inherit}
+img{max-width:100%;height:auto;display:block}
 
-/* Barra */
-.bar{width:100%;max-width:560px;display:flex;align-items:center;justify-content:space-between;padding:20px 2px 22px;position:relative;z-index:2}
-.bar a{font-family:var(--f-body);font-size:13px;font-weight:500;color:rgba(255,255,255,.5);text-decoration:none;transition:color .16s}
-.bar a:hover{color:#fff}
-.brand{display:inline-flex;align-items:center;gap:8px;text-decoration:none}
-.brand-mark{height:24px;width:auto;display:block}
-.brand-name{font-family:var(--f-display);font-weight:800;font-size:17px;color:#fff;letter-spacing:-.035em}
+/* Orbes animados (mismos colores que la app) */
+.orb{position:fixed;border-radius:999px;pointer-events:none;z-index:0;filter:blur(6px)}
+.orb1{top:-120px;left:-80px;width:340px;height:340px;background:rgba(107,75,255,.62);opacity:.55;animation:o1 8s ease-in-out infinite}
+.orb2{top:220px;right:-110px;width:300px;height:300px;background:rgba(167,142,255,.42);opacity:.45;animation:o2 8s ease-in-out infinite}
+.orb3{bottom:-160px;left:50%;transform:translateX(-50%);width:380px;height:380px;background:rgba(245,197,24,.14);opacity:.6;animation:o3 9s ease-in-out infinite}
+@keyframes o1{0%,100%{transform:translate(-40px,-30px) scale(1)}50%{transform:translate(0,0) scale(1.15)}}
+@keyframes o2{0%,100%{transform:translate(50px,40px) scale(1)}50%{transform:translate(0,0) scale(1.1)}}
+@keyframes o3{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.2)}}
 
-/* Tarjeta */
-.card{width:100%;max-width:560px;position:relative;z-index:2}
+/* Chispas que suben */
+.sparks{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.spark{position:absolute;bottom:30%;width:5px;height:5px;border-radius:3px;opacity:0;animation:spark 3s ease-in-out infinite}
+@keyframes spark{0%{opacity:0;transform:translateY(0) scale(.4)}15%{opacity:1;transform:translateY(0) scale(1)}70%,100%{opacity:0;transform:translateY(-80px) scale(1)}}
+@media (prefers-reduced-motion: reduce){.orb,.spark{animation:none}}
 
-.eyebrow{
-  font-family:var(--f-body);font-size:10.5px;font-weight:600;letter-spacing:1px;
-  text-transform:uppercase;color:var(--violet300);margin-bottom:10px;
+/* Layout: contenedor centrado (margin auto = a prueba de desbordes),
+   centrado vertical por columna. */
+.wrap{
+  position:relative;z-index:2;width:100%;max-width:420px;margin:0 auto;
+  min-height:100dvh;display:flex;flex-direction:column;justify-content:center;
+  padding:56px 20px 34px;
 }
-h1{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,4.6vw,34px);letter-spacing:-.6px;line-height:1.15}
-h1 .ac{color:var(--violet300)}
-.sub{font-family:var(--f-body);font-size:13.5px;color:rgba(255,255,255,.55);margin-top:7px;line-height:1.55}
+.stage{width:100%}
 
-/* Campos — input r14, bg .05, borde .10, Inter 14 (idéntico a la app) */
-.field{margin-bottom:15px}
-.lb{
-  display:block;font-family:var(--f-body);font-size:10.5px;font-weight:600;
-  letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.66);margin-bottom:7px;
+/* Píldora superior */
+.pill{
+  display:inline-flex;align-items:center;gap:5px;margin:0 auto 18px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:999px;
+  padding:7px 14px;font-size:12px;color:#fff;text-decoration:none;
+  transition:opacity .16s;
 }
-input[type=text],input[type=email],input[type=password],input[type=tel]{
-  width:100%;background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.10);border-radius:14px;
-  padding:13px 14px;font-family:var(--f-body);font-size:14px;color:#fff;
+.pill:hover{opacity:.8}
+.pill svg{width:11px;height:11px;stroke:var(--violet300);fill:none;stroke-width:2.5;stroke-linecap:round}
+.pill b{color:var(--violet300);font-weight:600}
+.pill-row{display:flex;justify-content:center}
+
+/* Wordmark */
+.wordmark{margin:0 auto 14px;width:min(240px,62vw);max-width:100%}
+
+/* Encabezado */
+.head{text-align:center;margin-bottom:14px}
+.head h1{font-family:var(--f-display);font-weight:700;font-size:clamp(21px,3vw,26px);letter-spacing:-.3px}
+.head p{font-size:clamp(13px,1.6vw,14px);color:rgba(255,255,255,.55);margin-top:2px}
+
+/* Tarjeta glass */
+.card{
+  background:rgba(20,21,42,.62);border:1px solid rgba(255,255,255,.08);border-radius:22px;
+  padding:clamp(16px,2.4vw,22px);display:flex;flex-direction:column;gap:12px;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+  backdrop-filter:blur(6px);
+}
+
+/* Botón Google (blanco, como la app) */
+.google{
+  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+  background:#fff;border:0;border-radius:13px;padding:13px;cursor:pointer;
+  font-family:var(--f-body);font-weight:600;font-size:14px;color:#1F1F1F;
+  transition:filter .16s,transform .12s;
+}
+.google:hover{filter:brightness(.97)}
+.google:active{transform:scale(.99)}
+.google:disabled{opacity:.7;cursor:default}
+.google svg{width:18px;height:18px}
+
+/* Divisor */
+.divider{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.38);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.10)}
+
+/* Campos */
+.field{display:flex;flex-direction:column;gap:6px}
+.lb{font-family:var(--f-body);font-weight:600;font-size:10px;letter-spacing:1.1px;color:rgba(255,255,255,.42)}
+.inp-wrap{position:relative;display:flex;align-items:center}
+.inp{
+  width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:14px;
+  padding:13px 14px;min-height:48px;font-family:var(--f-body);font-size:14px;color:#fff;
   transition:border-color .18s,background .18s;
 }
-input::placeholder{color:rgba(255,255,255,.28)}
-input:focus{outline:none;border-color:rgba(167,142,255,.72);background:rgba(139,112,255,.10)}
-input:focus-visible{outline:none}
+.inp::placeholder{color:rgba(255,255,255,.32)}
+.inp:focus{outline:none;border-color:rgba(167,142,255,.7);background:rgba(139,112,255,.10)}
+.eye{position:absolute;right:8px;top:0;bottom:0;width:34px;display:flex;align-items:center;justify-content:center;background:none;border:0;cursor:pointer;color:rgba(255,255,255,.55)}
+.eye svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-/* Contraseña con botón de ver. Sin esto el usuario no puede comprobar qué
-   escribió — y si Chrome autocompleta una contraseña generada, se entera
-   hasta que la app lo rechaza. */
-.pwd-wrap{position:relative}
-.pwd-wrap input{padding-right:50px}
-.pwd-eye{
-  position:absolute;right:5px;top:50%;transform:translateY(-50%);
-  background:none;border:0;cursor:pointer;padding:9px 10px;border-radius:10px;
-  color:rgba(255,255,255,.4);display:flex;transition:color .18s,background .18s;
+.forgot{align-self:flex-end;margin-top:-4px;background:none;border:0;cursor:pointer;font-family:var(--f-body);font-weight:600;font-size:12px;color:var(--violet300)}
+
+/* Mensaje de error */
+.msg{display:none}
+.msg.on{display:flex;align-items:center;gap:8px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.32);border-radius:12px;padding:10px 12px;font-family:var(--f-body);font-weight:500;font-size:12px;color:#FCA5A5;line-height:1.35}
+.msg.ok{background:rgba(52,199,89,.12);border-color:rgba(52,199,89,.32);color:#86EFAC}
+
+/* Botón Entrar (gradiente + glow) */
+.enter-wrap{position:relative;margin-top:2px}
+.enter-glow{position:absolute;inset:-4px;border-radius:19px;background:rgba(139,112,255,.35);filter:blur(12px);opacity:.4;animation:glow 2.8s ease-in-out infinite;pointer-events:none}
+@keyframes glow{0%,100%{opacity:.28;transform:scale(.99)}50%{opacity:.6;transform:scale(1.05)}}
+.enter{
+  position:relative;width:100%;border:0;border-radius:15px;min-height:52px;cursor:pointer;
+  background:linear-gradient(90deg,var(--violet400),var(--violet700));
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--f-display);font-weight:700;font-size:16px;color:#fff;letter-spacing:-.2px;
+  box-shadow:0 6px 16px rgba(107,75,255,.42);transition:transform .12s;
 }
-.pwd-eye:hover{color:#fff;background:rgba(255,255,255,.07)}
-.pwd-eye:focus-visible{outline:2px solid var(--violet300);outline-offset:1px}
-.pwd-eye svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.enter:hover{transform:translateY(-1px)}
+.enter:active{transform:scale(.98)}
+.enter:disabled{opacity:.85;cursor:default}
+.enter svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .18s}
+.enter:hover svg{transform:translateX(5px)}
+.dots{display:inline-flex;gap:6px}
+.dots i{width:7px;height:7px;border-radius:4px;background:#fff;animation:dot .9s ease-in-out infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.5);opacity:1}}
 
-/* Botones — CTA r18 con degradado violeta + glow (idéntico a la app) */
-.actions{display:flex;gap:10px;margin-top:20px}
-.btn{
-  border:0;border-radius:18px;padding:15px 18px;cursor:pointer;
-  font-family:var(--f-body);font-weight:700;font-size:14.5px;
-  transition:transform .12s,opacity .16s,background .16s;
-}
-.btn:active{transform:scale(.98)}
-.btn-primary{
-  flex:1;background:linear-gradient(90deg,var(--violet400),var(--violet700));
-  color:#fff;box-shadow:0 12px 20px rgba(107,75,255,.42);
-}
-.btn-primary:hover{opacity:.94}
-.btn-primary:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
-.btn-ghost{background:rgba(255,255,255,.06);color:rgba(255,255,255,.72);flex:0 0 auto}
-.btn-ghost:hover{background:rgba(255,255,255,.1)}
+/* Pie legal */
+.foot{text-align:center;margin-top:16px;font-size:11px;color:rgba(255,255,255,.36);line-height:1.5}
+.foot a{color:rgba(168,142,255,.75);text-decoration:none;font-weight:600}
+.foot a:hover{text-decoration:underline}
 
-.msg{font-family:var(--f-body);font-size:12.5px;line-height:1.5;margin-top:14px;padding:11px 13px;border-radius:12px}
-.msg.err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#FCA5A5}
-.msg.ok{background:rgba(52,199,89,.12);border:1px solid rgba(52,199,89,.3);color:#86EFAC}
+/* Volver */
+.back{position:fixed;top:16px;left:18px;z-index:3;font-size:13px;color:rgba(255,255,255,.5);text-decoration:none}
+.back:hover{color:#fff}
 
-.foot{text-align:center;margin-top:20px;font-family:var(--f-body);font-size:12.5px;color:rgba(255,255,255,.35)}
-.foot a{color:var(--violet300);text-decoration:none}
-
-/* Entrada */
-.rise{opacity:0;transform:translateY(14px);animation:rise .55s cubic-bezier(.16,1,.3,1) forwards}
-@keyframes rise{to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rise{opacity:1;transform:none}}
+/* Tablet/PC: un poco más de aire */
+@media(min-width:900px){ .stage{max-width:420px} .wordmark{width:300px} }
 </style>
 </head>
-<body>
 
-<div class="orb orb-a"></div>
-<div class="orb orb-b"></div>
-<div class="orb orb-c"></div>
-
-<div class="bar">
-  <a href="/">← Volver</a>
-  <span class="brand">
-    <img src="assets/logo-mark-web.png" alt="" class="brand-mark" width="195" height="256">
-    <span class="brand-name">Tiketes</span>
-  </span>
+<a class="back" href="/">← Volver</a>
+<div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+<div class="sparks">
+  <span class="spark" style="left:12%;background:#A88EFF;animation-delay:0s"></span>
+  <span class="spark" style="left:28%;background:#8B70FF;animation-delay:.3s"></span>
+  <span class="spark" style="left:45%;background:#F5C518;animation-delay:.6s"></span>
+  <span class="spark" style="left:60%;background:#A88EFF;animation-delay:.2s"></span>
+  <span class="spark" style="left:75%;background:#8B70FF;animation-delay:.5s"></span>
+  <span class="spark" style="left:88%;background:#F5C518;animation-delay:.1s"></span>
 </div>
 
-<main class="card" style="max-width:420px;margin:0 auto">
-  <div class="eyebrow">Panel</div>
-  <h1>Inicia <span class="ac">sesión</span></h1>
-  <p class="sub">Entra con el mismo correo y contraseña de tu app.</p>
-  <div class="field">
-    <label class="lb" for="email">Correo</label>
-    <input id="email" type="email" autocomplete="email" placeholder="tucorreo@ejemplo.com" maxlength="120">
-  </div>
-  <div class="field">
-    <label class="lb" for="pwd">Contraseña</label>
-    <div class="pwd-wrap">
-      <input id="pwd" type="password" autocomplete="current-password" placeholder="Tu contraseña" maxlength="72">
-      <button type="button" class="pwd-eye" id="eye" aria-label="Ver contraseña"></button>
+<div class="wrap">
+  <div class="stage">
+    <div class="pill-row">
+      <a class="pill" href="crear-cuenta.html">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        ¿Aún no tienes cuenta? <b>Crear cuenta</b>
+      </a>
     </div>
+
+    <img class="wordmark" src="assets/wordmark-light.svg" alt="Tiketes">
+
+    <div class="head">
+      <h1>Inicia sesión</h1>
+      <p>Vuelve a tu mostrador en segundos.</p>
+    </div>
+
+    <div class="card">
+      <button class="google" id="google">
+        <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <span id="gtext">Continuar con Google</span>
+      </button>
+
+      <div class="divider">o con correo</div>
+
+      <div class="field">
+        <label class="lb" for="email">CORREO</label>
+        <div class="inp-wrap">
+          <input class="inp" id="email" type="email" placeholder="tu@correo.com" autocomplete="email" maxlength="254">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lb" for="pwd">CONTRASEÑA</label>
+        <div class="inp-wrap">
+          <input class="inp" id="pwd" type="password" placeholder="••••••••" autocomplete="current-password" maxlength="128" style="padding-right:44px">
+          <button type="button" class="eye" id="eye" aria-label="Ver contraseña">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="forgot" id="forgot">¿Olvidaste tu contraseña?</button>
+
+      <div class="msg" id="msg"></div>
+
+      <div class="enter-wrap">
+        <div class="enter-glow"></div>
+        <button class="enter" id="enter">
+          <span id="enterLabel">Entrar</span>
+          <svg id="enterArrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <p class="foot">
+      Al continuar aceptas los <a href="terms.html">Términos</a> y la <a href="privacy.html">Privacidad</a> de Tiketes.
+    </p>
   </div>
-  <div id="msg"></div>
-  <div class="actions"><button class="btn btn-primary" id="submit">Entrar</button></div>
-  <button class="btn btn-ghost" id="google" style="margin-top:10px;width:100%">Entrar con Google</button>
-  <p class="foot">¿No tienes cuenta? <a href="crear-cuenta.html">Crear una</a></p>
-</main>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
@@ -158,35 +236,43 @@ var SUPABASE_URL='https://wwukfbadzhowpvruumrp.supabase.co';
 var SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3dWtmYmFkemhvd3B2cnV1bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNDk1MjksImV4cCI6MjA5NDcyNTUyOX0.2-cPfqjoEkFkzVcWEvIzQHL4SWbvdJnNlCeUSEyzXk8';
 var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON);
 var $=function(id){return document.getElementById(id)};
-function showErr(t){var m=$('msg');if(!t){m.innerHTML='';return;}m.innerHTML='<div class="msg err"></div>';m.firstChild.textContent=t;}
-// Si ya hay sesión, saltar directo al panel.
-sb.auth.getSession().then(function(r){ if(r.data.session) location.replace('panel/'); });
+
+// Si ya hay sesión (incluye el regreso de Google), va a la membresía.
+sb.auth.getSession().then(function(r){ if(r.data.session) location.replace('cuenta.html'); });
+
+function showMsg(t,ok){var m=$('msg');if(!t){m.className='msg';m.textContent='';return;}m.className='msg on'+(ok?' ok':'');m.textContent=t;}
+
 $('eye').addEventListener('click',function(){var i=$('pwd');i.type=i.type==='password'?'text':'password';i.focus();});
-$('submit').addEventListener('click',async function(){
-  showErr('');
+
+$('enter').addEventListener('click',async function(){
+  showMsg('');
   var email=$('email').value.trim().toLowerCase(), pwd=$('pwd').value;
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){showErr('Escribe un correo válido.');return}
-  if(!pwd){showErr('Escribe tu contraseña.');return}
-  var b=$('submit');b.disabled=true;b.textContent='Entrando…';
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){showMsg('Escribe un correo válido.');$('email').focus();return}
+  if(!pwd){showMsg('Escribe tu contraseña.');$('pwd').focus();return}
+  var b=$('enter');b.disabled=true;$('enterLabel').textContent='Entrando';$('enterArrow').style.display='none';
   var r=await sb.auth.signInWithPassword({email:email,password:pwd});
-  b.disabled=false;b.textContent='Entrar';
   if(r.error){
+    b.disabled=false;$('enterLabel').textContent='Entrar';$('enterArrow').style.display='';
     var m=r.error.message||'';
-    showErr(/invalid login|credentials/i.test(m)?'Correo o contraseña incorrectos.':
+    showMsg(/invalid login|credentials/i.test(m)?'Correo o contraseña incorrectos.':
             /confirm/i.test(m)?'Confirma tu correo antes de entrar.':
             /rate|seconds/i.test(m)?'Espera un momento e intenta de nuevo.':m);
     return;
   }
-  location.replace('panel/');
+  location.replace('cuenta.html');
 });
-$('pwd').addEventListener('keydown',function(e){if(e.key==='Enter')$('submit').click()});
+$('pwd').addEventListener('keydown',function(e){if(e.key==='Enter')$('enter').click()});
+
+// Google: al volver, aterriza en login.html y de ahí getSession() reenvía a cuenta.html.
 $('google').addEventListener('click',async function(){
-  showErr('');
-  var r=await sb.auth.signInWithOAuth({
-    provider:'google',
-    options:{ redirectTo: location.origin + '/panel/' }
-  });
-  if(r.error) showErr('No pudimos abrir Google. Intenta de nuevo.');
+  showMsg('');
+  $('google').disabled=true;$('gtext').textContent='Abriendo Google…';
+  var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+'/login.html'}});
+  if(r.error){$('google').disabled=false;$('gtext').textContent='Continuar con Google';showMsg('No pudimos abrir Google. Intenta de nuevo.');}
+});
+
+$('forgot').addEventListener('click',function(){
+  showMsg('Recupera tu contraseña desde la app de Tiketes (¿Olvidaste tu contraseña?). Pronto también aquí.',true);
 });
 </script>
 <!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
