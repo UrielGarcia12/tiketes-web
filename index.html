@@ -876,7 +876,7 @@ footer {
   </ul>
   <div class="nav-actions">
     <button class="btn-nav-ghost" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})">Ver planes</button>
-    <button class="btn-nav-ghost" onclick="location.href='login.html'">Iniciar sesión</button>
+    <button class="btn-nav-ghost" id="navLogin" onclick="location.href='login.html'">Iniciar sesión</button>
     <button class="btn-nav-primary" onclick="location.href='crear-cuenta.html'">Crear cuenta</button>
   </div>
 </nav>
@@ -1669,7 +1669,12 @@ if (statsEl) {
   async function initOneTap(){
     try{
       var s=await sb.auth.getSession();
-      if(s.data.session) return;                 // ya está dentro: no molestar
+      if(s.data.session){
+        // Ya está dentro: el botón "Iniciar sesión" pasa a "Mi cuenta".
+        var b=document.getElementById('navLogin');
+        if(b){b.textContent='Mi cuenta';b.onclick=function(){location.href='cuenta.html';};}
+        return;                                  // y no molestamos con el popup
+      }
       if(!(window.google&&google.accounts&&google.accounts.id)) return;
       // Nonce de seguridad: el hash va a Google, el crudo a Supabase.
       var bytes=crypto.getRandomValues(new Uint8Array(16));

@@ -122,6 +122,9 @@ async function salir(){try{await sb.auth.signOut();}catch(e){}location.replace('
   if(!s.data.session){location.replace('login.html');return;}
   document.body.style.visibility='visible';
   var uid=s.data.session.user.id;
+  var email=s.data.session.user.email||'';
+  // Portal de Polar: ahí el usuario cancela, cambia de plan, actualiza tarjeta.
+  var portalUrl='https://polar.sh/tiketes/portal'+(email?('?email='+encodeURIComponent(email)):'');
 
   // Perfil (nombre + plan) — RLS: sólo el propio.
   var pr=await sb.from('profiles').select('full_name,store_name,plan').eq('id',uid).maybeSingle();
@@ -160,8 +163,10 @@ async function salir(){try{await sb.auth.signOut();}catch(e){}location.replace('
       $('dateLabel').textContent='Se renueva el';
     }
     if(end){$('detailBlock').style.display='';$('dateVal').textContent=fmtDate(end);}
-    actions.innerHTML='<a class="btn btn-primary" href="index.html#plans">Ver planes</a>'
+    actions.innerHTML='<a class="btn btn-primary" href="'+portalUrl+'" target="_blank" rel="noopener">Administrar o cancelar mi plan</a>'
+      +'<a class="btn btn-ghost" href="index.html#plans">Cambiar de plan</a>'
       +'<a class="btn btn-ghost" href="index.html">Volver al inicio</a>';
+    $('planMsg').innerHTML+=' <span style="color:rgba(255,255,255,.5)">Puedes cambiar de plan o cancelar cuando quieras — te llevamos a Polar para hacerlo seguro.</span>';
   }
 
   $('loading').style.display='none';
