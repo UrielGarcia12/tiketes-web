@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Panel — Tiketes</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#07070F">
+<meta name="description" content="Panel de administración de tu tienda Tiketes: inventario, reportes y personal."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="panel.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a class="brand" href="/"><img src="../assets/logo-mark-web.png" class="brand-mark" alt=""><span>Tiketes</span></a>
+  <nav>
+    <a class="nav-item active">📦 Inventario</a>
+    <span class="nav-item off">📊 Reportes <b>Pronto</b></span>
+    <span class="nav-item off">👥 Personal <b>Pronto</b></span>
+  </nav>
+</aside>
+<main>
+  <header class="topbar">
+    <div><b id="storeName">…</b></div>
+    <div class="topbar-right">
+      <span id="storeInitial" class="avatar">·</span>
+      <button class="btn btn-ghost" onclick="signOut()">Salir</button>
+    </div>
+  </header>
+  <section class="content" id="content"><!-- inventory.js pinta aquí --></section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="common.js"></script>
+<script src="inventory.js"></script>
+<script>
+requireSession().then(async function(session){
+  // Nombre de la tienda para la barra (RLS: solo el propio perfil)
+  var p=await sb.from('profiles').select('store_name').eq('id', session.user.id).maybeSingle();
+  var name=(p.data && p.data.store_name) || 'Mi negocio';
+  document.getElementById('storeName').textContent=name;
+  document.getElementById('storeInitial').textContent=name.charAt(0).toUpperCase();
+  window.__initInventory && window.__initInventory(session);
+});
+</script>
+<!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
+</body>
+</html>
