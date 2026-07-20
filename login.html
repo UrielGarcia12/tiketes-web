@@ -158,7 +158,7 @@ var SUPABASE_URL='https://wwukfbadzhowpvruumrp.supabase.co';
 var SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3dWtmYmFkemhvd3B2cnV1bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNDk1MjksImV4cCI6MjA5NDcyNTUyOX0.2-cPfqjoEkFkzVcWEvIzQHL4SWbvdJnNlCeUSEyzXk8';
 var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON);
 var $=function(id){return document.getElementById(id)};
-function showErr(t){$('msg').innerHTML=t?('<div class="msg err">'+t+'</div>'):''}
+function showErr(t){var m=$('msg');if(!t){m.innerHTML='';return;}m.innerHTML='<div class="msg err"></div>';m.firstChild.textContent=t;}
 // Si ya hay sesión, saltar directo al panel.
 sb.auth.getSession().then(function(r){ if(r.data.session) location.replace('panel/'); });
 $('eye').addEventListener('click',function(){var i=$('pwd');i.type=i.type==='password'?'text':'password';i.focus();});
