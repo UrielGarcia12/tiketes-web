@@ -75,6 +75,9 @@ main{display:flex;flex-direction:column;min-width:0}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
 .btn-ghost{background:rgba(255,255,255,.06);color:rgba(255,255,255,.75)}
 .btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn-danger{background:#DC2626;color:#fff;box-shadow:0 8px 20px rgba(220,38,38,.30)}
+.btn-danger:hover{opacity:.92}
+.btn-danger:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
 
 /* ── Campos (para formularios dentro de modales) ────────────────── */
 .field{margin-bottom:14px}

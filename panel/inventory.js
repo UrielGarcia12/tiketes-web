@@ -196,6 +196,36 @@
     return {};
   }
 
+  // ── Task 6: eliminar producto (con confirmación) ────────────────
+  function confirmDelete(p){
+    var wrap=document.createElement('div');
+    wrap.className='modal';
+    // Markup estático + nombre del producto escapado — se evita XSS.
+    wrap.innerHTML =
+      '<div class="modal-card">'
+      +'<h2>Eliminar producto</h2>'
+      +'<p class="modal-text">¿Eliminar &quot;'+escapeHtml(p.name)+'&quot;? Esta acción no se puede deshacer.</p>'
+      +'<div class="modal-actions">'
+      +'<button type="button" class="btn btn-ghost" id="btnCancelDel">Cancelar</button>'
+      +'<button type="button" class="btn btn-danger" id="btnConfirmDel">Eliminar</button>'
+      +'</div></div>';
+    document.body.appendChild(wrap);
+
+    function close(){ wrap.remove(); }
+    wrap.addEventListener('click', function(e){ if(e.target===wrap) close(); });
+    wrap.querySelector('#btnCancelDel').addEventListener('click', close);
+    wrap.querySelector('#btnConfirmDel').addEventListener('click', function(){
+      var delBtn = wrap.querySelector('#btnConfirmDel');
+      delBtn.disabled = true;
+      sb.from('products').delete().eq('id', p.id).then(function(r){   // RLS: solo si es tuyo
+        if(r.error){ toast('No se pudo eliminar.'); delBtn.disabled = false; return; }
+        close();
+        toast('Producto eliminado.');
+        loadProducts();
+      });
+    });
+  }
+
   // Se exponen para tasks siguientes (mismo IIFE en el archivo final):
   window.__inv={ loadProducts:loadProducts, all:function(){return all}, toast:toast };
 })();
