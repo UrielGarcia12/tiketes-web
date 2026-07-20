@@ -226,6 +226,181 @@
     });
   }
 
+  // ── Task 7: importar Excel/CSV (mismo contrato de columnas que la app) ──
+  function normalize(raw){
+    var g=function(k){return raw[k]!=null?raw[k]:''};
+    var price=parseFloat(String(g('precio')||g('price')).replace(',','.'));
+    var name=String(g('nombre')||g('name')).trim();
+    var barcode=String(g('codigo_barras')||g('barcode')||g('codigo')).trim();
+    var cat=String(g('categoria')||g('category')).trim().toLowerCase();
+    if(CATS.indexOf(cat)<0) cat='otros';
+    var errors=[];
+    if(!name) errors.push('sin nombre');
+    if(!(price>0)) errors.push('precio inválido');
+    return { name:name, price:isNaN(price)?0:price,
+      cost_price: numOrNull(g('costo')||g('cost')),
+      stock: parseInt(String(g('stock')||g('cantidad')||'0'),10)||0,
+      min_stock: numOrNull(g('stock_minimo')||g('min_stock')),
+      category:cat, unit:String(g('unidad')||g('unit')).trim()||'pza',
+      brand:String(g('marca')||g('brand')).trim()||null,
+      barcode:barcode||null, sku:String(g('sku')).trim()||barcode||null,
+      description:String(g('descripcion')||g('description')).trim()||null,
+      errors:errors };
+  }
+  function numOrNull(v){var s=String(v).replace(',','.').trim(); if(!s)return null; var n=parseFloat(s); return isNaN(n)?null:n;}
+
+  var COLOR_BY_CAT={abarrotes:['#FFF7E6','#A07300'],bebidas:['#E6F0FF','#1E5BB8'],lacteos:['#DCFCE7','#137333'],snacks:['#FFE6E6','#B8252B'],panaderia:['#FFF3E0','#A0522D'],dulces:['#FFE9F2','#9D174D'],limpieza:['#E6FBFF','#0E7A9E'],cuidado:['#EAFCE8','#1F7D2A'],mascotas:['#FFEDE0','#9C4A1C'],galletas:['#F2EEFF','#4524D6'],papas:['#FEF3C7','#7A5500'],otros:['#EEEEF5','#3F3F58']};
+
+  // Normaliza las llaves de cada fila (encabezados) a minúsculas/trim, igual que la app.
+  function lowerKeys(rows){
+    return rows.map(function(row){
+      var out={};
+      for(var k in row){ if(Object.prototype.hasOwnProperty.call(row,k)) out[String(k).trim().toLowerCase()]=row[k]; }
+      return out;
+    });
+  }
+
+  function openImport(){
+    var wrap=document.createElement('div');
+    wrap.className='modal';
+    // Markup 100% estático (el enlace y textos son fijos) — se evita XSS.
+    wrap.innerHTML =
+      '<div class="modal-card">'
+      +'<h2>Importar Excel</h2>'
+      +'<p class="modal-text">Sube tu archivo <b>.xlsx</b> o <b>.csv</b> con tus productos. '
+      +'¿No tienes uno? <a href="../plantilla.html" target="_blank" rel="noopener">Descarga la plantilla</a>.</p>'
+      +'<input type="file" id="impFile" accept=".xlsx,.xls,.csv">'
+      +'<div id="impPreview"></div>'
+      +'<div id="impSummary" class="form-err" hidden></div>'
+      +'<div class="modal-actions">'
+      +'<button type="button" class="btn btn-ghost" id="btnImpCancel">Cerrar</button>'
+      +'<button type="button" class="btn btn-primary" id="btnImpConfirm" disabled>Importar</button>'
+      +'</div></div>';
+    document.body.appendChild(wrap);
+
+    var parsedValid=[];
+    function close(){ wrap.remove(); }
+    wrap.addEventListener('click', function(e){ if(e.target===wrap) close(); });
+    wrap.querySelector('#btnImpCancel').addEventListener('click', close);
+
+    var fileInput=wrap.querySelector('#impFile');
+    var previewEl=wrap.querySelector('#impPreview');
+    var confirmBtn=wrap.querySelector('#btnImpConfirm');
+
+    function handleRows(raw){
+      var normalized = lowerKeys(raw).map(normalize).filter(function(r){ return r.name || r.price>0; });
+      var valid = normalized.filter(function(r){ return r.errors.length===0; });
+      var invalid = normalized.filter(function(r){ return r.errors.length>0; });
+      parsedValid = valid;
+      renderPreview(valid, invalid);
+      confirmBtn.disabled = valid.length===0;
+    }
+
+    function renderPreview(valid, invalid){
+      if(valid.length===0 && invalid.length===0){
+        previewEl.innerHTML = '<p class="modal-text">No encontramos filas con datos. Revisa que existan las columnas <b>nombre</b> y <b>precio</b>.</p>';
+        return;
+      }
+      var html = '<p class="modal-text">'+valid.length+' producto'+(valid.length===1?'':'s')+' list'+(valid.length===1?'o':'os')+' para importar'
+        + (invalid.length? ', '+invalid.length+' con errores (no se importarán)':'') + '.</p>';
+      if(valid.length){
+        // Nombres del archivo escapados con escapeHtml — nunca innerHTML crudo de datos del usuario.
+        html += '<ul class="imp-list">' + valid.slice(0,15).map(function(r){
+          return '<li>'+escapeHtml(r.name)+' — $'+r.price.toFixed(2)+'</li>';
+        }).join('') + (valid.length>15? '<li>… y '+(valid.length-15)+' más</li>':'') + '</ul>';
+      }
+      if(invalid.length){
+        html += '<ul class="imp-list imp-list-err">' + invalid.slice(0,15).map(function(r){
+          return '<li>'+escapeHtml(r.name||'(sin nombre)')+' — '+escapeHtml(r.errors.join(', '))+'</li>';
+        }).join('') + (invalid.length>15? '<li>… y '+(invalid.length-15)+' más</li>':'') + '</ul>';
+      }
+      previewEl.innerHTML = html;
+    }
+
+    fileInput.addEventListener('change', function(){
+      var file = fileInput.files && fileInput.files[0];
+      if(!file) return;
+      confirmBtn.disabled = true;
+      previewEl.innerHTML = '<p class="modal-text">Leyendo archivo…</p>';
+      var lower = file.name.toLowerCase();
+      if(lower.indexOf('.csv')>=0){
+        Papa.parse(file, {
+          header:true, skipEmptyLines:true,
+          complete: function(res){ handleRows(res.data||[]); },
+          error: function(){ previewEl.innerHTML=''; toast('No pudimos leer el archivo.'); }
+        });
+      } else {
+        var reader = new FileReader();
+        reader.onload = function(e){
+          try{
+            var wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
+            var sheetName = wb.SheetNames[0];
+            if(!sheetName){ handleRows([]); return; }
+            var json = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], {defval:'', raw:false});
+            handleRows(json);
+          }catch(err){ previewEl.innerHTML=''; toast('No pudimos leer el archivo.'); }
+        };
+        reader.onerror = function(){ previewEl.innerHTML=''; toast('No pudimos leer el archivo.'); };
+        reader.readAsArrayBuffer(file);
+      }
+    });
+
+    confirmBtn.addEventListener('click', async function(){
+      if(parsedValid.length===0) return;
+      confirmBtn.disabled = true;
+      var summaryEl = wrap.querySelector('#impSummary');
+      summaryEl.hidden = true;
+
+      // Plan del usuario (default 'free' si no hay perfil / falla la consulta).
+      var prof = await sb.from('profiles').select('plan').eq('id', session.user.id).maybeSingle();
+      var plan = (prof.data && prof.data.plan) || 'free';
+      var limit = PLAN_LIMIT[plan] || PLAN_LIMIT.free;
+
+      // Tope de plan: contamos lo que YA tiene (RLS filtra por auth.uid()).
+      var cnt = await sb.from('products').select('*',{count:'exact',head:true});
+      if(cnt.error){ toast('No pudimos verificar tu límite.'); confirmBtn.disabled=false; return; }
+      var existing = cnt.count || 0;
+      var remaining = Math.max(0, limit - existing);
+      var toInsertRows = parsedValid.slice(0, remaining);
+      var leftOut = parsedValid.length - toInsertRows.length;
+
+      if(toInsertRows.length===0){
+        summaryEl.textContent = 'Ya llegaste al límite de tu plan ('+limit+' productos). No se importó nada.';
+        summaryEl.hidden = false;
+        confirmBtn.disabled = false;
+        return;
+      }
+
+      var inserts = toInsertRows.map(function(r){
+        var c = COLOR_BY_CAT[r.category] || COLOR_BY_CAT.otros;
+        return {
+          user_id: session.user.id, // products.user_id no tiene default: sin esto el insert cae en 403/RLS.
+          name: r.name, price: r.price, cost_price: r.cost_price,
+          stock: r.stock, min_stock: r.min_stock, category: r.category,
+          unit: r.unit, brand: r.brand, barcode: r.barcode, sku: r.sku,
+          description: r.description,
+          thumb: (r.name.charAt(0)||'📦').toUpperCase(), color:c[0], text_color:c[1]
+        };
+      });
+
+      var inserted=0, failed=0;
+      for(var i=0;i<inserts.length;i+=100){
+        var batch = inserts.slice(i,i+100);
+        var r = await sb.from('products').insert(batch);
+        if(r.error){ failed += batch.length; } // incluye PRODUCT_LIMIT_REACHED si la BD lo rechaza igual
+        else { inserted += batch.length; }
+      }
+
+      confirmBtn.disabled = false;
+      var omitted = leftOut + failed;
+      var msg = inserted+' producto'+(inserted===1?'':'s')+' importado'+(inserted===1?'':'s')+'.';
+      if(omitted>0) msg += ' '+omitted+' no se importaron (límite de tu plan).';
+      summaryEl.textContent = msg;
+      summaryEl.hidden = false;
+      if(inserted>0){ loadProducts(); toast('Importación completada.'); }
+    });
+  }
+
   // Se exponen para tasks siguientes (mismo IIFE en el archivo final):
   window.__inv={ loadProducts:loadProducts, all:function(){return all}, toast:toast };
 })();

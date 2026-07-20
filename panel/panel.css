@@ -166,6 +166,19 @@ main{display:flex;flex-direction:column;min-width:0}
 }
 .form-err[hidden]{display:none}
 
+/* ── Importar Excel (Task 7) ─────────────────────────────────────── */
+.modal-text a{color:var(--violet400)}
+.modal-text a:hover{text-decoration:underline}
+#impFile{
+  width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);
+  border-radius:12px;padding:10px 12px;color:#fff;font-family:var(--f-body);font-size:13px;margin:14px 0;
+}
+.imp-list{list-style:none;padding:0;margin:0 0 14px;max-height:180px;overflow:auto;
+  border:1px solid rgba(255,255,255,.08);border-radius:10px}
+.imp-list li{padding:8px 12px;font-size:12.5px;color:rgba(255,255,255,.75);border-bottom:1px solid rgba(255,255,255,.06)}
+.imp-list li:last-child{border-bottom:0}
+.imp-list-err li{color:#FCA5A5}
+
 /* ── Toast ───────────────────────────────────────────────────────── */
 .toast{
   position:fixed;left:50%;bottom:24px;transform:translate(-50%,10px);
