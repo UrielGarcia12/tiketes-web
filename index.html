@@ -1648,6 +1648,44 @@ if (statsEl) {
 })();
 </script>
 
+<!-- Google One Tap: sugiere entrar con la cuenta de Google del navegador (como manus).
+     Totalmente defensivo: si algo falla o ya hay sesión, no hace nada. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://accounts.google.com/gsi/client" async></script>
+<script>
+(function(){
+  var GID='955544577343-5s8jarqnh8smqlvt2k8jabq3p75cfpei.apps.googleusercontent.com';
+  var SB_URL='https://wwukfbadzhowpvruumrp.supabase.co';
+  var SB_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3dWtmYmFkemhvd3B2cnV1bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNDk1MjksImV4cCI6MjA5NDcyNTUyOX0.2-cPfqjoEkFkzVcWEvIzQHL4SWbvdJnNlCeUSEyzXk8';
+  var sb=null, rawNonce=null;
+  try{ sb=window.supabase.createClient(SB_URL,SB_ANON); }catch(e){ return; }
+
+  async function onCred(resp){
+    try{
+      var r=await sb.auth.signInWithIdToken({provider:'google',token:resp.credential,nonce:rawNonce});
+      if(!r.error) location.href='cuenta.html';
+    }catch(e){}
+  }
+  async function initOneTap(){
+    try{
+      var s=await sb.auth.getSession();
+      if(s.data.session) return;                 // ya está dentro: no molestar
+      if(!(window.google&&google.accounts&&google.accounts.id)) return;
+      // Nonce de seguridad: el hash va a Google, el crudo a Supabase.
+      var bytes=crypto.getRandomValues(new Uint8Array(16));
+      rawNonce=btoa(String.fromCharCode.apply(null,bytes));
+      var hb=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(rawNonce));
+      var hashed=Array.from(new Uint8Array(hb)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+      google.accounts.id.initialize({client_id:GID,callback:onCred,nonce:hashed,use_fedcm_for_prompt:true,auto_select:false,cancel_on_tap_outside:true});
+      google.accounts.id.prompt();
+    }catch(e){}
+  }
+  var tries=0, iv=setInterval(function(){
+    if(window.google&&google.accounts&&google.accounts.id){clearInterval(iv);initOneTap();}
+    else if(++tries>25){clearInterval(iv);}
+  },300);
+})();
+</script>
 <!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
 </body>
 </html>

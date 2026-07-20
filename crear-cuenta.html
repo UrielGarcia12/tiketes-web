@@ -360,14 +360,9 @@ input:focus-visible{outline:none}
       </div>
 
       <div class="field">
-        <label class="lb">Giro del negocio</label>
-        <div class="bizGrid" id="giros" role="group" aria-label="Giro del negocio"></div>
-        <div class="tip" id="tip"><b>Listo:</b> <span id="tipTx">preparamos tus categorías de tienda automáticamente.</span></div>
-      </div>
-
-      <div class="field hidden" id="otroWrap">
-        <label class="lb" for="otroName">Nombre de tu giro</label>
-        <input id="otroName" type="text" placeholder="Ej. Refaccionaria" maxlength="40">
+        <label class="lb" for="negocio">Nombre de tu negocio</label>
+        <input id="negocio" type="text" placeholder="Ej. Abarrotes María" maxlength="60">
+        <div class="tip"><b>Listo:</b> <span>así aparecerá el nombre de tu tienda en el ticket. El tipo de negocio lo eliges en la app.</span></div>
       </div>
 
       <div class="field">
@@ -499,15 +494,6 @@ var SUPABASE_URL  = 'https://wwukfbadzhowpvruumrp.supabase.co';
 var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3dWtmYmFkemhvd3B2cnV1bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNDk1MjksImV4cCI6MjA5NDcyNTUyOX0.2-cPfqjoEkFkzVcWEvIzQHL4SWbvdJnNlCeUSEyzXk8';
 var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-// Mismos giros que la app (constants/categoryPresets.ts)
-var BIZ = [
-  { key:'tienda',     label:'Tienda',        emoji:'🛒', tip:'preparamos tus categorías de tienda automáticamente.' },
-  { key:'farmacia',   label:'Farmacia',      emoji:'💊', tip:'preparamos categorías de farmacia automáticamente.' },
-  { key:'belleza',    label:'Belleza',       emoji:'💄', tip:'preparamos categorías de belleza automáticamente.' },
-  { key:'ferreteria', label:'Ferretería',    emoji:'🔧', tip:'preparamos categorías de ferretería automáticamente.' },
-  { key:'ropa',       label:'Ropa/Calzado',  emoji:'👕', tip:'preparamos categorías de ropa automáticamente.' },
-  { key:'otro',       label:'Otro',          emoji:'📦', tip:'creas tus propias categorías desde cero.' }
-];
 var CHECKOUT = {
   essential:{ monthly:'https://buy.polar.sh/polar_cl_BoypVJJCYKo0lOpPld3tElviwqGBLKkZvEu5F3rs69f',
               yearly: 'https://buy.polar.sh/polar_cl_JZv29xAvaioiYIrvZELctHwJUqTu7yYmoC2TB1bcWdz' },
@@ -558,25 +544,6 @@ function composeAddress(){
   if(cp)    parts.push('C.P. '+cp);
   return parts.length?parts.join(', '):null;
 }
-var bizKey='tienda';
-
-(function(){
-  var w=$('giros');
-  BIZ.forEach(function(b){
-    var el=document.createElement('button');
-    el.type='button';el.className='bizBtn';
-    el.setAttribute('aria-pressed',String(b.key===bizKey));
-    el.setAttribute('aria-label',b.label);
-    el.innerHTML='<span class="bizIco">'+b.emoji+'</span><span class="bizName">'+b.label+'</span>';
-    el.addEventListener('click',function(){
-      bizKey=b.key;
-      w.querySelectorAll('.bizBtn').forEach(function(x,i){x.setAttribute('aria-pressed',String(BIZ[i].key===bizKey))});
-      $('otroWrap').classList.toggle('hidden',bizKey!=='otro');
-      $('tipTx').textContent=b.tip;
-    });
-    w.appendChild(el);
-  });
-})();
 
 
 // ── Planes ────────────────────────────────────────────────────────────────
@@ -672,7 +639,7 @@ function goStep(s){
 $('next').addEventListener('click',function(){
   clearErr();
   if(!$('nombre').value.trim()){showErr('Escribe tu nombre para continuar.');$('nombre').focus();return}
-  if(bizKey==='otro'&&!$('otroName').value.trim()){showErr('Dinos el nombre de tu giro.');$('otroName').focus();return}
+  if(!$('negocio').value.trim()){showErr('Escribe el nombre de tu negocio.');$('negocio').focus();return}
   goStep('stepP');
 });
 $('nextP').addEventListener('click',function(){clearErr();goStep('step2')});
@@ -697,11 +664,10 @@ $('submit').addEventListener('click',async function(){
   if(!$('over18').checked){showErr('Necesitas aceptar los Términos y confirmar que eres mayor de edad.');return}
 
   var btn=$('submit');btn.disabled=true;btn.textContent='Creando tu cuenta…';
-  var meta=BIZ.filter(function(b){return b.key===bizKey})[0];
-  var otro=$('otroName').value.trim(),tel=$('tel').value.trim();
+  var tel=$('tel').value.trim();
   var profileData={
     full_name:$('nombre').value.trim()||null,
-    store_name:bizKey==='otro'?(otro||null):null,
+    store_name:$('negocio').value.trim()||null,
     store_state:$('estado').value||null,
     store_municipality:$('municipio').value.trim()||null,
     store_postal_code:$('cp').value.trim()||null,
@@ -709,7 +675,6 @@ $('submit').addEventListener('click',async function(){
     store_neighborhood:$('colonia').value.trim()||null,
     store_address:composeAddress(),
     phone:tel?('+52 '+tel):null,
-    biz_type:bizKey==='otro'?(otro||'Otro'):bizKey,
     uses_scanner:true
   };
   try{
@@ -723,7 +688,7 @@ $('submit').addEventListener('click',async function(){
       return;
     }
     var userId=res.data&&res.data.user?res.data.user.id:null;
-    var giroLabel=bizKey==='otro'?(otro||'Otro'):meta.label;
+    var negocioNombre=$('negocio').value.trim()||'Tu negocio';
 
     // finish(): pinta el éxito. Se llama directo si ya hay sesión, o tras
     // verificar el código si Supabase exigió confirmar el correo. El upsert
@@ -734,7 +699,7 @@ $('submit').addEventListener('click',async function(){
       $('verifyWrap').style.display='none';
       $('doneWrap').classList.remove('hidden');
       $('doneWrap').classList.add('rise');
-      renderDone(giroLabel,userId);
+      renderDone(negocioNombre,userId);
       scrollTo({top:0,behavior:'smooth'});
     }
 
@@ -751,7 +716,7 @@ $('submit').addEventListener('click',async function(){
 });
 
 // Pinta la pantalla de éxito (credenciales + resumen + CTA).
-function renderDone(giroLabel,userId){
+function renderDone(negocioNombre,userId){
     var email=$('email').value.trim().toLowerCase(),pwd=$('pwd').value;
     $('cEmail').textContent=email;
     $('cEmailCopy').addEventListener('click',function(){copyTo($('cEmailCopy'),email)});
@@ -763,7 +728,7 @@ function renderDone(giroLabel,userId){
       $('cPwdEye').setAttribute('aria-label',shown?'Ver contraseña':'Ocultar contraseña');
     });
     $('summary').innerHTML=
-      '<div><span>Giro</span><b>'+giroLabel.replace(/</g,'&lt;')+'</b></div>'+
+      '<div><span>Negocio</span><b>'+negocioNombre.replace(/</g,'&lt;')+'</b></div>'+
       '<div><span>Plan</span><b>'+(wantPlan?PLAN_NAME[wantPlan]:'Free')+'</b></div>';
     if(wantPlan&&userId){
       $('doneTitle').textContent='Cuenta creada. Falta el pago.';
