@@ -180,6 +180,14 @@ $('submit').addEventListener('click',async function(){
   location.replace('panel/');
 });
 $('pwd').addEventListener('keydown',function(e){if(e.key==='Enter')$('submit').click()});
+$('google').addEventListener('click',async function(){
+  showErr('');
+  var r=await sb.auth.signInWithOAuth({
+    provider:'google',
+    options:{ redirectTo: location.origin + '/panel/' }
+  });
+  if(r.error) showErr('No pudimos abrir Google. Intenta de nuevo.');
+});
 </script>
 <!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
 </body>
