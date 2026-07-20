@@ -150,6 +150,18 @@ main{display:flex;flex-direction:column;min-width:0}
   max-height:90vh;overflow:auto;
 }
 .modal-card h2{font-family:var(--f-display);font-size:18px;margin:0 0 16px}
+.modal-text{font-size:13.5px;line-height:1.5;color:rgba(255,255,255,.75);margin:0 0 20px}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
+.modal-actions .btn{text-decoration:none;display:inline-flex;align-items:center}
+
+/* ── Formularios dentro de modales (alta/edición de producto) ───── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.form-grid .field.full{grid-column:1 / -1}
+.form-err{
+  color:#FCA5A5;font-size:12.5px;background:rgba(239,68,68,.10);
+  border:1px solid rgba(239,68,68,.30);border-radius:10px;padding:9px 12px;margin:2px 0 14px;
+}
+.form-err[hidden]{display:none}
 
 /* ── Toast ───────────────────────────────────────────────────────── */
 .toast{
