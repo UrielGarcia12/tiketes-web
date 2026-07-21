@@ -344,21 +344,69 @@ input:focus-visible{outline:none}
     <h1 id="title">Cuéntanos de <span class="ac">tu negocio</span></h1>
     <p class="sub" id="lede">Con esto preparamos tu inventario y tus categorías desde el primer día.</p>
 
-    <div class="steps" aria-hidden="true"><i class="on" id="s1"></i><i id="sP"></i><i id="s2"></i></div>
+    <div class="steps" aria-hidden="true"><i class="on" id="d1"></i><i id="d2"></i><i id="d3"></i><i id="d4"></i><i id="d5"></i></div>
 
-    <!-- Paso 1 -->
-    <section id="step1">
+    <!-- Paso 1 — correo -->
+    <section id="stEmail">
       <button type="button" class="gbtn" id="gsignup">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         <span id="gtext">Continuar con Google</span>
       </button>
       <div class="gdiv">o regístrate con tu correo</div>
+      <div class="field">
+        <label class="lb" for="email">Correo electrónico</label>
+        <input id="email" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" maxlength="120">
+      </div>
+      <label class="check">
+        <input type="checkbox" id="over18">
+        <span>Soy mayor de edad y acepto los
+          <a href="terms.html" target="_blank" rel="noopener">Términos</a> y el
+          <a href="privacy.html" target="_blank" rel="noopener">Aviso de Privacidad</a>.</span>
+      </label>
+      <div class="actions"><button class="btn btn-primary" id="sendCode">Enviar código</button></div>
+    </section>
 
+    <!-- Paso 2 — código -->
+    <section id="stCode" class="hidden">
+      <div class="field">
+        <label class="lb" for="code">Código de verificación</label>
+        <input id="code" class="vCode" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="000000" maxlength="8">
+        <div style="text-align:center"><button type="button" class="vResend" id="resend">¿No llegó? Reenviar código</button></div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost" id="backCode">Atrás</button>
+        <button class="btn btn-primary" id="verifyBtn">Verificar</button>
+      </div>
+    </section>
+
+    <!-- Paso 3 — contraseña -->
+    <section id="stPass" class="hidden">
+      <div class="field">
+        <label class="lb" for="pwd">Contraseña</label>
+        <div class="pwd-wrap">
+          <input id="pwd" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password" maxlength="72">
+          <button type="button" class="pwd-eye" data-for="pwd" aria-label="Ver contraseña"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lb" for="pwd2">Confirmar contraseña</label>
+        <div class="pwd-wrap">
+          <input id="pwd2" type="password" placeholder="Repite tu contraseña" autocomplete="new-password" maxlength="72">
+          <button type="button" class="pwd-eye" data-for="pwd2" aria-label="Ver contraseña"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost" id="backPass">Atrás</button>
+        <button class="btn btn-primary" id="savePass">Continuar</button>
+      </div>
+    </section>
+
+    <!-- Paso 4 — negocio -->
+    <section id="stBiz" class="hidden">
       <div class="field">
         <label class="lb" for="nombre">Tu nombre</label>
         <input id="nombre" type="text" placeholder="Tu nombre o apodo" maxlength="60" autocomplete="name">
       </div>
-
       <div class="field">
         <label class="lb" for="negocio">Nombre de tu negocio</label>
         <input id="negocio" type="text" placeholder="Ej. Abarrotes María" maxlength="60">
@@ -375,7 +423,6 @@ input:focus-visible{outline:none}
         <label class="lb" for="otroName">¿Qué vendes?</label>
         <input id="otroName" type="text" placeholder="Ej. Refaccionaria" maxlength="40">
       </div>
-
       <div class="field">
         <label class="lb">Dirección del local <span class="opt">— para tu ticket</span></label>
         <select id="estado" class="sel"><option value="">Elige tu estado</option><option>Aguascalientes</option><option>Baja California</option><option>Baja California Sur</option><option>Campeche</option><option>Chiapas</option><option>Chihuahua</option><option>Ciudad de México</option><option>Coahuila</option><option>Colima</option><option>Durango</option><option>Estado de México</option><option>Guanajuato</option><option>Guerrero</option><option>Hidalgo</option><option>Jalisco</option><option>Michoacán</option><option>Morelos</option><option>Nayarit</option><option>Nuevo León</option><option>Oaxaca</option><option>Puebla</option><option>Querétaro</option><option>Quintana Roo</option><option>San Luis Potosí</option><option>Sinaloa</option><option>Sonora</option><option>Tabasco</option><option>Tamaulipas</option><option>Tlaxcala</option><option>Veracruz</option><option>Yucatán</option><option>Zacatecas</option></select>
@@ -406,12 +453,14 @@ input:focus-visible{outline:none}
           <input id="tel" type="tel" placeholder="222 123 4567" maxlength="20" autocomplete="tel">
         </div>
       </div>
-
-      <div class="actions"><button class="btn btn-primary" id="next">Continuar</button></div>
+      <div class="actions">
+        <button class="btn btn-ghost" id="backBiz">Atrás</button>
+        <button class="btn btn-primary" id="bizNext">Continuar</button>
+      </div>
     </section>
 
-    <!-- Paso 2 — plan -->
-    <section id="stepP" class="hidden">
+    <!-- Paso 5 — plan -->
+    <section id="stPlan" class="hidden">
       <div class="cyc" role="group" aria-label="Ciclo de cobro">
         <button type="button" class="cycB" id="cycM" aria-pressed="true">Mensual</button>
         <button type="button" class="cycB" id="cycY" aria-pressed="false">Anual <span class="cycOff">−20%</span></button>
@@ -419,41 +468,7 @@ input:focus-visible{outline:none}
       <div class="planGrid" id="planes" role="group" aria-label="Plan"></div>
       <div class="tip"><b>Sin tarjeta:</b> <span>el plan Free no pide datos de pago. Cambias de plan cuando quieras desde la app.</span></div>
       <div class="actions">
-        <button class="btn btn-ghost" id="backP">Atrás</button>
-        <button class="btn btn-primary" id="nextP">Continuar</button>
-      </div>
-    </section>
-
-    <!-- Paso 3 -->
-    <section id="step2" class="hidden">
-      <div class="field">
-        <label class="lb" for="email">Correo electrónico</label>
-        <input id="email" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" maxlength="120">
-      </div>
-      <div class="field">
-        <label class="lb" for="pwd">Contraseña</label>
-        <div class="pwd-wrap">
-          <input id="pwd" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password" maxlength="72">
-          <button type="button" class="pwd-eye" data-for="pwd" aria-label="Ver contraseña"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-        </div>
-      </div>
-      <div class="field">
-        <label class="lb" for="pwd2">Confirmar contraseña</label>
-        <div class="pwd-wrap">
-          <input id="pwd2" type="password" placeholder="Repite tu contraseña" autocomplete="new-password" maxlength="72">
-          <button type="button" class="pwd-eye" data-for="pwd2" aria-label="Ver contraseña"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-        </div>
-      </div>
-
-      <label class="check">
-        <input type="checkbox" id="over18">
-        <span>Soy mayor de edad y acepto los
-          <a href="terms.html" target="_blank" rel="noopener">Términos</a> y el
-          <a href="privacy.html" target="_blank" rel="noopener">Aviso de Privacidad</a>.</span>
-      </label>
-
-      <div class="actions">
-        <button class="btn btn-ghost" id="back">Atrás</button>
+        <button class="btn btn-ghost" id="backPlan">Atrás</button>
         <button class="btn btn-primary" id="submit">Crear mi cuenta</button>
       </div>
     </section>
@@ -604,7 +619,7 @@ function paintPlans(){
         '<div class="planLim">'+p.lim+'</div>'+
       '</div>';
   });
-  $('nextP').textContent=wantPlan?('Continuar con '+PLAN_NAME[wantPlan]):'Continuar con Free';
+  var sb2=$('submit'); if(sb2) sb2.textContent=wantPlan?('Crear cuenta y pagar '+PLAN_NAME[wantPlan]):'Crear mi cuenta (Free)';
 }
 (function(){
   var w=$('planes');
@@ -662,29 +677,24 @@ function copyTo(btn,txt){
 function showErr(t){$('msg').innerHTML='<div class="msg err">'+t+'</div>'}
 function clearErr(){$('msg').innerHTML=''}
 
+var STEPS=['stEmail','stCode','stPass','stBiz','stPlan'];
+var googleMode=false;
+
 function goStep(s){
-  ['step1','stepP','step2'].forEach(function(x){$(x).classList.add('hidden')});
+  STEPS.forEach(function(x){$(x).classList.add('hidden')});
   $(s).classList.remove('hidden');
-  $('sP').classList.toggle('on',s!=='step1');
-  $('s2').classList.toggle('on',s==='step2');
-  var t={
-    step1:['Registro · Paso 1 de 3','Cuéntanos de <span class="ac">tu negocio</span>','Con esto preparamos tu inventario y tus categorías desde el primer día.'],
-    stepP:['Registro · Paso 2 de 3','Elige <span class="ac">tu plan</span>','Puedes empezar gratis y subir de plan cuando lo necesites.'],
-    step2:['Registro · Paso 3 de 3','Crea tu <span class="ac">acceso</span>','Con este correo y contraseña entrarás a la app.']
+  var idx=STEPS.indexOf(s);
+  ['d1','d2','d3','d4','d5'].forEach(function(d,i){$(d).classList.toggle('on',i<=idx)});
+  var meta={
+    stEmail:['Registro · Paso 1','Escribe tu <span class="ac">correo</span>','Te enviaremos un código para confirmarlo.'],
+    stCode: ['Registro · Paso 2','Revisa tu <span class="ac">correo</span>','Escribe el código de 6 dígitos que te enviamos.'],
+    stPass: ['Registro · Paso 3','Crea tu <span class="ac">contraseña</span>','Con esta contraseña entrarás a la app.'],
+    stBiz:  ['Registro · '+(googleMode?'Paso 1 de 2':'Paso 4'),'Cuéntanos de <span class="ac">tu negocio</span>','Con esto preparamos tu inventario y tus categorías.'],
+    stPlan: ['Registro · '+(googleMode?'Paso 2 de 2':'Paso 5'),'Elige <span class="ac">tu plan</span>','Puedes empezar gratis y subir cuando lo necesites.']
   }[s];
-  $('eyebrow').textContent=t[0];$('title').innerHTML=t[1];$('lede').textContent=t[2];
+  $('eyebrow').textContent=meta[0];$('title').innerHTML=meta[1];$('lede').textContent=meta[2];
   scrollTo({top:0,behavior:'smooth'});
 }
-$('next').addEventListener('click',function(){
-  clearErr();
-  if(!$('nombre').value.trim()){showErr('Escribe tu nombre para continuar.');$('nombre').focus();return}
-  if(!$('negocio').value.trim()){showErr('Escribe el nombre de tu negocio.');$('negocio').focus();return}
-  if(bizKey==='otro'&&!$('otroName').value.trim()){showErr('Dinos qué vendes.');$('otroName').focus();return}
-  goStep('stepP');
-});
-$('nextP').addEventListener('click',function(){clearErr();goStep('step2')});
-$('backP').addEventListener('click',function(){clearErr();goStep('step1')});
-$('back').addEventListener('click',function(){clearErr();goStep('stepP')});
 
 function polarUrl(plan,cycle,userId,email){
   var u=new URL(CHECKOUT[plan][cycle]);
@@ -695,17 +705,80 @@ function polarUrl(plan,cycle,userId,email){
   return u.toString();
 }
 
-$('submit').addEventListener('click',async function(){
+// ── Paso 1: correo → enviar código (OTP crea el usuario) ───────────────────
+$('sendCode').addEventListener('click',async function(){
   clearErr();
-  var email=$('email').value.trim().toLowerCase(),pwd=$('pwd').value,pwd2=$('pwd2').value;
+  var email=$('email').value.trim().toLowerCase();
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){showErr('Escribe un correo válido.');$('email').focus();return}
+  if(!$('over18').checked){showErr('Necesitas aceptar los Términos y confirmar que eres mayor de edad.');return}
+  var b=$('sendCode');b.disabled=true;b.textContent='Enviando…';
+  var r=await sb.auth.signInWithOtp({email:email,options:{shouldCreateUser:true}});
+  b.disabled=false;b.textContent='Enviar código';
+  if(r.error){showErr(/rate|seconds/i.test(r.error.message)?'Espera un momento antes de pedir otro código.':(r.error.message||'No pudimos enviar el código.'));return}
+  goStep('stCode');
+  setTimeout(function(){$('code').focus()},250);
+});
+$('email').addEventListener('keydown',function(e){if(e.key==='Enter')$('sendCode').click()});
+
+// ── Paso 2: código → verificar (crea la sesión) ────────────────────────────
+$('code').addEventListener('input',function(){$('code').value=$('code').value.replace(/\D/g,'').slice(0,8)});
+$('backCode').addEventListener('click',function(){clearErr();goStep('stEmail')});
+$('resend').addEventListener('click',async function(){
+  clearErr();
+  var email=$('email').value.trim().toLowerCase();
+  var r=await sb.auth.signInWithOtp({email:email,options:{shouldCreateUser:true}});
+  if(r.error){showErr(/rate|seconds/i.test(r.error.message)?'Espera un momento antes de pedir otro código.':r.error.message);return}
+  $('msg').innerHTML='<div class="msg ok">Te reenviamos el código a '+email+'.</div>';
+});
+$('verifyBtn').addEventListener('click',async function(){
+  clearErr();
+  var email=$('email').value.trim().toLowerCase(), code=$('code').value.replace(/\D/g,'');
+  if(code.length<6){showErr('Escribe el código completo que te llegó al correo.');$('code').focus();return}
+  var b=$('verifyBtn');b.disabled=true;b.textContent='Verificando…';
+  var r=await sb.auth.verifyOtp({email:email,token:code,type:'email'});
+  b.disabled=false;b.textContent='Verificar';
+  if(r.error){showErr(/expired|invalid/i.test(r.error.message)?'Código incorrecto o vencido. Pide otro.':r.error.message);return}
+  goStep('stPass');
+  setTimeout(function(){$('pwd').focus()},250);
+});
+$('code').addEventListener('keydown',function(e){if(e.key==='Enter')$('verifyBtn').click()});
+
+// ── Paso 3: contraseña → updateUser ────────────────────────────────────────
+$('backPass').addEventListener('click',function(){clearErr();goStep('stCode')});
+$('savePass').addEventListener('click',async function(){
+  clearErr();
+  var pwd=$('pwd').value,pwd2=$('pwd2').value;
   if(pwd.length<8){showErr('La contraseña necesita al menos 8 caracteres.');$('pwd').focus();return}
   if(pwd!==pwd2){showErr('Las contraseñas no coinciden.');$('pwd2').focus();return}
-  if(!$('over18').checked){showErr('Necesitas aceptar los Términos y confirmar que eres mayor de edad.');return}
+  var b=$('savePass');b.disabled=true;b.textContent='Guardando…';
+  var r=await sb.auth.updateUser({password:pwd});
+  b.disabled=false;b.textContent='Continuar';
+  if(r.error){showErr(r.error.message||'No pudimos guardar la contraseña.');return}
+  goStep('stBiz');
+  setTimeout(function(){$('nombre').focus()},250);
+});
 
-  var btn=$('submit');btn.disabled=true;btn.textContent='Creando tu cuenta…';
+// ── Paso 4: negocio ────────────────────────────────────────────────────────
+$('backBiz').addEventListener('click',function(){clearErr(); if(googleMode){location.href='index.html';} else {goStep('stPass');}});
+$('bizNext').addEventListener('click',function(){
+  clearErr();
+  if(!$('nombre').value.trim()){showErr('Escribe tu nombre.');$('nombre').focus();return}
+  if(!$('negocio').value.trim()){showErr('Escribe el nombre de tu negocio.');$('negocio').focus();return}
+  if(bizKey==='otro'&&!$('otroName').value.trim()){showErr('Dinos qué vendes.');$('otroName').focus();return}
+  goStep('stPlan');
+});
+
+// ── Paso 5: plan → crear (upsert del perfil; la sesión ya existe) ───────────
+$('backPlan').addEventListener('click',function(){clearErr();goStep('stBiz')});
+$('submit').addEventListener('click',async function(){
+  clearErr();
+  var s=await sb.auth.getSession();
+  if(!s.data.session){showErr('Tu sesión expiró. Vuelve a empezar.');goStep('stEmail');return}
+  var uid=s.data.session.user.id, email=s.data.session.user.email||$('email').value.trim().toLowerCase();
+  var b=$('submit');b.disabled=true;b.textContent='Creando tu cuenta…';
   var tel=$('tel').value.trim();
   var profileData={
+    id:uid,
     full_name:$('nombre').value.trim()||null,
     store_name:$('negocio').value.trim()||null,
     store_state:$('estado').value||null,
@@ -718,49 +791,24 @@ $('submit').addEventListener('click',async function(){
     biz_type:bizKey==='otro'?($('otroName').value.trim()||'Otro'):bizKey,
     uses_scanner:true
   };
-  try{
-    var res=await sb.auth.signUp({email:email,password:pwd,options:{data:profileData}});
-    if(res.error){
-      btn.disabled=false;btn.textContent='Crear mi cuenta';
-      var m=String(res.error.message||'');
-      if(/already registered|already been registered|User already/i.test(m)) showErr('Ese correo ya tiene una cuenta. Entra desde la app o recupera tu contraseña ahí.');
-      else if(/rate|seconds/i.test(m)) showErr('Espera un momento antes de volver a intentar.');
-      else showErr(m||'No pudimos crear la cuenta. Intenta de nuevo.');
-      return;
-    }
-    var userId=res.data&&res.data.user?res.data.user.id:null;
-    var negocioNombre=$('negocio').value.trim()||'Tu negocio';
-
-    // finish(): pinta el éxito. Se llama directo si ya hay sesión, o tras
-    // verificar el código si Supabase exigió confirmar el correo. El upsert
-    // vive aquí porque necesita sesión (RLS) — y aquí siempre la hay.
-    async function finish(){
-      if(userId){try{await sb.from('profiles').upsert(Object.assign({id:userId},profileData),{onConflict:'id'})}catch(e){}}
-      $('formWrap').classList.add('hidden');
-      $('verifyWrap').style.display='none';
-      $('doneWrap').classList.remove('hidden');
-      $('doneWrap').classList.add('rise');
-      renderDone(negocioNombre,userId);
-      scrollTo({top:0,behavior:'smooth'});
-    }
-
-    // Sin sesión = "Confirm email" activo → pedimos el código antes del éxito.
-    if(!res.data.session){
-      startVerify(email,finish);
-      return;
-    }
-    await finish();
-  }catch(e){
-    btn.disabled=false;btn.textContent='Crear mi cuenta';
-    showErr('No pudimos conectar. Revisa tu internet e intenta de nuevo.');
-  }
+  try{ await sb.from('profiles').upsert(profileData,{onConflict:'id'}); }catch(e){}
+  b.disabled=false;
+  $('formWrap').classList.add('hidden');
+  $('doneWrap').classList.remove('hidden');$('doneWrap').classList.add('rise');
+  renderDone($('negocio').value.trim()||'Tu negocio',uid,email);
+  scrollTo({top:0,behavior:'smooth'});
 });
 
-// Pinta la pantalla de éxito (credenciales + resumen + CTA).
-function renderDone(negocioNombre,userId){
-    var email=$('email').value.trim().toLowerCase(),pwd=$('pwd').value;
-    $('cEmail').textContent=email;
-    $('cEmailCopy').addEventListener('click',function(){copyTo($('cEmailCopy'),email)});
+// Pinta la pantalla de éxito.
+function renderDone(negocioNombre,userId,email){
+  $('cEmail').textContent=email;
+  $('cEmailCopy').addEventListener('click',function(){copyTo($('cEmailCopy'),email)});
+  if(googleMode){
+    $('cPwd').textContent='Entraste con Google';
+    if($('cPwdEye'))$('cPwdEye').style.display='none';
+    if($('cPwdCopy'))$('cPwdCopy').style.display='none';
+  }else{
+    var pwd=$('pwd').value;
     $('cPwdCopy').addEventListener('click',function(){copyTo($('cPwdCopy'),pwd)});
     $('cPwdEye').addEventListener('click',function(){
       var shown=$('cPwd').textContent!=='••••••••';
@@ -768,54 +816,39 @@ function renderDone(negocioNombre,userId){
       $('cPwdEye').innerHTML=shown?IC_EYE:IC_OFF;
       $('cPwdEye').setAttribute('aria-label',shown?'Ver contraseña':'Ocultar contraseña');
     });
-    $('summary').innerHTML=
-      '<div><span>Negocio</span><b>'+negocioNombre.replace(/</g,'&lt;')+'</b></div>'+
-      '<div><span>Plan</span><b>'+(wantPlan?PLAN_NAME[wantPlan]:'Free')+'</b></div>';
-    if(wantPlan&&userId){
-      $('doneTitle').textContent='Cuenta creada. Falta el pago.';
-      $('doneMsg').textContent='Te llevamos a pagar tu plan '+PLAN_NAME[wantPlan]+' ($'+(wantCycle==='yearly'?Math.round(PLAN_PRICE[wantPlan]*0.8):PLAN_PRICE[wantPlan])+' MXN/mes). Al terminar, descarga la app: tu plan ya estará activo.';
-      $('ctaApp').textContent='Pagar plan '+PLAN_NAME[wantPlan];
-      $('doneFoot').textContent='El pago lo procesa Polar de forma segura.';
-      $('ctaApp').addEventListener('click',function(){location.href=polarUrl(wantPlan,wantCycle,userId,email)});
-    }else{
-      $('doneTitle').textContent='Tu cuenta quedó lista';
-      $('doneMsg').textContent='Ya puedes entrar a la app con este correo y esta contraseña. Tu plan Free no vence.';
-      $('doneFoot').textContent='Tu inventario ya está configurado para tu giro.';
-      $('ctaApp').addEventListener('click',function(){alert('Próximamente en Google Play')});
-    }
-    scrollTo({top:0,behavior:'smooth'});
+  }
+  $('summary').innerHTML=
+    '<div><span>Negocio</span><b>'+negocioNombre.replace(/</g,'&lt;')+'</b></div>'+
+    '<div><span>Plan</span><b>'+(wantPlan?PLAN_NAME[wantPlan]:'Free')+'</b></div>';
+  if(wantPlan){
+    $('doneTitle').textContent='Cuenta creada. Falta el pago.';
+    $('doneMsg').textContent='Te llevamos a pagar tu plan '+PLAN_NAME[wantPlan]+' ($'+(wantCycle==='yearly'?Math.round(PLAN_PRICE[wantPlan]*0.8):PLAN_PRICE[wantPlan])+' MXN/mes). Al terminar, descarga la app: tu plan ya estará activo.';
+    $('ctaApp').textContent='Pagar plan '+PLAN_NAME[wantPlan];
+    $('doneFoot').textContent='El pago lo procesa Polar de forma segura.';
+    $('ctaApp').addEventListener('click',function(){location.href=polarUrl(wantPlan,wantCycle,userId,email)});
+  }else{
+    $('doneTitle').textContent='Tu cuenta quedó lista';
+    $('doneMsg').textContent='Ya puedes entrar a la app con este correo. Tu plan Free no vence.';
+    $('doneFoot').textContent='Tu inventario ya está configurado para tu giro.';
+    $('ctaApp').addEventListener('click',function(){alert('Próximamente en Google Play')});
+  }
+  scrollTo({top:0,behavior:'smooth'});
 }
 
-// ── Verificación de correo por código (Supabase OTP type:'signup') ─────────
-// Sólo se usa cuando signUp no trae sesión (Confirm email activo en Supabase).
-function startVerify(mail,onOk){
-  $('formWrap').classList.add('hidden');
-  $('verifyWrap').style.display='block';
-  $('verifyWrap').classList.add('rise');
-  $('vEmail').textContent=mail;
-  $('vCode').value='';
-  setTimeout(function(){$('vCode').focus()},250);
-  function vMsg(t,ok){$('vMsg').innerHTML=t?('<div class="msg '+(ok?'ok':'err')+'">'+t+'</div>'):''}
-  $('vCode').oninput=function(){$('vCode').value=$('vCode').value.replace(/\D/g,'').slice(0,8)};
-  $('vBtn').onclick=async function(){
-    vMsg('');
-    var t=$('vCode').value.replace(/\D/g,'');
-    if(t.length<6){vMsg('Escribe el código completo que te llegó al correo.');$('vCode').focus();return}
-    $('vBtn').disabled=true;$('vBtn').textContent='Verificando…';
-    var r=await sb.auth.verifyOtp({email:mail,token:t,type:'signup'});
-    $('vBtn').disabled=false;$('vBtn').textContent='Verificar y continuar';
-    if(r.error){vMsg(/expired|invalid/i.test(r.error.message)?'Código incorrecto o vencido. Revisa el correo más reciente o pide otro.':r.error.message);return}
-    onOk();
-  };
-  $('vResend').onclick=async function(){
-    vMsg('');
-    var r=await sb.auth.resend({type:'signup',email:mail});
-    if(r.error){vMsg(/rate|seconds/i.test(r.error.message)?'Espera un momento antes de pedir otro código.':r.error.message);return}
-    vMsg('Te reenviamos el código a '+mail+'.',true);
-  };
-}
-$('nombre').addEventListener('keydown',function(e){if(e.key==='Enter')$('next').click()});
-$('pwd2').addEventListener('keydown',function(e){if(e.key==='Enter')$('submit').click()});
+// Inicializa el título/progreso del primer paso.
+goStep('stEmail');
+
+// ── Al cargar: ¿volvemos de Google con sesión? → completar negocio ─────────
+sb.auth.getSession().then(function(r){
+  var sess=r.data.session; if(!sess) return;
+  sb.from('profiles').select('store_name').eq('id',sess.user.id).maybeSingle().then(function(p){
+    if(p.data && p.data.store_name){ location.replace('cuenta.html'); return; }  // ya tiene cuenta completa
+    googleMode=true;
+    var md=sess.user.user_metadata||{};
+    if(md.full_name||md.name) $('nombre').value=(md.full_name||md.name);
+    goStep('stBiz');
+  });
+});
 </script>
 <!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
 </body>

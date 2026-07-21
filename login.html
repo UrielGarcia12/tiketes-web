@@ -237,8 +237,14 @@ var SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIs
 var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON);
 var $=function(id){return document.getElementById(id)};
 
-// Si ya hay sesión (incluye el regreso de Google), va a la membresía.
-sb.auth.getSession().then(function(r){ if(r.data.session) location.replace('cuenta.html'); });
+// Si ya hay sesión (incluye el regreso de Google): si el perfil ya tiene
+// negocio → membresía; si es una cuenta nueva (de Google) → completar negocio.
+sb.auth.getSession().then(function(r){
+  if(!r.data.session) return;
+  sb.from('profiles').select('store_name').eq('id',r.data.session.user.id).maybeSingle().then(function(p){
+    location.replace((p.data&&p.data.store_name)?'cuenta.html':'crear-cuenta.html');
+  });
+});
 
 function showMsg(t,ok){var m=$('msg');if(!t){m.className='msg';m.textContent='';return;}m.className='msg on'+(ok?' ok':'');m.textContent=t;}
 
