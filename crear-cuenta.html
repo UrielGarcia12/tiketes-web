@@ -409,7 +409,7 @@ input:focus-visible{outline:none}
       </div>
       <div class="field">
         <label class="lb" for="negocio">Nombre de tu negocio</label>
-        <input id="negocio" type="text" placeholder="Ej. Abarrotes María" maxlength="60">
+        <input id="negocio" type="text" placeholder="Ej. Abarrotes María" maxlength="40">
         <div class="tip"><b>Listo:</b> <span>así aparecerá el nombre de tu tienda en el ticket.</span></div>
       </div>
 
@@ -421,7 +421,7 @@ input:focus-visible{outline:none}
 
       <div class="field hidden" id="otroWrap">
         <label class="lb" for="otroName">¿Qué vendes?</label>
-        <input id="otroName" type="text" placeholder="Ej. Refaccionaria" maxlength="40">
+        <input id="otroName" type="text" placeholder="Ej. Refaccionaria" maxlength="30">
       </div>
       <div class="field">
         <label class="lb">Dirección del local <span class="opt">— para tu ticket</span></label>
@@ -434,22 +434,22 @@ input:focus-visible{outline:none}
         </div>
         <div>
           <label class="lb" for="municipio">Municipio</label>
-          <input id="municipio" type="text" placeholder="Puebla" maxlength="60">
+          <input id="municipio" type="text" placeholder="Tu municipio" maxlength="35">
         </div>
       </div>
       <div class="field">
         <label class="lb" for="calle">Calle y número</label>
-        <input id="calle" type="text" placeholder="Av. Juárez 123" maxlength="90" autocomplete="street-address">
+        <input id="calle" type="text" placeholder="Av. Juárez 123" maxlength="55" autocomplete="street-address">
       </div>
       <div class="field">
         <label class="lb" for="colonia">Colonia</label>
-        <input id="colonia" type="text" placeholder="Centro" maxlength="70">
+        <input id="colonia" type="text" placeholder="Tu colonia" maxlength="35">
       </div>
 
       <div class="field">
         <label class="lb" for="tel">Teléfono <span class="opt">— opcional</span></label>
         <div class="phone-wrap">
-          <span class="dial">🇲🇽 +52</span>
+          <span class="dial"><svg width="20" height="13" viewBox="0 0 3 2" style="border-radius:2px;vertical-align:middle;margin-right:6px"><rect width="1" height="2" x="0" fill="#006847"/><rect width="1" height="2" x="1" fill="#fff"/><rect width="1" height="2" x="2" fill="#CE1126"/></svg>+52</span>
           <input id="tel" type="tel" placeholder="222 123 4567" maxlength="20" autocomplete="tel">
         </div>
       </div>
@@ -676,6 +676,22 @@ function copyTo(btn,txt){
 
 function showErr(t){$('msg').innerHTML='<div class="msg err">'+t+'</div>'}
 function clearErr(){$('msg').innerHTML=''}
+var signupStartTs=0;
+// Traduce los mensajes de error de Supabase (vienen en inglés) al español.
+function humanize(m){
+  m=String(m||'');
+  if(/different from the old password/i.test(m)) return 'Esa contraseña es igual a la que ya tenías. Usa una diferente.';
+  if(/already registered|already been registered|user already|already exists/i.test(m)) return 'Ese correo ya tiene una cuenta. Inicia sesión.';
+  if(/invalid login|invalid credentials/i.test(m)) return 'Correo o contraseña incorrectos.';
+  if(/expired|invalid.*(token|otp)|(token|otp).*invalid/i.test(m)) return 'El código es incorrecto o ya venció. Pide uno nuevo.';
+  if(/rate limit|too many|for security purposes|seconds/i.test(m)) return 'Espera un momento antes de intentar de nuevo.';
+  if(/at least|too short|weak password/i.test(m)) return 'La contraseña es muy corta. Usa al menos 8 caracteres.';
+  if(/not confirmed|confirm your email/i.test(m)) return 'Confirma tu correo antes de continuar.';
+  if(/invalid.*email|email.*invalid|unable to validate email/i.test(m)) return 'El correo no es válido.';
+  if(/network|failed to fetch|load failed/i.test(m)) return 'No pudimos conectar. Revisa tu internet e intenta de nuevo.';
+  if(/signups.*disabled|not allowed/i.test(m)) return 'No pudimos crear la cuenta. Intenta más tarde.';
+  return m || 'Ocurrió un error. Intenta de nuevo.';
+}
 
 var STEPS=['stEmail','stCode','stPass','stBiz','stPlan'];
 var googleMode=false;
@@ -712,9 +728,10 @@ $('sendCode').addEventListener('click',async function(){
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){showErr('Escribe un correo válido.');$('email').focus();return}
   if(!$('over18').checked){showErr('Necesitas aceptar los Términos y confirmar que eres mayor de edad.');return}
   var b=$('sendCode');b.disabled=true;b.textContent='Enviando…';
+  signupStartTs=Date.now();
   var r=await sb.auth.signInWithOtp({email:email,options:{shouldCreateUser:true}});
   b.disabled=false;b.textContent='Enviar código';
-  if(r.error){showErr(/rate|seconds/i.test(r.error.message)?'Espera un momento antes de pedir otro código.':(r.error.message||'No pudimos enviar el código.'));return}
+  if(r.error){showErr(humanize(r.error.message));return}
   goStep('stCode');
   setTimeout(function(){$('code').focus()},250);
 });
@@ -727,7 +744,7 @@ $('resend').addEventListener('click',async function(){
   clearErr();
   var email=$('email').value.trim().toLowerCase();
   var r=await sb.auth.signInWithOtp({email:email,options:{shouldCreateUser:true}});
-  if(r.error){showErr(/rate|seconds/i.test(r.error.message)?'Espera un momento antes de pedir otro código.':r.error.message);return}
+  if(r.error){showErr(humanize(r.error.message));return}
   $('msg').innerHTML='<div class="msg ok">Te reenviamos el código a '+email+'.</div>';
 });
 $('verifyBtn').addEventListener('click',async function(){
@@ -737,7 +754,14 @@ $('verifyBtn').addEventListener('click',async function(){
   var b=$('verifyBtn');b.disabled=true;b.textContent='Verificando…';
   var r=await sb.auth.verifyOtp({email:email,token:code,type:'email'});
   b.disabled=false;b.textContent='Verificar';
-  if(r.error){showErr(/expired|invalid/i.test(r.error.message)?'Código incorrecto o vencido. Pide otro.':r.error.message);return}
+  if(r.error){showErr(humanize(r.error.message));return}
+  // Estricto: si la cuenta ya existía ANTES de este registro (p. ej. ya la
+  // creaste con Google), no dejamos "crear" otra vez → a iniciar sesión.
+  var u=r.data&&r.data.user, cm=u&&u.created_at?new Date(u.created_at).getTime():0;
+  if(signupStartTs&&cm&&(signupStartTs-cm>15000)){
+    showErr('Ya tienes una cuenta con este correo. Te llevamos a iniciar sesión…');
+    setTimeout(function(){location.href='login.html'},1900);return;
+  }
   goStep('stPass');
   setTimeout(function(){$('pwd').focus()},250);
 });
@@ -753,7 +777,7 @@ $('savePass').addEventListener('click',async function(){
   var b=$('savePass');b.disabled=true;b.textContent='Guardando…';
   var r=await sb.auth.updateUser({password:pwd});
   b.disabled=false;b.textContent='Continuar';
-  if(r.error){showErr(r.error.message||'No pudimos guardar la contraseña.');return}
+  if(r.error){showErr(humanize(r.error.message));return}
   goStep('stBiz');
   setTimeout(function(){$('nombre').focus()},250);
 });
