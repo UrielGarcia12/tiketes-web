@@ -46,6 +46,7 @@ body{
   box-shadow:0 28px 72px rgba(0,0,0,.48);
   font-family:'Courier New',Courier,monospace;
 }
+.paper .tlogo{display:block;margin:0 auto 6px;width:150px;max-width:60%;}
 .paper .store{text-align:center;font-size:18px;font-weight:800;margin-bottom:2px;}
 .paper .slogan{text-align:center;font-size:10px;color:#444;margin-bottom:2px;font-style:italic;}
 .paper .addr{text-align:center;font-size:10.5px;margin-bottom:1px;color:#222;}
@@ -196,6 +197,9 @@ function renderPaper(){
   var html='<div class="paper-outer" id="paperOuter"><div class="paper" id="paper">'
     + wm
     + '<div class="content">'
+    + (d.slg
+        ? '<img class="tlogo" src="'+esc(d.slg)+'"/>'
+        : (d.stl===0 ? '' : '<img class="tlogo" src="assets/logo-para-tickets.png"/>'))
     + '<div class="store">'+esc((d.s||'Tienda').toUpperCase())+'</div>'
     + (d.h?'<div class="slogan">'+esc(d.h)+'</div>':'')
     + (d.ad?'<div class="addr">'+esc(d.ad)+'</div>':'')
