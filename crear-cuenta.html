@@ -453,6 +453,11 @@ input:focus-visible{outline:none}
           <input id="tel" type="tel" placeholder="222 123 4567" maxlength="20" autocomplete="tel">
         </div>
       </div>
+      <div class="field">
+        <label class="lb" for="quejas">Número de quejas o aclaraciones <span class="opt">— opcional</span></label>
+        <input id="quejas" type="tel" placeholder="Ej. 800 123 4567" maxlength="40">
+        <div style="font-size:12.5px;color:rgba(255,255,255,.5);margin-top:6px;line-height:1.5">Aparecerá en tus tickets para que tus clientes puedan contactarte.</div>
+      </div>
       <div class="actions">
         <button class="btn btn-ghost" id="backBiz">Atrás</button>
         <button class="btn btn-primary" id="bizNext">Continuar</button>
@@ -815,6 +820,8 @@ $('submit').addEventListener('click',async function(){
     biz_type:bizKey==='otro'?($('otroName').value.trim()||'Otro'):bizKey,
     uses_scanner:true
   };
+  var quejas=$('quejas')?$('quejas').value.trim():'';
+  if(quejas) profileData.ticket_settings={complaints_phone:quejas};
   try{ await sb.from('profiles').upsert(profileData,{onConflict:'id'}); }catch(e){}
   b.disabled=false;
   $('formWrap').classList.add('hidden');

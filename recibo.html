@@ -213,6 +213,7 @@ function renderPaper(){
     + '<div class="thanks">'+thanks+'</div>'
     + (d.so?'<div class="social">'+esc(d.so)+'</div>':'')
     + (d.lg?'<div class="legal">'+esc(d.lg).replace(/\n/g,'<br/>')+'</div>':'')
+    + (d.qj?'<div style="text-align:center;font-size:10px;margin-top:8px;color:#333;line-height:1.4">Quejas y aclaraciones:<br/><strong>'+esc(d.qj)+'</strong></div>':'')
     + (d.wm?'<div class="brand">VÍA TIKETES</div>':'')
     + '</div></div></div>';
 
