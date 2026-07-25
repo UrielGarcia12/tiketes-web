@@ -84,6 +84,9 @@ body{
 .recibo-links a{color:#A88EFF;text-decoration:none;}
 .recibo-links a:active{opacity:.7;}
 .recibo-links .dot{color:rgba(255,255,255,.25);}
+/* Modo preview (editor de la app): solo la tarjeta del recibo. */
+body.preview .topbar,body.preview .status,body.preview .btn-dl,body.preview .recibo-foot{display:none!important;}
+body.preview{padding-top:18px;padding-bottom:24px;}
 </style>
 </head>
 <body>
@@ -121,7 +124,11 @@ function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'
 function fmt(n){return '$'+Number(n||0).toFixed(2);}
 function $(id){return document.getElementById(id);}
 
-var raw=new URLSearchParams(location.search).get('d');
+var params=new URLSearchParams(location.search);
+// Modo "preview" (usado por el editor de la app): muestra solo la tarjeta del
+// recibo, sin barra superior, estado ni botón de descarga.
+if(params.has('preview')){document.body.classList.add('preview');}
+var raw=params.get('d');
 var d=null;
 try{d=JSON.parse(raw||'');}catch(e){}
 
