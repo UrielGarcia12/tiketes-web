@@ -14,10 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="colors_and_type.css">
 <style>
-/* ════════════════════════════════════════════════════════════════
-   Mismos tokens que la app (src/constants/colors.ts + Fonts).
-   Fondo #050617, orbes violeta+oro, inputs r14, CTA r18 con glow.
-   ════════════════════════════════════════════════════════════════ */
+
 :root{
   --ink950:#050617; --ink900:#0A0B1F;
   --violet500:#6B4BFF; --violet700:#4524D6; --violet300:#A88EFF; --violet400:#8B70FF;
@@ -32,13 +29,12 @@ body{
   min-height:100dvh;overflow-x:hidden;-webkit-font-smoothing:antialiased;
   display:flex;flex-direction:column;align-items:center;padding:0 18px 56px;
 }
-/* Orbes de fondo — mismos colores/posiciones que SignupScreen */
+
 .orb{position:fixed;border-radius:999px;pointer-events:none;z-index:0;filter:blur(38px)}
 .orb-a{top:-90px;left:-70px;width:300px;height:300px;background:rgba(107,75,255,.45)}
 .orb-b{top:260px;right:-90px;width:250px;height:250px;background:rgba(245,197,24,.18)}
 .orb-c{bottom:-120px;left:10%;width:260px;height:260px;background:rgba(107,75,255,.22)}
 
-/* Barra */
 .bar{width:100%;max-width:560px;display:flex;align-items:center;justify-content:space-between;padding:20px 2px 22px;position:relative;z-index:2}
 .bar a{font-family:var(--f-body);font-size:13px;font-weight:500;color:rgba(255,255,255,.5);text-decoration:none;transition:color .16s}
 .bar a:hover{color:#fff}
@@ -46,7 +42,6 @@ body{
 .brand-mark{height:24px;width:auto;display:block}
 .brand-name{font-family:var(--f-display);font-weight:800;font-size:17px;color:#fff;letter-spacing:-.035em}
 
-/* Tarjeta */
 .card{width:100%;max-width:560px;position:relative;z-index:2}
 
 .eyebrow{
@@ -57,12 +52,10 @@ h1{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,4.6vw,34px)
 h1 .ac{color:var(--violet300)}
 .sub{font-family:var(--f-body);font-size:13.5px;color:rgba(255,255,255,.55);margin-top:7px;line-height:1.55}
 
-/* Progreso */
 .steps{display:flex;gap:6px;margin:20px 0 22px}
 .steps i{flex:1;height:3px;border-radius:99px;background:rgba(255,255,255,.1);transition:background .3s}
 .steps i.on{background:var(--violet400)}
 
-/* Campos — input r14, bg .05, borde .10, Inter 14 (idéntico a la app) */
 .field{margin-bottom:15px}
 .lb{
   display:block;font-family:var(--f-body);font-size:10.5px;font-weight:600;
@@ -96,7 +89,6 @@ input:focus-visible{outline:none}
 }
 .phone-wrap input{flex:1}
 
-/* Giros — 3 por fila, emoji + nombre, r12 (idéntico a la app) */
 .bizGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .bizBtn{
   background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);
@@ -117,7 +109,6 @@ input:focus-visible{outline:none}
 .bizIco{font-size:22px;line-height:26px}
 .bizName{font-family:var(--f-body);font-weight:600;font-size:9.5px;color:#fff;text-align:center}
 
-/* Tip box (igual que la app) */
 .tip{
   display:flex;align-items:center;gap:8px;background:rgba(167,142,255,.10);
   border:1px solid rgba(167,142,255,.22);border-radius:12px;
@@ -126,9 +117,6 @@ input:focus-visible{outline:none}
 }
 .tip b{color:var(--violet300);font-weight:600}
 
-/* Contraseña con botón de ver. Sin esto el usuario no puede comprobar qué
-   escribió — y si Chrome autocompleta una contraseña generada, se entera
-   hasta que la app lo rechaza. */
 .pwd-wrap{position:relative}
 .pwd-wrap input{padding-right:50px}
 .pwd-eye{
@@ -140,7 +128,6 @@ input:focus-visible{outline:none}
 .pwd-eye:focus-visible{outline:2px solid var(--violet300);outline-offset:1px}
 .pwd-eye svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 
-/* Planes — mismo lenguaje visual que .bizBtn, pero en fila */
 .cyc{display:inline-flex;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:99px;padding:3px;margin-bottom:12px}
 .cycB{
   background:none;border:0;border-radius:99px;padding:7px 15px;cursor:pointer;
@@ -151,9 +138,7 @@ input:focus-visible{outline:none}
 .cycB:focus-visible{outline:2px solid var(--violet300);outline-offset:2px}
 .cycOff{color:var(--gold);font-weight:700;margin-left:4px}
 .planGrid{display:grid;gap:10px}
-/* Cada tarjeta lleva --ac (su color) por estilo en línea, igual que la
-   sección de precios. color-mix tiñe el fondo y el borde sin fijar 4 colores
-   a mano por plan. */
+
 .planBtn{
   position:relative;overflow:hidden;isolation:isolate;
   display:grid;gap:12px;
@@ -196,7 +181,7 @@ input:focus-visible{outline:none}
 .planPr{font-family:var(--f-display);font-weight:800;font-size:23px;color:#fff;letter-spacing:-.5px;line-height:1}
 .planPr small{font-family:var(--f-body);font-weight:500;font-size:10px;color:rgba(255,255,255,.42);margin-left:3px;letter-spacing:0}
 .planLim{font-family:var(--f-body);font-size:10.5px;color:rgba(255,255,255,.4);text-align:right;line-height:1.4;max-width:46%}
-/* Palomita de seleccionado */
+
 .planPick{
   position:absolute;top:13px;right:14px;width:22px;height:22px;border-radius:99px;
   background:var(--ac);display:flex;align-items:center;justify-content:center;
@@ -206,7 +191,6 @@ input:focus-visible{outline:none}
 .planBtn[aria-pressed=true] .planTag{opacity:0}
 .planPick svg{width:12px;height:12px;fill:none;stroke:var(--ink950);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 
-/* Credenciales en el éxito — lo que evita quedarse fuera de la app */
 .cred{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:2px 14px;margin:18px 0 10px;text-align:left}
 .credRow{display:flex;align-items:center;gap:9px;padding:11px 0}
 .credRow+.credRow{border-top:1px solid rgba(255,255,255,.07)}
@@ -230,7 +214,6 @@ input:focus-visible{outline:none}
 .credWarn b{color:var(--gold);font-weight:600}
 .credWarn svg{width:15px;height:15px;flex:0 0 15px;margin-top:1px;fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round}
 
-/* Paso de verificación de correo (OTP) */
 .verify{max-width:560px}
 .verify .seal{
   width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
@@ -246,7 +229,6 @@ input:focus-visible{outline:none}
 .vResend{background:none;border:0;color:var(--violet300);font-family:var(--f-body);font-weight:600;font-size:13px;cursor:pointer;margin-top:14px}
 .vResend:hover{text-decoration:underline}
 
-/* Check */
 .check{display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-top:14px}
 .check input{
   appearance:none;width:18px;height:18px;flex:0 0 18px;margin-top:1px;
@@ -262,7 +244,6 @@ input:focus-visible{outline:none}
 .check a{color:var(--violet300);text-decoration:none}
 .check a:hover{text-decoration:underline}
 
-/* Botones — CTA r18 con degradado violeta + glow (idéntico a la app) */
 .actions{display:flex;gap:10px;margin-top:20px}
 .btn{
   border:0;border-radius:18px;padding:15px 18px;cursor:pointer;
@@ -283,7 +264,6 @@ input:focus-visible{outline:none}
 .msg.err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#FCA5A5}
 .msg.ok{background:rgba(52,199,89,.12);border:1px solid rgba(52,199,89,.3);color:#86EFAC}
 
-/* Botón Google (registro) */
 .gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;border:0;border-radius:14px;padding:14px;cursor:pointer;font-family:var(--f-body);font-weight:600;font-size:14px;color:#1F1F1F;transition:filter .16s,transform .12s;margin-bottom:14px}
 .gbtn:hover{filter:brightness(.97)}
 .gbtn:active{transform:scale(.99)}
@@ -295,7 +275,6 @@ input:focus-visible{outline:none}
 .foot{text-align:center;margin-top:20px;font-family:var(--f-body);font-size:12.5px;color:rgba(255,255,255,.35)}
 .foot a{color:var(--violet300);text-decoration:none}
 
-/* Éxito */
 .done{text-align:center;padding:6px 0}
 .seal{
   width:64px;height:64px;margin:0 auto 16px;border-radius:32px;
@@ -314,7 +293,6 @@ input:focus-visible{outline:none}
 .summary div{display:flex;justify-content:space-between;padding:5px 0;color:rgba(255,255,255,.5)}
 .summary div b{color:#fff;font-weight:600}
 
-/* Entrada */
 .rise{opacity:0;transform:translateY(14px);animation:rise .55s cubic-bezier(.16,1,.3,1) forwards}
 .rise:nth-child(2){animation-delay:.05s}
 @keyframes rise{to{opacity:1;transform:none}}
@@ -338,7 +316,7 @@ input:focus-visible{outline:none}
 </div>
 
 <main class="card">
-  <!-- ══ FORM ══ -->
+  
   <div id="formWrap" class="rise">
     <div class="eyebrow" id="eyebrow">Registro · Paso 1 de 3</div>
     <h1 id="title">Cuéntanos de <span class="ac">tu negocio</span></h1>
@@ -346,7 +324,6 @@ input:focus-visible{outline:none}
 
     <div class="steps" aria-hidden="true"><i class="on" id="d1"></i><i id="d2"></i><i id="d3"></i><i id="d4"></i><i id="d5"></i></div>
 
-    <!-- Paso 1 — correo -->
     <section id="stEmail">
       <button type="button" class="gbtn" id="gsignup">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
@@ -366,7 +343,6 @@ input:focus-visible{outline:none}
       <div class="actions"><button class="btn btn-primary" id="sendCode">Enviar código</button></div>
     </section>
 
-    <!-- Paso 2 — código -->
     <section id="stCode" class="hidden">
       <div class="field">
         <label class="lb" for="code">Código de verificación</label>
@@ -379,7 +355,6 @@ input:focus-visible{outline:none}
       </div>
     </section>
 
-    <!-- Paso 3 — contraseña -->
     <section id="stPass" class="hidden">
       <div class="field">
         <label class="lb" for="pwd">Contraseña</label>
@@ -401,7 +376,6 @@ input:focus-visible{outline:none}
       </div>
     </section>
 
-    <!-- Paso 4 — negocio -->
     <section id="stBiz" class="hidden">
       <div class="field">
         <label class="lb" for="nombre">Tu nombre</label>
@@ -464,7 +438,6 @@ input:focus-visible{outline:none}
       </div>
     </section>
 
-    <!-- Paso 5 — plan -->
     <section id="stPlan" class="hidden">
       <div class="cyc" role="group" aria-label="Ciclo de cobro">
         <button type="button" class="cycB" id="cycM" aria-pressed="true">Mensual</button>
@@ -482,7 +455,6 @@ input:focus-visible{outline:none}
     <p class="foot">¿Ya tienes cuenta? Inicia sesión desde la app.</p>
   </div>
 
-  <!-- ══ ÉXITO ══ -->
   <div id="doneWrap" class="done hidden">
     <div class="seal"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
     <h2 id="doneTitle">Tu cuenta quedó lista</h2>
@@ -504,7 +476,6 @@ input:focus-visible{outline:none}
   </div>
 </main>
 
-  <!-- ══ VERIFICAR CORREO ══ -->
   <main class="card verify" id="verifyWrap" style="display:none">
     <div class="seal"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
     <div class="eyebrow">Un paso más</div>
@@ -525,7 +496,6 @@ var SUPABASE_URL  = 'https://wwukfbadzhowpvruumrp.supabase.co';
 var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3dWtmYmFkemhvd3B2cnV1bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNDk1MjksImV4cCI6MjA5NDcyNTUyOX0.2-cPfqjoEkFkzVcWEvIzQHL4SWbvdJnNlCeUSEyzXk8';
 var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-// Tipo de negocio → la app arma las categorías predeterminadas (categoryPresets.ts)
 var BIZ = [
   { key:'tienda',     label:'Tienda',        emoji:'🛒', tip:'preparamos tus categorías de tienda automáticamente en la app.' },
   { key:'farmacia',   label:'Farmacia',      emoji:'💊', tip:'preparamos categorías de farmacia automáticamente en la app.' },
@@ -544,13 +514,11 @@ var CHECKOUT = {
 };
 var PLAN_NAME={essential:'Essential',pro:'Pro',premium:'Premium'};
 var PLAN_PRICE={essential:159,pro:399,premium:859};
-// Mismos planes, precios y límites que la app (PricingScreen.tsx)
 var CREST={
   zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
   check:'<polyline points="20 6 9 17 4 12"/>',
   crown:'<path d="M2 18h20M3 18l1-10 5 5 3-7 3 7 5-5 1 10"/>'
 };
-// Mismos planes, precios, límites, colores y escudos que la app (PricingScreen.tsx)
 var PLANS=[
   {key:'',          name:'Free',      price:0,   ds:'Vende hoy mismo, sin pagar nada.', lim:'50 productos · 1 sucursal',            ac:'#22C55E', crest:'zap',   tag:'Empieza aquí'},
   {key:'essential', name:'Essential', price:159, ds:'Para tiendas en crecimiento.',     lim:'500 productos · 1 sucursal',           ac:'#0EA5E9', crest:'check', tag:'Recomendado'},
@@ -565,14 +533,12 @@ if(!CHECKOUT[wantPlan]) wantPlan='';
 
 var $=function(id){return document.getElementById(id)};
 
-// Registro con Google: crea la cuenta al instante y lleva a "Mi membresía".
 $('gsignup').addEventListener('click',async function(){
   var b=$('gsignup');b.disabled=true;$('gtext').textContent='Abriendo Google…';
   var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+'/login.html'}});
   if(r.error){b.disabled=false;$('gtext').textContent='Continuar con Google';showErr('No pudimos abrir Google. Intenta de nuevo.');}
 });
 
-// Junta la dirección en una línea para el ticket, saltando lo vacío.
 function composeAddress(){
   var calle=$('calle').value.trim(), col=$('colonia').value.trim(),
       cp=$('cp').value.trim(), mun=$('municipio').value.trim(), edo=$('estado').value;
@@ -604,8 +570,6 @@ var bizKey='tienda';
   });
 })();
 
-
-// ── Planes ────────────────────────────────────────────────────────────────
 function planPrice(p){return p.price===0?0:(wantCycle==='yearly'?Math.round(p.price*0.8):p.price)}
 function paintPlans(){
   var els=$('planes').querySelectorAll('.planBtn');
@@ -646,7 +610,6 @@ function paintPlans(){
   cyc(wantCycle);
 })();
 
-// ── Ver contraseña ────────────────────────────────────────────────────────
 var IC_EYE='<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
 var IC_OFF='<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
 var IC_CHK='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
@@ -660,8 +623,6 @@ Array.prototype.forEach.call(document.querySelectorAll('.pwd-eye'),function(b){
   });
 });
 
-// Copiar al portapapeles. clipboard API sólo existe en contexto seguro;
-// execCommand es el respaldo para navegadores viejos.
 function copyTo(btn,txt){
   function done(){
     var o=btn.innerHTML;btn.classList.add('ok');btn.innerHTML=IC_CHK;
@@ -682,7 +643,6 @@ function copyTo(btn,txt){
 function showErr(t){$('msg').innerHTML='<div class="msg err">'+t+'</div>'}
 function clearErr(){$('msg').innerHTML=''}
 var signupStartTs=0;
-// Traduce los mensajes de error de Supabase (vienen en inglés) al español.
 function humanize(m){
   m=String(m||'');
   if(/different from the old password/i.test(m)) return 'Esa contraseña es igual a la que ya tenías. Usa una diferente.';
@@ -726,7 +686,6 @@ function polarUrl(plan,cycle,userId,email){
   return u.toString();
 }
 
-// ── Paso 1: correo → enviar código (OTP crea el usuario) ───────────────────
 $('sendCode').addEventListener('click',async function(){
   clearErr();
   var email=$('email').value.trim().toLowerCase();
@@ -742,7 +701,6 @@ $('sendCode').addEventListener('click',async function(){
 });
 $('email').addEventListener('keydown',function(e){if(e.key==='Enter')$('sendCode').click()});
 
-// ── Paso 2: código → verificar (crea la sesión) ────────────────────────────
 $('code').addEventListener('input',function(){$('code').value=$('code').value.replace(/\D/g,'').slice(0,8)});
 $('backCode').addEventListener('click',function(){clearErr();goStep('stEmail')});
 $('resend').addEventListener('click',async function(){
@@ -760,8 +718,6 @@ $('verifyBtn').addEventListener('click',async function(){
   var r=await sb.auth.verifyOtp({email:email,token:code,type:'email'});
   b.disabled=false;b.textContent='Verificar';
   if(r.error){showErr(humanize(r.error.message));return}
-  // Estricto: si la cuenta ya existía ANTES de este registro (p. ej. ya la
-  // creaste con Google), no dejamos "crear" otra vez → a iniciar sesión.
   var u=r.data&&r.data.user, cm=u&&u.created_at?new Date(u.created_at).getTime():0;
   if(signupStartTs&&cm&&(signupStartTs-cm>15000)){
     showErr('Ya tienes una cuenta con este correo. Te llevamos a iniciar sesión…');
@@ -772,7 +728,6 @@ $('verifyBtn').addEventListener('click',async function(){
 });
 $('code').addEventListener('keydown',function(e){if(e.key==='Enter')$('verifyBtn').click()});
 
-// ── Paso 3: contraseña → updateUser ────────────────────────────────────────
 $('backPass').addEventListener('click',function(){clearErr();goStep('stCode')});
 $('savePass').addEventListener('click',async function(){
   clearErr();
@@ -787,7 +742,6 @@ $('savePass').addEventListener('click',async function(){
   setTimeout(function(){$('nombre').focus()},250);
 });
 
-// ── Paso 4: negocio ────────────────────────────────────────────────────────
 $('backBiz').addEventListener('click',function(){clearErr(); if(googleMode){location.href='index.html';} else {goStep('stPass');}});
 $('bizNext').addEventListener('click',function(){
   clearErr();
@@ -797,7 +751,6 @@ $('bizNext').addEventListener('click',function(){
   goStep('stPlan');
 });
 
-// ── Paso 5: plan → crear (upsert del perfil; la sesión ya existe) ───────────
 $('backPlan').addEventListener('click',function(){clearErr();goStep('stBiz')});
 $('submit').addEventListener('click',async function(){
   clearErr();
@@ -830,7 +783,6 @@ $('submit').addEventListener('click',async function(){
   scrollTo({top:0,behavior:'smooth'});
 });
 
-// Pinta la pantalla de éxito.
 function renderDone(negocioNombre,userId,email){
   $('cEmail').textContent=email;
   $('cEmailCopy').addEventListener('click',function(){copyTo($('cEmailCopy'),email)});
@@ -866,10 +818,8 @@ function renderDone(negocioNombre,userId,email){
   scrollTo({top:0,behavior:'smooth'});
 }
 
-// Inicializa el título/progreso del primer paso.
 goStep('stEmail');
 
-// ── Al cargar: ¿volvemos de Google con sesión? → completar negocio ─────────
 sb.auth.getSession().then(function(r){
   var sess=r.data.session; if(!sess) return;
   sb.from('profiles').select('store_name').eq('id',sess.user.id).maybeSingle().then(function(p){
@@ -881,6 +831,6 @@ sb.auth.getSession().then(function(r){
   });
 });
 </script>
-<!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
 </body>
 </html>

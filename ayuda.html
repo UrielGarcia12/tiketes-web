@@ -29,7 +29,6 @@ body{
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 
-/* NAV */
 .nav{
   position:sticky;top:0;z-index:50;
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
@@ -48,7 +47,6 @@ body{
 .nav .back:hover{color:#fff}
 @media(max-width:640px){.nav .tag{display:none}}
 
-/* HERO + buscador */
 .hero{
   position:relative;overflow:hidden;text-align:center;
   padding:clamp(52px,9vh,92px) clamp(16px,4vw,44px) clamp(34px,5vh,56px);
@@ -85,7 +83,6 @@ body{
 #q::placeholder{color:rgba(255,255,255,.3)}
 #q:focus{outline:none;border-color:rgba(167,142,255,.7);background:rgba(139,112,255,.09)}
 
-/* Categorías */
 .wrap{max-width:860px;margin:0 auto;padding:clamp(30px,5vh,52px) clamp(16px,4vw,28px) 80px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:28px}
 .chip{
@@ -100,7 +97,6 @@ body{
 .chip[aria-pressed=true]{background:rgba(139,112,255,.2);border-color:rgba(167,142,255,.65);color:#fff}
 .chip:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
-/* Acordeón */
 .faq{border-top:1px solid var(--rule)}
 .qa{border-bottom:1px solid var(--rule);opacity:0;transform:translateY(14px);animation:in .5s var(--ease) forwards}
 @keyframes in{to{opacity:1;transform:none}}
@@ -124,7 +120,6 @@ body{
 .qa.open .q{color:var(--gold-light)}
 .q span{flex:1}
 
-/* Truco: max-height animado + grid-rows para que se sienta fluido */
 .a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s var(--ease)}
 .qa.open .a{grid-template-rows:1fr}
 .a-in{overflow:hidden}
@@ -144,7 +139,6 @@ body{
 .empty{text-align:center;padding:50px 20px;color:rgba(255,255,255,.35);font-size:14px}
 .empty[hidden]{display:none}
 
-/* Contacto */
 .contact{
   margin-top:44px;border-radius:20px;padding:28px;text-align:center;
   background:linear-gradient(150deg,rgba(107,75,255,.16),rgba(201,169,110,.07));
@@ -152,7 +146,7 @@ body{
 }
 .contact h2{font-family:var(--f-hero);font-weight:800;text-transform:uppercase;font-size:clamp(26px,4vw,38px);letter-spacing:-.01em}
 .contact p{font-size:13.5px;color:rgba(255,255,255,.5);margin-top:8px;line-height:1.6}
-/* Caja con el correo + copiar */
+
 .mailbox{
   display:inline-flex;align-items:center;gap:10px;margin-top:20px;
   background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
@@ -237,8 +231,6 @@ footer span{color:rgba(255,255,255,.2);margin:0 8px}
     <h2>¿No estaba tu duda?</h2>
     <p>Escríbenos y te contesta una persona, no un robot.<br>Somos un equipo chico: te leemos todo.</p>
 
-    <!-- El correo a la vista y tú eliges cómo escribir: forzar mailto abre
-         el cliente que Windows tenga por default (casi siempre Outlook). -->
     <div class="mailbox">
       <span class="mail-addr" id="addr">tiketes.soporteapp@gmail.com</span>
       <button class="mail-copy" id="copy" type="button" aria-label="Copiar correo">
@@ -268,7 +260,6 @@ footer span{color:rgba(255,255,255,.2);margin:0 8px}
 </footer>
 
 <script>
-// Las respuestas viven aquí: agregar una es agregar un objeto.
 var FAQ = [
   { c:'Tickets', q:'¿Puedo imprimir con una impresora térmica?',
     a:['Sí. Tiketes manda el ticket a cualquier <b>impresora térmica de 80 mm</b> que tu teléfono ya reconozca (por Bluetooth, Wi-Fi o la que tengas configurada en Android).',
@@ -388,8 +379,6 @@ function pinta(){
 q.addEventListener('input', pinta);
 pinta();
 
-// Copiar el correo. execCommand es el plan B: clipboard.writeText necesita
-// contexto seguro y no siempre está (webviews viejos, http).
 (function(){
   var b = document.getElementById('copy'), tx = document.getElementById('copyTx');
   var mail = document.getElementById('addr').textContent.trim();
@@ -413,6 +402,6 @@ pinta();
   });
 })();
 </script>
-<!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
 </body>
 </html>

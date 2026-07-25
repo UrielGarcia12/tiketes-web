@@ -15,10 +15,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="colors_and_type.css">
 <style>
-/* ================================================================
-   Tiketes Landing — Rediseño Premium 2026
-   Estética: Porsche × Apple × Zara
-   ================================================================ */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -30,7 +26,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ── TOKENS EXTRA ─────────────────────────────────────────────── */
 :root {
   --gold:        #C9A96E;
   --gold-dim:    #8C6E3C;
@@ -40,12 +35,10 @@ body {
   --onyx-3:      #111120;
   --rule-dark:   rgba(255,255,255,0.07);
   --rule-light:  rgba(15,15,40,0.08);
-  /* Display condensada SOLO para titulares grandes — nunca en botones ni UI */
+  
   --font-hero:   'Big Shoulders Display', 'Sora', system-ui, sans-serif;
 }
 
-/* ── Accesibilidad: respetar "reducir movimiento" del sistema ──── */
-/* Sin esto, quien marea con las animaciones no tiene salida. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .001ms !important;
@@ -59,7 +52,6 @@ body {
   .printer { opacity: 1 !important; }
 }
 
-/* ── Reveal al hacer scroll (toda la página) ───────────────────── */
 .rv { opacity: 0; transform: translateY(26px); }
 .rv.vis {
   opacity: 1; transform: none;
@@ -68,9 +60,6 @@ body {
 .rv-d1.vis { transition-delay: .08s } .rv-d2.vis { transition-delay: .16s }
 .rv-d3.vis { transition-delay: .24s } .rv-d4.vis { transition-delay: .32s }
 
-/* ── NAV ──────────────────────────────────────────────────────── */
-/* Grid de 3 columnas: la del centro queda centrada de verdad, sin importar
-   que el logo y los botones midan distinto (con space-between se recorrían). */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   height: 68px;
@@ -87,8 +76,7 @@ body {
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-bottom-color: var(--rule-dark);
 }
-/* Marca = logo real (PNG con alfa) + el nombre como texto vivo, para que
-   quede nítido a cualquier tamaño y se pueda re-estilar sin tocar la imagen. */
+
 .brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; }
 .brand-mark { height: 27px; width: auto; display: block; }
 .brand-name {
@@ -124,10 +112,6 @@ body {
 
 @media (max-width: 768px) { .nav-links { display: none; } }
 
-
-/* ── HERO ─────────────────────────────────────────────────────── */
-/* Hero a dos columnas: el texto manda a la izquierda, el ticket vive a la
-   derecha y pisa el titular. Centrado todo se leía como plantilla. */
 .hero {
   min-height: 100vh;
   background: var(--onyx);
@@ -146,7 +130,6 @@ body {
   .hero-visual { order: -1; justify-content: flex-start; }
 }
 
-/* Dot grid — very subtle */
 .hero::before {
   content: ''; position: absolute; inset: 0; pointer-events: none;
   background-image:
@@ -157,13 +140,11 @@ body {
   -webkit-mask: radial-gradient(ellipse 80% 80% at 50% 50%, #000 0%, transparent 80%);
 }
 
-/* Bottom rule */
 .hero::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
   background: linear-gradient(90deg, transparent, var(--rule-dark) 25%, var(--rule-dark) 75%, transparent);
 }
 
-/* Ambient orbs */
 .orb { position: absolute; border-radius: 50%; pointer-events: none; }
 .orb-a {
   top: -300px; left: -200px; width: 720px; height: 720px;
@@ -191,9 +172,6 @@ body {
   background: linear-gradient(90deg, var(--gold-dim), transparent);
 }
 
-/* ── Entrada escalonada del hero ───────────────────────────────── */
-/* Cada pieza sube en secuencia; el titular sale por línea desde una
-   máscara, que es lo que le da el aire editorial. */
 .an { opacity: 0; animation: heroUp .75s cubic-bezier(.16,1,.3,1) forwards; }
 .an-1 { animation-delay: .06s } .an-2 { animation-delay: .50s }
 .an-3 { animation-delay: .60s } .an-4 { animation-delay: .70s }
@@ -212,8 +190,7 @@ body {
 
 .hero-h1 {
   font-family: var(--font-hero);
-  /* "Controla todo." es la línea más larga: el tamaño se ajusta para que
-     quepa en una sola línea, si no el titular desborda el hero. */
+  
   font-size: clamp(46px, 7.7vw, 112px);
   font-weight: 800;
   letter-spacing: -.018em;
@@ -224,7 +201,7 @@ body {
   margin: 0 0 26px;
   position: relative; z-index: 2;
 }
-/* Oro sólido, sin gradiente de texto (los degradados en texto delatan plantilla) */
+
 .hero-h1 em { font-style: normal; color: var(--gold); }
 
 .hero-lead {
@@ -264,14 +241,11 @@ body {
   color: rgba(255,255,255,.24); letter-spacing: .02em;
 }
 
-/* ── Ticket que se imprime y atraviesa el titular ──────────────── */
-/* La firma de la página: el POS imprime. El papel pisa la tipografía,
-   igual que el sujeto rompe el título en las referencias editoriales.   */
 .printer {
   position: relative; z-index: 3;
   width: clamp(180px, 21vw, 250px);
-  margin-left: -14%;                /* pisa el titular, como la raqueta */
-  /* Lo sube para que quede a la altura de "segundos." / "controla todo." */
+  margin-left: -14%;                
+  
   margin-bottom: clamp(120px, 27vh, 280px);
   transform: rotate(2.4deg);
   filter: drop-shadow(0 40px 70px rgba(0,0,0,.62));
@@ -310,7 +284,6 @@ body {
 .pr-brand { text-align: center; font-size: 5.5px; letter-spacing: .22em; color: #A0A0AE; margin-top: 6px; }
 @keyframes printOut { to { clip-path: inset(0 0 0 0); } }
 
-/* Scroll cue */
 .scroll-cue {
   position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
   display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -323,8 +296,6 @@ body {
 }
 @keyframes scrollPulse { 0%,100%{opacity:0;transform:scaleY(.4) translateY(-8px)} 55%{opacity:1;transform:scaleY(1) translateY(0)} }
 
-
-/* ── STATS ────────────────────────────────────────────────────── */
 .stats-section {
   background: var(--onyx-2);
   border-top: 1px solid var(--rule-dark);
@@ -360,8 +331,6 @@ body {
   .stat-item + .stat-item::before { display: none; }
 }
 
-
-/* ── SHARED SECTION LAYOUT ────────────────────────────────────── */
 .section-inner { max-width: 1140px; margin: 0 auto; }
 
 .s-eyebrow {
@@ -383,13 +352,6 @@ body {
   line-height: 1.65; max-width: 460px; margin-bottom: 72px;
 }
 
-
-/* ── FEATURES ─────────────────────────────────────────────────── */
-/* ── FUNCIONES ─────────────────────────────────────────────────── */
-/* Antes: tarjetas blancas con el icono metido en un cuadrito redondeado —
-   el patrón que aparece en toda landing y que no dice nada de la marca.
-   Ahora: rejilla oscura con reglas de 1px (sin esquinas redondeadas), el
-   icono suelto sobre un halo, y una regla dorada que se dibuja al pasar.  */
 .features-section {
   background: var(--onyx-2);
   border-top: 1px solid var(--rule-dark);
@@ -419,7 +381,6 @@ body {
 .f-card.vis { opacity: 1; transform: translateY(0); }
 .f-card:hover { background: var(--onyx-3); }
 
-/* Regla dorada que se dibuja de izquierda a derecha al pasar el mouse */
 .f-card::after {
   content: ''; position: absolute; left: 0; bottom: 0; height: 1px; width: 100%;
   background: linear-gradient(90deg, var(--gold), transparent);
@@ -435,7 +396,7 @@ body {
   margin-bottom: 22px; position: relative;
   transition: color 300ms var(--ease-out), transform 300ms var(--ease-out);
 }
-/* Halo detrás del icono, en vez de la cajita redondeada de siempre */
+
 .f-icon::before {
   content: ''; position: absolute; left: -6px; top: -6px;
   width: 40px; height: 40px; border-radius: 50%;
@@ -452,16 +413,12 @@ body {
 }
 .f-desc { font-size: 13px; color: rgba(255,255,255,.42); line-height: 1.65; }
 
-
-/* ── FLUJO DE VENTA: 5 pasos, capturas reales ──────────────────── */
-/* Aquí sí numeramos: es una secuencia de verdad (el orden importa). */
 .flow-section {
   background: var(--onyx-2);
   border-top: 1px solid var(--rule-dark);
   padding: clamp(72px, 11vh, 130px) 0;
 }
-/* .s-h2 nace oscuro (--ink-900) porque nació en secciones blancas: en las
-   oscuras hay que invertirlo o el titular desaparece contra el fondo. */
+
 .flow-section .s-h2   { color: #fff; }
 .flow-section .s-lead { color: rgba(255,255,255,.44); }
 .flow {
@@ -489,7 +446,7 @@ body {
   box-shadow: 0 40px 74px rgba(0,0,0,.66), 0 0 50px rgba(107,75,255,.12);
 }
 .flow-txt { padding-top: 18px; }
-/* El número manda: es lo que hace leer la secuencia de un vistazo. */
+
 .flow-n {
   display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;
 }
@@ -511,7 +468,6 @@ body {
 }
 .flow-step p { font-size: 12.5px; line-height: 1.6; color: rgba(255,255,255,.42); }
 
-/* ── TODO BAJO CONTROL: rejilla de pantallas reales ────────────── */
 .tour-section {
   background: var(--onyx);
   border-top: 1px solid var(--rule-dark);
@@ -538,10 +494,6 @@ body {
   color: rgba(255,255,255,.42);
 }
 
-/* ── PLANES: réplica de PricingScreen.tsx ────────────────────────
-   Tarjetas claras con acento por plan y Premium en oscuro, crest, badge
-   de tag, barra de stats, grupos con palomita y el toggle Mensual/Anual.
-   Los datos salen del PLANS de la app, no se escriben a mano.          */
 .plans-section {
   background: var(--onyx);
   border-top: 1px solid var(--rule-dark);
@@ -550,9 +502,6 @@ body {
 .plans-section .s-h2   { color: #fff; }
 .plans-section .s-lead { color: rgba(255,255,255,.44); }
 
-/* Toggle Mensual / Anual -20% */
-/* Toggle Mensual / Anual — vidrio sobre el onyx, con una pastilla que se
-   desliza entre las dos opciones en vez de encender/apagar de golpe. */
 .pc-toggle {
   position: relative; display: inline-flex; padding: 5px;
   background: rgba(255,255,255,.05);
@@ -561,7 +510,7 @@ body {
   border-radius: 99px; margin: clamp(26px,4vh,38px) auto 0;
   box-shadow: 0 10px 30px rgba(0,0,0,.4);
 }
-/* La pastilla que viaja */
+
 .pc-toggle::before {
   content: ''; position: absolute; z-index: 0;
   top: 5px; bottom: 5px; left: 5px;
@@ -590,14 +539,12 @@ body {
 }
 .pc-tg.on .pc-off { transform: scale(1.08); }
 
-/* Los precios cambian con un parpadeo corto, para que se note el cambio */
 .pc-amt { transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out); }
 .pc-amt.flip { opacity: 0; transform: translateY(-6px); }
 @media (prefers-reduced-motion: reduce) {
   .pc-toggle::before, .pc-amt { transition: none; }
 }
 
-/* Rejilla */
 .pc-grid {
   display: grid; grid-template-columns: repeat(4, 1fr); padding-top: 14px;
   gap: clamp(12px, 1.6vw, 20px); margin-top: clamp(34px,5vh,50px);
@@ -606,12 +553,9 @@ body {
 @media (max-width: 1100px) { .pc-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 620px)  { .pc-grid { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; } }
 
-/* Tarjeta — vidrio teñido con el color del plan sobre el fondo oscuro.
-   Nada de blanco: cada plan se reconoce por su tinte y deja ver el onyx. */
 .pc {
   position: relative; border-radius: 22px; padding: 22px 20px 24px;
-  /* Fallback primero: si el navegador no entiende color-mix, la tarjeta se ve
-     igual, solo sin el tinte del plan. */
+  
   background: rgba(255,255,255,.05);
   border: 1px solid rgba(255,255,255,.14);
   background:
@@ -624,15 +568,13 @@ body {
   transition: transform 340ms var(--ease-out), box-shadow 340ms var(--ease-out),
               border-color 340ms var(--ease-out);
 }
-/* Capa de efectos: ESTA recorta, no la tarjeta — así el badge "MÁS POPULAR"
-   puede sobresalir por arriba sin que se lo coman. */
+
 .pc-fx {
   position: absolute; inset: 0; z-index: 0;
   border-radius: 22px; overflow: hidden; pointer-events: none;
 }
 .pc > *:not(.pc-fx) { position: relative; z-index: 1; }
 
-/* Halo del color del plan */
 .pc-fx::before {
   content: ''; position: absolute;
   top: -70px; right: -70px; width: 220px; height: 220px; border-radius: 50%;
@@ -640,7 +582,7 @@ body {
   transition: transform 600ms var(--ease-out), opacity 400ms;
   opacity: .8;
 }
-/* Barrido "holo" al pasar, como en la app */
+
 .pc-fx::after {
   content: ''; position: absolute; inset: 0;
   background: linear-gradient(105deg, transparent 38%,
@@ -736,18 +678,14 @@ body {
 .b-ai   { background: #6B4BFF; color: #fff; }
 .b-live { background: #F5C518; color: #7A5500; }
 
-
-/* Entrada escalonada de las tarjetas (se apoya en el .rv del observer) */
 .pc-grid .pc:nth-child(1).vis { transition-delay: 0s }
 .pc-grid .pc:nth-child(2).vis { transition-delay: .09s }
 .pc-grid .pc:nth-child(3).vis { transition-delay: .18s }
 .pc-grid .pc:nth-child(4).vis { transition-delay: .27s }
 
-/* El crest reacciona al hover, como en la app */
 .pc-crest { transition: transform 320ms var(--ease-out), background 320ms; }
 .pc:hover .pc-crest { transform: translateY(-2px) scale(1.06); background: color-mix(in srgb, var(--ac) 34%, transparent); }
 
-/* La corona respira para llamar la atención al plan destacado */
 .pc-pop-tag { animation: popPulse 2.6s ease-in-out infinite; }
 @keyframes popPulse {
   0%, 100% { box-shadow: 0 8px 18px rgba(245,197,24,.4); }
@@ -762,7 +700,6 @@ body {
 .pc-secure svg { width: 14px; height: 14px; }
 .pc-secure b { color: rgba(255,255,255,.72); font-weight: 600; }
 
-/* ── CTA BANNER ───────────────────────────────────────────────── */
 .cta-banner {
   background: #fff;
   padding: 128px clamp(24px, 5vw, 80px);
@@ -801,8 +738,6 @@ body {
   box-shadow: 0 18px 48px rgba(107,75,255,.28);
 }
 
-
-/* ── FOOTER ───────────────────────────────────────────────────── */
 footer {
   background: var(--onyx);
   border-top: 1px solid var(--rule-dark);
@@ -828,7 +763,6 @@ footer {
 .footer-col a     { font-size: 13px; color: rgba(255,255,255,.40); text-decoration: none; transition: color 140ms; }
 .footer-col a:hover { color: rgba(255,255,255,.80); }
 
-/* Fila legal: los enlaces que la gente busca abajo de todo */
 .footer-legal {
   display: flex; flex-wrap: wrap; gap: 10px 26px;
   padding: 22px 0 18px; border-top: 1px solid var(--rule-dark);
@@ -849,8 +783,6 @@ footer {
 .footer-bottom a { color: rgba(255,255,255,.26); text-decoration: none; }
 .footer-bottom a:hover { color: rgba(255,255,255,.54); }
 
-
-/* ── REVEAL ANIMATION ─────────────────────────────────────────── */
 .reveal {
   opacity: 0; transform: translateY(28px);
   transition: opacity 640ms var(--ease-out), transform 640ms var(--ease-out);
@@ -861,8 +793,6 @@ footer {
 </head>
 <body>
 
-
-<!-- ════════ NAV ════════════════════════════════════════════════ -->
 <nav class="nav" id="nav">
   <a class="brand" href="#" aria-label="Tiketes inicio" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
     <img src="assets/logo-mark-web.png" alt="" class="brand-mark" width="195" height="256">
@@ -881,8 +811,6 @@ footer {
   </div>
 </nav>
 
-
-<!-- ════════ HERO ═══════════════════════════════════════════════ -->
 <section class="hero">
   <div class="orb orb-a"></div>
   <div class="orb orb-b"></div>
@@ -909,7 +837,6 @@ footer {
     <p class="hero-caption an an-4">Gratis para siempre en el plan básico. Sin contratos.</p>
   </div>
 
-  <!-- Firma: el ticket se imprime y pisa el titular -->
   <div class="hero-visual">
     <div class="printer" aria-hidden="true">
       <div class="pr-slot"></div>
@@ -933,8 +860,6 @@ footer {
   </div>
 </section>
 
-
-<!-- ════════ STATS ═══════════════════════════════════════════════ -->
 <section class="stats-section">
   <div class="stats-inner rv">
     <div class="stat-item">
@@ -952,8 +877,6 @@ footer {
   </div>
 </section>
 
-
-<!-- ════════ FEATURES ════════════════════════════════════════════ -->
 <section class="features-section" id="features">
   <div class="section-inner">
     <div class="reveal">
@@ -1037,9 +960,6 @@ footer {
   </div>
 </section>
 
-
-<!-- ════════ PRODUCT ══════════════════════════════════════════════ -->
-<!-- ======== FLUJO DE UNA VENTA ======== -->
 <section class="flow-section" id="tour">
   <div class="section-inner">
     <div class="reveal">
@@ -1078,7 +998,6 @@ footer {
   </div>
 </section>
 
-<!-- ======== TODO BAJO CONTROL ======== -->
 <section class="tour-section">
   <div class="section-inner">
     <div class="reveal">
@@ -1461,7 +1380,6 @@ footer {
   </div>
 </section>
 
-<!-- ════════ CTA ══════════════════════════════════════════════════ -->
 <section class="cta-banner">
   <div style="position:relative;z-index:1">
     <h2 class="cta-h2 rv">Empieza <em>hoy.</em><br>Es gratis.</h2>
@@ -1473,8 +1391,6 @@ footer {
   </div>
 </section>
 
-
-<!-- ════════ FOOTER ═══════════════════════════════════════════════ -->
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
@@ -1523,17 +1439,12 @@ footer {
   </div>
 </footer>
 
-
 <script>
-// ── Registro: lleva al alta de cuenta con el plan preseleccionado ──
-// El pago se cobra en Polar con metadata[user_id], igual que en la app, así
-// que al entrar a la app el plan ya está activo.
 function goSignup(plan){
   var c = window.__cycle || 'monthly';
   location.href = 'crear-cuenta.html?plan=' + encodeURIComponent(plan) + '&cycle=' + c;
 }
 
-// ── "Próximamente en Google Play" toast (la app aún no está publicada) ──
 function comingSoon(){
   let t=document.getElementById('cs-toast');
   if(!t){
@@ -1548,13 +1459,11 @@ function comingSoon(){
   window._csTimer=setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(20px)';},2600);
 }
 
-// ── Nav ──────────────────────────────────────────────────────────
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 52);
 }, { passive: true });
 
-// ── Reveal / stagger ─────────────────────────────────────────────
 const io = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (!e.isIntersecting) return;
@@ -1575,7 +1484,6 @@ const io = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal, .rv, #features-grid, #plans-grid').forEach(el => io.observe(el));
 
-// ── Stat counters (trigger on viewport entry) ─────────────────────
 function animateCounter(el, target, fmt) {
   if (!el) return;
   const t0 = performance.now(), dur = 1600;
@@ -1592,7 +1500,6 @@ const statsEl = document.querySelector('.stats-section');
 if (statsEl) {
   const statsObs = new IntersectionObserver((entries) => {
     if (!entries[0].isIntersecting) return;
-    // Solo animamos datos verificables del producto (límite real del plan Free).
     animateCounter(
       document.getElementById('stat-productos'), 50,
       v => String(v)
@@ -1602,15 +1509,12 @@ if (statsEl) {
   statsObs.observe(statsEl);
 }
 
-// ── Toggle Mensual / Anual (mismo cálculo que PricingScreen: -20%) ──
 (function(){
   var wrap = document.querySelector('.pc-toggle');
   var m = document.getElementById('tgM'), y = document.getElementById('tgY');
   if (!wrap || !m || !y) return;
   var ciclo = 'monthly';
 
-  // La pastilla se mide contra el botón activo, así nunca se desalinea
-  // aunque cambie el texto o el tamaño de fuente.
   function pastilla(){
     var on = ciclo === 'yearly' ? y : m;
     wrap.style.setProperty('--tgw', on.offsetWidth + 'px');
@@ -1642,14 +1546,11 @@ if (statsEl) {
   m.addEventListener('click', function(){ if(ciclo!=='monthly'){ ciclo='monthly'; pinta(true);} });
   y.addEventListener('click', function(){ if(ciclo!=='yearly'){  ciclo='yearly';  pinta(true);} });
   addEventListener('resize', pastilla, { passive:true });
-  // Las fuentes cambian el ancho al cargar: recolocar cuando terminen
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(pastilla);
   pinta(false);
 })();
 </script>
 
-<!-- Google One Tap: sugiere entrar con la cuenta de Google del navegador (como manus).
-     Totalmente defensivo: si algo falla o ya hay sesión, no hace nada. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://accounts.google.com/gsi/client" async></script>
 <script>
@@ -1670,13 +1571,11 @@ if (statsEl) {
     try{
       var s=await sb.auth.getSession();
       if(s.data.session){
-        // Ya está dentro: el botón "Iniciar sesión" pasa a "Mi cuenta".
         var b=document.getElementById('navLogin');
         if(b){b.textContent='Mi cuenta';b.onclick=function(){location.href='cuenta.html';};}
         return;                                  // y no molestamos con el popup
       }
       if(!(window.google&&google.accounts&&google.accounts.id)) return;
-      // Nonce de seguridad: el hash va a Google, el crudo a Supabase.
       var bytes=crypto.getRandomValues(new Uint8Array(16));
       rawNonce=btoa(String.fromCharCode.apply(null,bytes));
       var hb=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(rawNonce));
@@ -1691,6 +1590,6 @@ if (statsEl) {
   },300);
 })();
 </script>
-<!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
 </body>
 </html>

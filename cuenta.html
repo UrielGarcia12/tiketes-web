@@ -29,7 +29,6 @@ img{max-width:100%;height:auto;display:block}
 .orb1{top:-120px;left:-80px;width:320px;height:320px;background:rgba(107,75,255,.45);opacity:.5}
 .orb2{bottom:-160px;right:-90px;width:340px;height:340px;background:rgba(245,197,24,.10);opacity:.6}
 
-/* Barra superior */
 .top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:16px clamp(16px,4vw,32px);border-bottom:1px solid rgba(255,255,255,.07)}
 .brand{display:inline-flex;align-items:center;gap:9px;text-decoration:none}
 .brand img{height:24px;width:auto}
@@ -42,7 +41,6 @@ img{max-width:100%;height:auto;display:block}
 .hello b{color:#fff}
 h1{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,5vw,36px);letter-spacing:-.02em;margin:6px 0 22px}
 
-/* Tarjeta de membresía */
 .mcard{border-radius:22px;padding:24px;position:relative;overflow:hidden;
   background:linear-gradient(160deg,color-mix(in srgb,var(--ac) 18%,#0C0C1A),#0A0B1F);
   border:1px solid color-mix(in srgb,var(--ac) 34%,transparent);
@@ -60,7 +58,6 @@ h1{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,5vw,36px);l
 .mrow span{color:rgba(255,255,255,.5)}
 .mrow b{color:#fff;font-family:var(--f-body);font-weight:600}
 
-/* Acciones */
 .actions{display:flex;flex-direction:column;gap:10px;margin-top:22px}
 .btn{border:0;border-radius:15px;padding:15px;cursor:pointer;font-family:var(--f-display);font-weight:700;font-size:15px;text-align:center;text-decoration:none;display:block}
 .btn-primary{background:linear-gradient(90deg,var(--violet400),var(--violet700));color:#fff;box-shadow:0 8px 18px rgba(107,75,255,.4)}
@@ -117,23 +114,19 @@ function fmtDate(iso){try{return new Date(iso).toLocaleDateString('es-MX',{day:'
 async function salir(){try{await sb.auth.signOut();}catch(e){}location.replace('login.html');}
 
 (async function(){
-  // Guard: sin sesión, al login (nada se ve — body oculto hasta confirmar).
   var s=await sb.auth.getSession();
   if(!s.data.session){location.replace('login.html');return;}
   document.body.style.visibility='visible';
   var uid=s.data.session.user.id;
   var email=s.data.session.user.email||'';
-  // Portal de Polar: ahí el usuario cancela, cambia de plan, actualiza tarjeta.
   var portalUrl='https://polar.sh/tiketes/portal'+(email?('?email='+encodeURIComponent(email)):'');
 
-  // Perfil (nombre + plan) — RLS: sólo el propio.
   var pr=await sb.from('profiles').select('full_name,store_name,plan').eq('id',uid).maybeSingle();
   var prof=pr.data||{};
   var name=prof.store_name||prof.full_name||s.data.session.user.email||'tu negocio';
   var plan=(prof.plan||'free');
   if(!PLAN_NAME[plan])plan='free';
 
-  // Suscripción Polar activa (misma consulta que la app).
   var su=await sb.from('polar_customers').select('status,current_period_end,cancel_at_period_end')
     .eq('user_id',uid).neq('status','revoked').order('updated_at',{ascending:false}).limit(1).maybeSingle();
   var sub=su.data;
@@ -173,6 +166,6 @@ async function salir(){try{await sb.auth.signOut();}catch(e){}location.replace('
   $('content').style.display='';
 })();
 </script>
-<!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
 </body>
 </html>

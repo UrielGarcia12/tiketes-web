@@ -18,7 +18,6 @@ body{
   padding-bottom:60px;-webkit-font-smoothing:antialiased;
 }
 
-/* Top bar */
 .topbar{
   width:100%;padding:20px 20px 16px;
   display:flex;align-items:center;justify-content:space-between;
@@ -29,7 +28,6 @@ body{
 .topbar-tag.ready{background:rgba(34,197,94,.15);color:#4ADE80;}
 .topbar-tag.error{background:rgba(239,68,68,.14);color:#F87171;}
 
-/* Status success */
 .status{display:flex;flex-direction:column;align-items:center;padding:0 24px 24px;gap:12px;opacity:0;transform:translateY(12px);transition:opacity .4s,transform .4s;}
 .status.show{opacity:1;transform:translateY(0)}
 .status-icon{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#22C55E,#16A34A);box-shadow:0 14px 36px rgba(34,197,94,.38);}
@@ -37,7 +35,6 @@ body{
 .status-title{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.04em;text-align:center;}
 .status-sub{font-size:13px;color:rgba(255,255,255,.40);text-align:center;line-height:1.55;max-width:280px;}
 
-/* Paper — mismo look que el ticket térmico de la app */
 .paper-outer{width:calc(100% - 32px);max-width:380px;margin:0 16px;opacity:0;transform:translateY(16px);transition:opacity .5s .15s,transform .5s .15s;}
 .paper-outer.show{opacity:1;transform:translateY(0)}
 .paper{
@@ -72,7 +69,6 @@ body{
 .paper .wmline{position:absolute;left:-30px;transform:rotate(-18deg);font-size:15px;font-weight:800;color:rgba(0,0,0,0.09);white-space:nowrap;letter-spacing:2px;}
 .paper .content{position:relative;z-index:1;}
 
-/* Download button */
 .btn-dl{display:flex;align-items:center;justify-content:center;gap:10px;width:calc(100% - 32px);max-width:380px;margin:18px 16px 0;padding:16px;background:#fff;border:0;border-radius:16px;cursor:pointer;font-size:15px;font-weight:700;color:#0F0F28;letter-spacing:-.02em;box-shadow:0 8px 28px rgba(0,0,0,.28);-webkit-tap-highlight-color:transparent;opacity:0;transform:translateY(12px);transition:opacity .4s .3s,transform .4s .3s;}
 .btn-dl.show{opacity:1;transform:translateY(0)}
 .btn-dl:active{opacity:.8;transform:scale(.97)}
@@ -80,7 +76,6 @@ body{
 .err{color:rgba(255,255,255,.44);text-align:center;padding:64px 32px;max-width:320px;}
 .err h2{font-size:20px;color:#fff;margin-bottom:8px;font-weight:700}
 
-/* Footer de marca + legales */
 .recibo-foot{margin:26px 16px 4px;text-align:center;opacity:0;animation:footIn .5s .5s forwards;}
 @keyframes footIn{to{opacity:1}}
 .recibo-brand{font-size:12px;color:rgba(255,255,255,.34);font-weight:600;letter-spacing:.02em;}
@@ -263,6 +258,6 @@ function showSuccess(){
   if(!_blob){$('btnLabel').textContent='Toma captura de pantalla';}
 }
 </script>
-<!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
 </body>
 </html>

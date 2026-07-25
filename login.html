@@ -14,11 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="colors_and_type.css">
 <style>
-/* ════════════════════════════════════════════════════════════════
-   Port fiel de la pantalla de login de la app (LoginScreen.tsx):
-   fondo #050617, orbes animados, chispas, wordmark, tarjeta glass,
-   Google + correo. Responsivo para celular, tablet y PC.
-   ════════════════════════════════════════════════════════════════ */
+
 :root{
   --ink950:#050617;
   --violet500:#6B4BFF; --violet400:#8B70FF; --violet300:#A88EFF; --violet700:#4524D6;
@@ -35,7 +31,6 @@ body{
 a{color:inherit}
 img{max-width:100%;height:auto;display:block}
 
-/* Orbes animados (mismos colores que la app) */
 .orb{position:fixed;border-radius:999px;pointer-events:none;z-index:0;filter:blur(6px)}
 .orb1{top:-120px;left:-80px;width:340px;height:340px;background:rgba(107,75,255,.62);opacity:.55;animation:o1 8s ease-in-out infinite}
 .orb2{top:220px;right:-110px;width:300px;height:300px;background:rgba(167,142,255,.42);opacity:.45;animation:o2 8s ease-in-out infinite}
@@ -44,14 +39,11 @@ img{max-width:100%;height:auto;display:block}
 @keyframes o2{0%,100%{transform:translate(50px,40px) scale(1)}50%{transform:translate(0,0) scale(1.1)}}
 @keyframes o3{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.2)}}
 
-/* Chispas que suben */
 .sparks{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .spark{position:absolute;bottom:30%;width:5px;height:5px;border-radius:3px;opacity:0;animation:spark 3s ease-in-out infinite}
 @keyframes spark{0%{opacity:0;transform:translateY(0) scale(.4)}15%{opacity:1;transform:translateY(0) scale(1)}70%,100%{opacity:0;transform:translateY(-80px) scale(1)}}
 @media (prefers-reduced-motion: reduce){.orb,.spark{animation:none}}
 
-/* Layout: contenedor centrado (margin auto = a prueba de desbordes),
-   centrado vertical por columna. */
 .wrap{
   position:relative;z-index:2;width:100%;max-width:420px;margin:0 auto;
   min-height:100dvh;display:flex;flex-direction:column;justify-content:center;
@@ -59,7 +51,6 @@ img{max-width:100%;height:auto;display:block}
 }
 .stage{width:100%}
 
-/* Píldora superior */
 .pill{
   display:inline-flex;align-items:center;gap:5px;margin:0 auto 18px;
   background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:999px;
@@ -71,15 +62,12 @@ img{max-width:100%;height:auto;display:block}
 .pill b{color:var(--violet300);font-weight:600}
 .pill-row{display:flex;justify-content:center}
 
-/* Wordmark */
 .wordmark{margin:0 auto 14px;width:min(240px,62vw);max-width:100%}
 
-/* Encabezado */
 .head{text-align:center;margin-bottom:14px}
 .head h1{font-family:var(--f-display);font-weight:700;font-size:clamp(21px,3vw,26px);letter-spacing:-.3px}
 .head p{font-size:clamp(13px,1.6vw,14px);color:rgba(255,255,255,.55);margin-top:2px}
 
-/* Tarjeta glass */
 .card{
   background:rgba(20,21,42,.62);border:1px solid rgba(255,255,255,.08);border-radius:22px;
   padding:clamp(16px,2.4vw,22px);display:flex;flex-direction:column;gap:12px;
@@ -87,7 +75,6 @@ img{max-width:100%;height:auto;display:block}
   backdrop-filter:blur(6px);
 }
 
-/* Botón Google (blanco, como la app) */
 .google{
   display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
   background:#fff;border:0;border-radius:13px;padding:13px;cursor:pointer;
@@ -99,11 +86,9 @@ img{max-width:100%;height:auto;display:block}
 .google:disabled{opacity:.7;cursor:default}
 .google svg{width:18px;height:18px}
 
-/* Divisor */
 .divider{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.38);font-size:12px}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.10)}
 
-/* Campos */
 .field{display:flex;flex-direction:column;gap:6px}
 .lb{font-family:var(--f-body);font-weight:600;font-size:10px;letter-spacing:1.1px;color:rgba(255,255,255,.42)}
 .inp-wrap{position:relative;display:flex;align-items:center}
@@ -119,12 +104,10 @@ img{max-width:100%;height:auto;display:block}
 
 .forgot{align-self:flex-end;margin-top:-4px;background:none;border:0;cursor:pointer;font-family:var(--f-body);font-weight:600;font-size:12px;color:var(--violet300)}
 
-/* Mensaje de error */
 .msg{display:none}
 .msg.on{display:flex;align-items:center;gap:8px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.32);border-radius:12px;padding:10px 12px;font-family:var(--f-body);font-weight:500;font-size:12px;color:#FCA5A5;line-height:1.35}
 .msg.ok{background:rgba(52,199,89,.12);border-color:rgba(52,199,89,.32);color:#86EFAC}
 
-/* Botón Entrar (gradiente + glow) */
 .enter-wrap{position:relative;margin-top:2px}
 .enter-glow{position:absolute;inset:-4px;border-radius:19px;background:rgba(139,112,255,.35);filter:blur(12px);opacity:.4;animation:glow 2.8s ease-in-out infinite;pointer-events:none}
 @keyframes glow{0%,100%{opacity:.28;transform:scale(.99)}50%{opacity:.6;transform:scale(1.05)}}
@@ -145,16 +128,13 @@ img{max-width:100%;height:auto;display:block}
 .dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
 @keyframes dot{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.5);opacity:1}}
 
-/* Pie legal */
 .foot{text-align:center;margin-top:16px;font-size:11px;color:rgba(255,255,255,.36);line-height:1.5}
 .foot a{color:rgba(168,142,255,.75);text-decoration:none;font-weight:600}
 .foot a:hover{text-decoration:underline}
 
-/* Volver */
 .back{position:fixed;top:16px;left:18px;z-index:3;font-size:13px;color:rgba(255,255,255,.5);text-decoration:none}
 .back:hover{color:#fff}
 
-/* Tablet/PC: un poco más de aire */
 @media(min-width:900px){ .stage{max-width:420px} .wordmark{width:300px} }
 </style>
 </head>
@@ -237,8 +217,6 @@ var SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIs
 var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON);
 var $=function(id){return document.getElementById(id)};
 
-// Si ya hay sesión (incluye el regreso de Google): si el perfil ya tiene
-// negocio → membresía; si es una cuenta nueva (de Google) → completar negocio.
 sb.auth.getSession().then(function(r){
   if(!r.data.session) return;
   sb.from('profiles').select('store_name').eq('id',r.data.session.user.id).maybeSingle().then(function(p){
@@ -269,7 +247,6 @@ $('enter').addEventListener('click',async function(){
 });
 $('pwd').addEventListener('keydown',function(e){if(e.key==='Enter')$('enter').click()});
 
-// Google: al volver, aterriza en login.html y de ahí getSession() reenvía a cuenta.html.
 $('google').addEventListener('click',async function(){
   showMsg('');
   $('google').disabled=true;$('gtext').textContent='Abriendo Google…';
@@ -281,6 +258,6 @@ $('forgot').addEventListener('click',function(){
   showMsg('Recupera tu contraseña desde la app de Tiketes (¿Olvidaste tu contraseña?). Pronto también aquí.',true);
 });
 </script>
-<!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
 </body>
 </html>

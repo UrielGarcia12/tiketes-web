@@ -27,7 +27,6 @@ html{scroll-behavior:smooth}
 body{background:var(--onyx);color:var(--fg);font-family:var(--body);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
 
-/* ── NAV ─────────────────────────────────────────────── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:50;
   display:flex;align-items:center;justify-content:space-between;
@@ -51,7 +50,6 @@ nav img{height:17px}
 .btn-gold:hover{background:var(--gold-light)}
 .btn-gold:focus-visible,.nav-link:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
-/* ── HERO ────────────────────────────────────────────── */
 .hero{
   min-height:100dvh;position:relative;display:flex;flex-direction:column;justify-content:flex-end;
   padding:96px clamp(16px,4vw,44px) 0;overflow:hidden;
@@ -63,7 +61,6 @@ nav img{height:17px}
 }
 .hero-eyebrow::after{content:"";height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,var(--gold-dim),transparent)}
 
-/* La tipografía gigante. El recibo la atraviesa. */
 .hero-type{position:relative;z-index:1;pointer-events:none}
 .hero-type h1{
   font-family:var(--display);
@@ -79,7 +76,6 @@ nav img{height:17px}
 .hero-type .l:nth-child(2) i{animation-delay:.27s}
 .hero-type .dot{color:var(--gold)}
 
-/* Recibo que se imprime, rompiendo la tipografía */
 .printer{
   position:absolute;z-index:2;
   right:clamp(12px,7vw,120px);top:clamp(70px,13vh,130px);
@@ -102,7 +98,7 @@ nav img{height:17px}
   animation:print 1.5s .55s cubic-bezier(.33,1,.68,1) forwards;
   position:relative;
 }
-.paper::after{ /* borde dentado inferior */
+.paper::after{ 
   content:"";position:absolute;left:0;right:0;bottom:-6px;height:6px;
   background:radial-gradient(circle at 5px 6px, transparent 4.6px, #fff 5px) 0 0/10px 6px repeat-x;
 }
@@ -118,7 +114,6 @@ nav img{height:17px}
 }
 .p-brand{text-align:center;font-size:6.5px;letter-spacing:.22em;color:#A0A0AE;margin-top:8px}
 
-/* franja de datos abajo del hero */
 .hero-foot{
   position:relative;z-index:3;display:flex;flex-wrap:wrap;gap:clamp(20px,5vw,60px);
   border-top:1px solid var(--rule);margin-top:clamp(28px,5vh,54px);
@@ -138,7 +133,6 @@ nav img{height:17px}
 }
 @media(max-width:760px){.hero-lede{margin-left:0;max-width:none;flex:1 0 100%}}
 
-/* ── PLANES ──────────────────────────────────────────── */
 .sec{padding:clamp(70px,11vh,124px) clamp(16px,4vw,44px)}
 .sec-head{display:flex;align-items:baseline;gap:16px;border-bottom:1px solid var(--rule);padding-bottom:16px;margin-bottom:clamp(28px,5vh,52px)}
 .sec-mark{
@@ -176,7 +170,6 @@ nav img{height:17px}
 .plan.feat .plan-cta:hover{background:var(--gold-light);border-color:var(--gold-light)}
 .plan-cta:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
-/* reveal on scroll */
 .rv{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
 .rv.vis{opacity:1;transform:none}
 
@@ -207,7 +200,6 @@ footer a:hover{color:var(--fg)}
   </div>
 </nav>
 
-<!-- ══════ HERO ══════ -->
 <header class="hero">
   <div class="hero-eyebrow">Punto de venta · México</div>
 
@@ -218,7 +210,6 @@ footer a:hover{color:var(--fg)}
     </h1>
   </div>
 
-  <!-- El recibo se imprime y atraviesa la tipografía -->
   <div class="printer" aria-hidden="true">
     <div class="slot"></div>
     <div class="paper">
@@ -243,7 +234,6 @@ footer a:hover{color:var(--fg)}
   </div>
 </header>
 
-<!-- ══════ PLANES ══════ -->
 <section class="sec" id="planes">
   <div class="sec-head rv">
     <span class="sec-mark">$</span>
@@ -324,6 +314,6 @@ addEventListener('scroll',function(){nav.classList.toggle('on',scrollY>40)},{pas
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll('.rv').forEach(function(e){io.observe(e)});
 </script>
-<!-- Cloudflare Web Analytics (sin cookies) --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
 </body>
 </html>
