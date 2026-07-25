@@ -117,12 +117,29 @@ section{margin-top:clamp(48px,7vh,80px)}
     <span class="eyebrow">Carga masiva</span>
     <h1>Sube cientos de<br><em>productos</em> de una vez</h1>
     <p>Llena una hoja de Excel y súbela en la app. Tu inventario entra completo, sin escanear producto por producto.</p>
+    <style>
+      .dl-label{display:block;font-size:13px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:8px}
+      .dl-select{width:100%;max-width:420px;margin:0 auto 14px;display:block;appearance:none;-webkit-appearance:none;
+        background:rgba(255,255,255,.06) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A88EFF' stroke-width='2.5'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 16px center;
+        border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:13px 40px 13px 16px;color:#fff;font-size:15px;font-family:inherit;cursor:pointer}
+      .dl-select option{color:#111;background:#fff}
+      .dl-btn{cursor:pointer;border:0;font-family:inherit}
+    </style>
     <div class="dl">
-      <a class="dl-btn" href="plantilla-productos-tiketes.xlsx" download>
+      <label class="dl-label" for="biz">Elige tu tipo de negocio — la plantilla trae tus categorías:</label>
+      <select id="biz" class="dl-select">
+        <option value="tienda">🛒 Tienda — abarrotes, miscelánea, papelería</option>
+        <option value="farmacia">💊 Farmacia</option>
+        <option value="belleza">💄 Belleza — cosméticos, estética</option>
+        <option value="ferreteria">🔧 Ferretería</option>
+        <option value="ropa">👕 Ropa / Calzado</option>
+        <option value="otro">📦 Otro — creo mis categorías en la app</option>
+      </select>
+      <button class="dl-btn" id="dlBtn" type="button">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Descargar plantilla de Excel
-      </a>
-      <span class="dl-note">Archivo .xlsx en blanco · abre en Excel, Google Sheets o Numbers · listo para llenar</span>
+        Descargar plantilla de mi negocio
+      </button>
+      <span class="dl-note">Genera un .xlsx con las columnas y las categorías de tu giro · abre en Excel, Sheets o Numbers</span>
     </div>
   </div>
 
@@ -175,6 +192,30 @@ section{margin-top:clamp(48px,7vh,80px)}
         <div class="col-name">descripcion <span class="req off">Opcional</span></div>
         <div class="col-desc">Una nota o detalle del producto.</div>
       </div>
+      <div class="col">
+        <div class="col-name">estante <span class="req off">Opcional</span></div>
+        <div class="col-desc">Dónde está guardado. Ej. <b>A-3</b> o «Refri».</div>
+      </div>
+      <div class="col">
+        <div class="col-name">pasillo <span class="req off">Opcional</span></div>
+        <div class="col-desc">Pasillo del almacén. Ej. <b>2</b> o «Entrada».</div>
+      </div>
+      <div class="col">
+        <div class="col-name">empaque <span class="req off">Opcional</span></div>
+        <div class="col-desc">Cómo viene: <b>Caja</b>, <b>Bolsa</b>, <b>Pieza</b>…</div>
+      </div>
+      <div class="col">
+        <div class="col-name">piezas_empaque <span class="req off">Opcional</span></div>
+        <div class="col-desc">Cuántas piezas trae el empaque. Ej. <b>24</b>.</div>
+      </div>
+      <div class="col">
+        <div class="col-name">proveedor <span class="req off">Opcional</span></div>
+        <div class="col-desc">Quién te surte el producto.</div>
+      </div>
+      <div class="col">
+        <div class="col-name">notas <span class="req off">Opcional</span></div>
+        <div class="col-desc">Notas internas (solo tú las ves). Ej. «caduca rápido».</div>
+      </div>
     </div>
     <div class="note" style="margin-top:20px">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
@@ -185,13 +226,8 @@ section{margin-top:clamp(48px,7vh,80px)}
   <section>
     <span class="s-eyebrow">Valores válidos</span>
     <h2 class="s-h2">Categorías</h2>
-    <p class="s-lead">Escribe exactamente una de estas, en minúsculas. Cualquier otra cosa entra como “otros”.</p>
-    <div class="chips">
-      <span class="chip">abarrotes</span><span class="chip">bebidas</span><span class="chip">lacteos</span>
-      <span class="chip">snacks</span><span class="chip">panaderia</span><span class="chip">dulces</span>
-      <span class="chip">limpieza</span><span class="chip">cuidado</span><span class="chip">mascotas</span>
-      <span class="chip">galletas</span><span class="chip">papas</span><span class="chip">otros</span>
-    </div>
+    <p class="s-lead">Dependen de tu giro. La plantilla que descargas ya las trae (y las lista en una hoja «Categorías» dentro del Excel). Escríbelas tal cual en la columna <b style="color:#fff">categoria</b>; cualquier otra cosa entra como “otros”. Estas son las de tu negocio:</p>
+    <div class="chips" id="catChips"></div>
   </section>
 
   <section>
@@ -229,6 +265,67 @@ section{margin-top:clamp(48px,7vh,80px)}
     ¿Dudas? Visita el <a href="ayuda.html">Centro de ayuda</a> o vuelve al <a href="/">inicio</a>.
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+(function(){
+  // Categorías por giro (mismas etiquetas que la app: constants/categoryPresets.ts).
+  var CATS = {
+    tienda:    ['Abarrotes','Bebidas','Lácteos','Snacks','Galletas','Dulces','Pan','Limpieza','Cuidado','Papelería','A granel','Mascotas'],
+    farmacia:  ['Analgésicos','Antibióticos','Antigripales','Vitaminas','Higiene','Cuidado bebé','Primeros aux.','Ortopedia','Control natal','Cuidado diario','Aseo personal','Sueros'],
+    belleza:   ['Ojos','Labios','Rostro','Uñas','Cabello','Skincare','Perfumería','Corporal','Servicios','Hombre','Higiene','Kits y sets'],
+    ferreteria:['Herramientas','Eléctrica','Plomería','Pintura','Tornillería','Construcción','Seguridad','Jardín','Cerrajería','Medición','Consumibles','Accesorios'],
+    ropa:      ['Dama','Caballero','Niño','Niña','Bebé','Calzado','Accesorios','Ropa interior','Deportiva','Temporada','Ofertas','Liquidación'],
+    otro:      []
+  };
+  // Columnas canónicas (mismas que lee la app al importar).
+  var HEADERS = ['nombre','precio','costo','stock','stock_minimo','categoria','unidad','marca','codigo_barras','sku','descripcion','estante','pasillo','empaque','piezas_empaque','proveedor','notas'];
+  // 2 filas de ejemplo por giro (hasta 'descripcion'; el resto se rellena vacío).
+  var EX = {
+    tienda:    [['Coca Cola 600ml',20,14,50,10,'Bebidas','pza','Coca-Cola','7501055310302','',''],['Sabritas 30g',15,'',100,'','Snacks','pza','Sabritas','','','']],
+    farmacia:  [['Paracetamol 500mg c/10',35,20,40,10,'Analgésicos','caja','Genérico','','',''],['Alcohol 250ml',28,'',30,'','Higiene','pza','','','','']],
+    belleza:   [['Labial mate rojo',89,45,20,5,'Labios','pza','','','',''],['Shampoo 400ml',75,'',15,'','Cabello','pza','','','','']],
+    ferreteria:[['Martillo 16oz',120,70,10,3,'Herramientas','pza','Truper','','',''],['Cinta de aislar',18,'',50,'','Eléctrica','pza','','','','']],
+    ropa:      [['Playera básica talla M',150,80,30,5,'Caballero','pza','','','',''],['Vestido floral talla S',320,'',12,'','Dama','pza','','','','']],
+    otro:      [['Producto de ejemplo',50,'',10,'','','pza','','','','']]
+  };
+  function build(biz){
+    var wb = XLSX.utils.book_new();
+    var rows = [HEADERS];
+    (EX[biz] || EX.otro).forEach(function(ex){
+      var full = ex.slice();
+      while (full.length < HEADERS.length) full.push('');
+      rows.push(full);
+    });
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), 'Productos');
+    var cats = CATS[biz] || [];
+    var catRows = [['Categorías válidas para tu negocio']];
+    if (cats.length) { cats.forEach(function(c){ catRows.push([c]); }); }
+    else { catRows.push(['Tu giro es «Otro»: deja la columna categoria vacía y crea tus categorías dentro de la app.']); }
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(catRows), 'Categorías');
+    return wb;
+  }
+  var btn = document.getElementById('dlBtn');
+  if (btn) btn.addEventListener('click', function(){
+    var sel = document.getElementById('biz');
+    var biz = (sel && sel.value) || 'tienda';
+    try { XLSX.writeFile(build(biz), 'plantilla-tiketes-' + biz + '.xlsx'); }
+    catch (e) { alert('No se pudo generar la plantilla. Revisa tu conexión e intenta de nuevo.'); }
+  });
+  // Chips de categorías que cambian con el giro elegido.
+  var chipsEl = document.getElementById('catChips');
+  function renderChips(){
+    if (!chipsEl) return;
+    var sel = document.getElementById('biz');
+    var cats = CATS[(sel && sel.value) || 'tienda'] || [];
+    chipsEl.innerHTML = cats.length
+      ? cats.map(function(c){ return '<span class="chip">' + c + '</span>'; }).join('')
+      : '<span class="chip">Sin categorías preset — las creas en la app</span>';
+  }
+  var selEl = document.getElementById('biz');
+  if (selEl) selEl.addEventListener('change', renderChips);
+  renderChips();
+})();
+</script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
 </body>
 </html>
