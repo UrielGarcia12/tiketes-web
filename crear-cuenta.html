@@ -83,10 +83,12 @@ input:focus-visible{outline:none}
 
 .phone-wrap{display:flex;gap:8px}
 .dial{
-  display:flex;align-items:center;padding:0 14px;background:rgba(255,255,255,.05);
+  appearance:none;-webkit-appearance:none;cursor:pointer;
+  padding:0 10px;background:rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.10);border-radius:14px;
   font-family:var(--f-body);font-weight:600;font-size:14px;color:#fff;white-space:nowrap;
 }
+.dial option{color:#111;background:#fff}
 .phone-wrap input{flex:1}
 
 .bizGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
@@ -423,7 +425,16 @@ input:focus-visible{outline:none}
       <div class="field">
         <label class="lb" for="tel">Teléfono <span class="opt">— opcional</span></label>
         <div class="phone-wrap">
-          <span class="dial"><svg width="20" height="13" viewBox="0 0 3 2" style="border-radius:2px;vertical-align:middle;margin-right:6px"><rect width="1" height="2" x="0" fill="#006847"/><rect width="1" height="2" x="1" fill="#fff"/><rect width="1" height="2" x="2" fill="#CE1126"/></svg>+52</span>
+          <select id="dial" class="dial" aria-label="Código de país">
+            <option value="+52" selected>🇲🇽 +52</option>
+            <option value="+1">🇺🇸 +1</option>
+            <option value="+1">🇨🇦 +1</option>
+            <option value="+34">🇪🇸 +34</option>
+            <option value="+54">🇦🇷 +54</option>
+            <option value="+55">🇧🇷 +55</option>
+            <option value="+56">🇨🇱 +56</option>
+            <option value="+57">🇨🇴 +57</option>
+          </select>
           <input id="tel" type="tel" placeholder="222 123 4567" maxlength="20" autocomplete="tel">
         </div>
       </div>
@@ -769,7 +780,7 @@ $('submit').addEventListener('click',async function(){
     store_street:$('calle').value.trim()||null,
     store_neighborhood:$('colonia').value.trim()||null,
     store_address:composeAddress(),
-    phone:tel?('+52 '+tel):null,
+    phone:tel?((($('dial')&&$('dial').value)||'+52')+' '+tel):null,
     biz_type:bizKey==='otro'?($('otroName').value.trim()||'Otro'):bizKey,
     uses_scanner:true
   };
