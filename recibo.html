@@ -269,33 +269,36 @@ function renderPaper(){
 
   var thanks = d.cr ? 'Te esperamos para liquidar' : esc(d.fo||'¡Gracias por tu compra!');
 
+  // Bloques ocultados en el editor (impreso) → el recibo digital también los salta.
+  var hb = new Set((d.hb||'').split(',').filter(Boolean));
+  var show = function(t){ return !hb.has(t); };
+
   var html='<div class="paper-outer" id="paperOuter"><div class="paper" id="paper">'
     + wm
     + '<div class="content">'
-    + (d.slg
+    + (show('logo') ? (d.slg
         ? '<img class="tlogo" src="'+esc(d.slg)+'"/>'
-        : (d.stl===0 ? '' : '<img class="tlogo" src="assets/logo-para-tickets.png"/>'))
+        : (d.stl===0 ? '' : '<img class="tlogo" src="assets/logo-para-tickets.png"/>')) : '')
     + '<div class="headrow">'
     +   '<div class="storebox">'
-    +     '<div class="store">'+esc(d.s||'Tienda')+'</div>'
-    +     (d.h?'<div class="slogan">'+esc(d.h)+'</div>':'')
-    +     (d.ad?'<div class="addr">'+esc(d.ad)+'</div>':'')
-    +     (d.ph?'<div class="addr">Tel: '+esc(d.ph)+'</div>':'')
+    +     (show('logo')?'<div class="store">'+esc(d.s||'Tienda')+'</div>':'')
+    +     ((d.h&&show('slogan'))?'<div class="slogan">'+esc(d.h)+'</div>':'')
+    +     ((d.ad&&show('address'))?'<div class="addr">'+esc(d.ad)+'</div>':'')
+    +     ((d.ph&&show('phone'))?'<div class="addr">Tel: '+esc(d.ph)+'</div>':'')
     +   '</div>'
-    +   '<div class="folio"><div class="fl">Venta</div><div class="fn">#'+esc(d.f)+'</div></div>'
+    +   (show('meta')?'<div class="folio"><div class="fl">Venta</div><div class="fn">#'+esc(d.f)+'</div></div>':'')
     + '</div>'
     + ((d.cn&&!d.cr)?'<div class="cust">Cliente: '+esc(d.cn)+'</div>':'')
-    + '<div class="items">'+itemsHtml+'</div>'
+    + (show('items')?'<div class="items">'+itemsHtml+'</div>':'')
     + '<div class="sep"></div>'
-    + subs
-    + '<div class="totalrow"><span class="tl">TOTAL</span><span class="ta">'+fmt(d.T)+'</span></div>'
-    + paytag
-    + (payBlock ? '<div class="thinrule"></div>'+payBlock : '')
-    + '<div class="foot" style="margin-top:14px">'+esc(d.d)+' · '+esc(d.t)+' · '+items.length+' '+(items.length===1?'producto':'productos')+'</div>'
-    + '<div class="thanks">'+thanks+'</div>'
-    + (d.so?'<div class="social">'+esc(d.so)+'</div>':'')
+    + (show('subtotal')?subs:'')
+    + (show('total')?'<div class="totalrow"><span class="tl">TOTAL</span><span class="ta">'+fmt(d.T)+'</span></div>':'')
+    + (show('pay')?(paytag + (payBlock ? '<div class="thinrule"></div>'+payBlock : '')) : '')
+    + (show('meta')?'<div class="foot" style="margin-top:14px">'+esc(d.d)+' · '+esc(d.t)+' · '+items.length+' '+(items.length===1?'producto':'productos')+'</div>':'')
+    + (show('thanks')?'<div class="thanks">'+thanks+'</div>':'')
+    + ((d.so&&show('social'))?'<div class="social">'+esc(d.so)+'</div>':'')
     + (d.qj?'<div class="foot" style="margin-top:6px">Quejas y aclaraciones: <strong>'+esc(d.qj)+'</strong></div>':'')
-    + (d.lg?'<div class="legal">'+esc(d.lg).replace(/\n/g,'<br/>')+'</div>':'')
+    + ((d.lg&&show('legal'))?'<div class="legal">'+esc(d.lg).replace(/\n/g,'<br/>')+'</div>':'')
     + ((d.wf===1||d.fr)?'<div class="foot" style="margin-top:8px">Visita tiketes.com.mx</div>':'')
     + (d.wm?'<div class="brand">VÍA TIKETES</div>':'')
     + '</div></div></div>';
