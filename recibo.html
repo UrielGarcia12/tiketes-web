@@ -296,7 +296,7 @@ function renderPaper(){
     + (d.so?'<div class="social">'+esc(d.so)+'</div>':'')
     + (d.qj?'<div class="foot" style="margin-top:6px">Quejas y aclaraciones: <strong>'+esc(d.qj)+'</strong></div>':'')
     + (d.lg?'<div class="legal">'+esc(d.lg).replace(/\n/g,'<br/>')+'</div>':'')
-    + (d.fr?'<div class="foot" style="margin-top:8px">Hecho con Tiketes · tiketes.com.mx</div>':'')
+    + ((d.wf===1||d.fr)?'<div class="foot" style="margin-top:8px">Visita tiketes.com.mx</div>':'')
     + (d.wm?'<div class="brand">VÍA TIKETES</div>':'')
     + '</div></div></div>';
 
