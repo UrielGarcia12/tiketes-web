@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=5, user-scalable=yes"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.2, maximum-scale=5, user-scalable=yes"/>
 <title>Ticket — Tiketes</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
@@ -99,7 +99,7 @@ body{
 .recibo-links a:active{opacity:.7;}
 .recibo-links .dot{color:rgba(255,255,255,.25);}
 /* Modo preview (editor de la app): solo la tarjeta del recibo. */
-body.preview .topbar,body.preview .status,body.preview .btn-dl,body.preview .recibo-foot{display:none!important;}
+body.preview .topbar,body.preview .status,body.preview .btn-dl,body.preview .recibo-foot,body.preview #rateWrap{display:none!important;}
 body.preview,html:has(body.preview){padding-top:18px;padding-bottom:24px;background:#EEF0F6!important;}
 /* Widget de calificacion (reseña del cliente) */
 .rate{width:calc(100% - 32px);max-width:380px;margin:20px auto 0;background:#fff;border-radius:18px;padding:20px 18px;box-shadow:0 20px 50px rgba(0,0,0,.4);text-align:center;opacity:0;transform:translateY(12px);transition:opacity .5s .2s,transform .5s .2s;}
