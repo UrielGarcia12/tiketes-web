@@ -167,19 +167,79 @@ try{d=JSON.parse(raw||'');}catch(e){}
 
 var tag=$('tag'),statusEl=$('statusEl'),paperWrap=$('paperWrap'),btnDl=$('btnDl');
 
+// ── FUENTE DE VERDAD DEL BRANDING ────────────────────────────────────────
+// El QR solo lleva los datos INMUTABLES de la venta (folio, artículos, total,
+// pago). El branding (logo, marca de agua, pie, nombre) NO se congela en el
+// QR: se lee EN VIVO desde Supabase por owner_id (d.o) en cada escaneo.
+// Así, si el negocio cambia su logo/pie/marca de agua después, cualquier QR
+// —incluso uno impreso hace semanas— muestra SIEMPRE el branding más reciente.
+var SUPA_URL='https://wwukfbadzhowpvruumrp.supabase.co';
+var SUPA_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3dWtmYmFkemhvd3B2cnV1bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNDk1MjksImV4cCI6MjA5NDcyNTUyOX0.2-cPfqjoEkFkzVcWEvIzQHL4SWbvdJnNlCeUSEyzXk8';
+var PLAN_RANK={free:0,essential:1,pro:2,premium:3};
+
+// Sobrescribe en `d` SOLO los campos de branding con los valores actuales de
+// la tienda, respetando los límites por plan. Los datos de la venta no se tocan.
+function mergeBranding(b){
+  if(!b||typeof b!=='object')return;
+  var ts=b.ts||{};
+  var dig=ts.digital||{};                 // overrides específicos del ticket digital
+  var pick=function(k){return dig[k]!=null?dig[k]:ts[k];};
+  var rank=PLAN_RANK[b.plan]!=null?PLAN_RANK[b.plan]:0;
+  var canHide=rank>=1;                     // Essential+ puede ocultar marca Tiketes
+  var canLogo=rank>=2;                     // Pro+ puede subir su propio logo
+  // Identidad de la tienda (siempre la más reciente)
+  if(b.store_name)d.s=b.store_name;
+  if(b.store_address!=null)d.ad=b.store_address||undefined;
+  if(b.phone!=null)d.ph=b.phone||undefined;
+  var hl=pick('header_line'); if(hl!=null)d.h=hl||undefined;
+  var so=pick('social_handle'); if(so!=null)d.so=so||undefined;
+  var lg=pick('legal_note'); if(lg!=null)d.lg=lg||undefined;
+  var qj=pick('complaints_phone'); if(qj!=null)d.qj=qj||undefined;
+  // Logo propio: solo Pro+; si no, se quita para que caiga al genérico
+  var logo=pick('store_logo_url');
+  d.slg=(canLogo&&logo)?logo:undefined;
+  // Marca Tiketes y marca de agua: solo los pagados pueden ocultarlas
+  d.stl=canHide?((pick('show_tiketes_logo')!==false)?1:0):1;
+  d.wm =canHide?((pick('show_watermark')!==false)?1:0):1;
+  // Pie del ticket (su web/red social) — solo pagados; free forzado a Tiketes
+  var wf=canHide?(pick('web_footer')!==false):true;
+  d.wf=wf?1:0;
+  d.cf=(canHide&&pick('custom_footer'))?String(pick('custom_footer')).slice(0,60):undefined;
+  d.fr=canHide?undefined:1;                // free → branding Tiketes forzado
+}
+
+// Trae el branding actual (con timeout para no colgar el render si hay red lenta).
+function applyLatestBranding(done){
+  if(!d.o){done();return;}                 // sin owner_id → usa el snapshot del QR
+  var finished=false;
+  var finish=function(){if(finished)return;finished=true;done();};
+  var t=setTimeout(finish,2500);           // fallback: nunca bloquear más de 2.5s
+  fetch(SUPA_URL+'/rest/v1/rpc/get_store_branding',{
+    method:'POST',
+    headers:{apikey:SUPA_ANON,Authorization:'Bearer '+SUPA_ANON,'Content-Type':'application/json'},
+    body:JSON.stringify({p_owner:d.o})
+  }).then(function(r){return r.json();})
+    .then(function(b){clearTimeout(t);mergeBranding(b);finish();})
+    .catch(function(){clearTimeout(t);finish();});
+}
+
 if(!d||d.T==null){
   paperWrap.innerHTML='<div class="err"><h2>Comprobante no encontrado</h2><p>El enlace no es válido o ya expiró. Pide al negocio que genere el QR de nuevo.</p></div>';
   tag.textContent='Inválido';tag.className='topbar-tag error';
   btnDl.style.display='none';
 }else{
-  renderPaper();
+  renderPaper();          // 1) pintado instantáneo con el snapshot del QR (rápido)
   renderRating();
-  if(!document.body.classList.contains('preview')){
-    generatePNG().then(function(blob){
-      if(blob){_blob=blob;triggerDownload(blob);}
-      showSuccess();
-    });
-  }
+  applyLatestBranding(function(){
+    renderPaper();        // 2) re-pintado con el branding MÁS RECIENTE de la tienda
+    if(!document.body.classList.contains('preview')){
+      // 3) el PNG que se descarga se genera YA con el branding actualizado
+      generatePNG().then(function(blob){
+        if(blob){_blob=blob;triggerDownload(blob);}
+        showSuccess();
+      });
+    }
+  });
 }
 
 var RATE_URL='https://wwukfbadzhowpvruumrp.supabase.co/functions/v1/submit-rating';
