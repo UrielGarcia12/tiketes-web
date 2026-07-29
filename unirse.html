@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050617">
+<title>Únete al equipo · Tiketes</title>
+<link rel="icon" href="favicon.png">
+<style>
+/* ── Marca Tiketes: oscuro premium + acento morado/dorado (igual que la app) ── */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#050617; --card:#0d1030; --card2:#141838;
+  --ink:#ffffff; --muted:rgba(255,255,255,.58); --faint:rgba(255,255,255,.4);
+  --line:rgba(255,255,255,.12); --line2:rgba(255,255,255,.18);
+  --primary:#A88EFF; --primary-d:#7c5cff; --gold:#F6C86A; --err:#ff6b6b; --ok:#34d399;
+  --field:rgba(255,255,255,.05);
+}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 16px 48px;
+  background:
+    radial-gradient(1100px 520px at 50% -10%, rgba(124,92,255,.28), transparent 60%),
+    radial-gradient(700px 420px at 110% 8%, rgba(246,200,106,.10), transparent 55%),
+    var(--bg);
+}
+.wrap{width:100%;max-width:460px}
+/* Header con logo */
+.head{text-align:center;padding:34px 0 18px}
+.logo{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.logo b{color:var(--primary)}
+.head .sub{margin-top:6px;font-size:13px;color:var(--muted)}
+/* Tarjeta de tienda (a quién te unes) */
+.storebox{display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,var(--card),var(--card2));
+  border:1px solid var(--line2);border-radius:18px;padding:14px 16px;margin-bottom:18px}
+.storebox .badge{width:46px;height:46px;border-radius:14px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  background:rgba(168,142,255,.16);border:1px solid rgba(168,142,255,.4);font-size:20px}
+.storebox .t{font-size:11px;color:var(--faint);letter-spacing:.4px;text-transform:uppercase}
+.storebox .n{font-size:16px;font-weight:700;margin-top:2px}
+/* Secciones */
+.section{font-size:10.5px;font-weight:700;letter-spacing:1.4px;color:var(--faint);margin:20px 2px 10px}
+.hint{font-size:11.5px;color:var(--faint);line-height:1.5;margin:-4px 2px 12px}
+/* Campos */
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;color:var(--muted);margin:0 2px 6px}
+.field input, .field textarea{width:100%;background:var(--field);border:1px solid var(--line);border-radius:13px;
+  color:var(--ink);font-size:15px;padding:13px 14px;outline:none;transition:border-color .15s, background .15s;font-family:inherit}
+.field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,.28)}
+.field input:focus,.field textarea:focus{border-color:var(--primary);background:rgba(168,142,255,.07)}
+.field textarea{resize:none;min-height:64px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px}
+/* Términos */
+.terms{display:flex;align-items:flex-start;gap:10px;margin:6px 2px 4px;cursor:pointer}
+.terms .box{width:22px;height:22px;flex:0 0 auto;border-radius:7px;border:1.5px solid var(--line2);background:var(--field);
+  display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s}
+.terms.on .box{background:var(--primary);border-color:var(--primary)}
+.terms .box svg{opacity:0;transition:opacity .15s}
+.terms.on .box svg{opacity:1}
+.terms span{font-size:12.5px;color:var(--muted);line-height:1.5}
+.terms a{color:var(--primary);text-decoration:none}
+/* Botón */
+.btn{width:100%;border:none;border-radius:14px;padding:16px;font-size:15.5px;font-weight:800;color:#12002e;cursor:pointer;
+  background:linear-gradient(180deg,var(--gold),#e9b64f);margin-top:18px;transition:transform .08s, filter .15s;font-family:inherit}
+.btn:active{transform:scale(.99)}
+.btn:disabled{filter:grayscale(.4) brightness(.8);cursor:default}
+.btn.ghost{background:transparent;border:1px solid var(--line2);color:var(--ink)}
+/* Mensaje de error */
+.err{display:none;background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ffb4b4;
+  border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;margin-top:14px}
+.err.show{display:block}
+/* Estados de pantalla */
+.screen{display:none} .screen.show{display:block}
+.center{text-align:center;padding-top:40px}
+.spinner{width:40px;height:40px;border:3px solid var(--line2);border-top-color:var(--primary);border-radius:50%;
+  animation:spin .8s linear infinite;margin:0 auto 18px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.big-ico{width:88px;height:88px;border-radius:28px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:40px}
+.big-ico.ok{background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4)}
+.big-ico.bad{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4)}
+.center h1{font-size:22px;font-weight:800;margin-bottom:10px}
+.center p{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:8px}
+.center .accent{color:var(--primary);font-weight:700}
+/* Panel "ya tienes cuenta" */
+.existing{display:none;background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--line2);
+  border-radius:16px;padding:16px;margin-top:14px}
+.existing.show{display:block}
+.existing .t{font-size:14px;font-weight:700;margin-bottom:6px}
+.existing .d{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.foot{text-align:center;font-size:11px;color:var(--faint);margin-top:26px;line-height:1.6}
+.foot a{color:var(--muted);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="logo">Ti<b>ketes</b></div>
+    <div class="sub">Únete al equipo</div>
+  </div>
+
+  <!-- 1) Cargando invitación -->
+  <div class="screen show center" id="scLoading">
+    <div class="spinner"></div>
+    <p>Verificando tu invitación…</p>
+  </div>
+
+  <!-- 2) Invitación inválida -->
+  <div class="screen center" id="scInvalid">
+    <div class="big-ico bad">✕</div>
+    <h1 id="invalidTitle">Invitación no válida</h1>
+    <p id="invalidMsg">Este enlace no es válido o ya venció. Pídele a tu jefe que te genere uno nuevo.</p>
+  </div>
+
+  <!-- 3) Formulario (idéntico a la app) -->
+  <div class="screen" id="scForm">
+    <div class="storebox">
+      <div class="badge">🏪</div>
+      <div>
+        <div class="t">Te unes a</div>
+        <div class="n" id="storeName">—</div>
+      </div>
+    </div>
+    <p class="hint">Llena tus datos para unirte. Solo lo básico es obligatorio; lo demás es opcional. Al terminar, tu jefe recibe tu solicitud y te aprueba.</p>
+
+    <div class="section">OBLIGATORIO</div>
+    <div class="field"><label>Nombre completo *</label><input id="fName" placeholder="Tu nombre" autocomplete="name"></div>
+
+    <div class="section">TU ACCESO *</div>
+    <p class="hint">Con este correo y contraseña vas a entrar a la app. Guárdalos bien.</p>
+    <div class="field"><label>Correo de acceso *</label><input id="fEmail" type="email" placeholder="tu@correo.com" autocomplete="email" inputmode="email"></div>
+    <div class="field"><label>Contraseña * (mínimo 6)</label><input id="fPass" type="password" placeholder="••••••" autocomplete="new-password"></div>
+
+    <div class="section">DATOS PERSONALES · OPCIONAL</div>
+    <div class="field"><label>Puesto</label><input id="fRole" placeholder="Caja, almacén, piso…"></div>
+    <div class="field"><label>Área o turno</label><input id="fArea" placeholder="Mañana, fines de semana…"></div>
+    <div class="field"><label>Teléfono</label><input id="fPhone" type="tel" inputmode="numeric" placeholder="55 1234 5678"></div>
+    <div class="field"><label>Correo personal</label><input id="fPersonal" type="email" inputmode="email" placeholder="personal@correo.com"></div>
+    <div class="field"><label>RFC</label><input id="fRfc" placeholder="ABCD800101XXX" style="text-transform:uppercase"></div>
+    <div class="field"><label>CURP</label><input id="fCurp" placeholder="ABCD800101HDFXXX01" style="text-transform:uppercase"></div>
+    <div class="field">
+      <label>Fecha de nacimiento</label>
+      <div class="row3">
+        <input id="fbD" inputmode="numeric" maxlength="2" placeholder="DD">
+        <input id="fbM" inputmode="numeric" maxlength="2" placeholder="MM">
+        <input id="fbY" inputmode="numeric" maxlength="4" placeholder="AAAA">
+      </div>
+    </div>
+    <div class="field"><label>Domicilio</label><textarea id="fAddr" placeholder="Calle, número, colonia, ciudad"></textarea></div>
+    <div class="field"><label>Teléfono de emergencia</label><input id="fEmerg" type="tel" inputmode="numeric" placeholder="55 1234 5678"></div>
+
+    <label class="terms" id="termsRow">
+      <span class="box"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#12002e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+      <span>Acepto los <a href="terms.html" target="_blank" rel="noopener">Términos</a> y el <a href="privacy.html" target="_blank" rel="noopener">Aviso de privacidad</a>.</span>
+    </label>
+
+    <div class="err" id="formErr"></div>
+
+    <!-- Panel que aparece si el correo YA tiene cuenta -->
+    <div class="existing" id="existingPanel">
+      <div class="t">Ya tienes una cuenta con ese correo</div>
+      <div class="d">No hace falta registrarte de nuevo. Escribe tu contraseña para vincular esta invitación a tu cuenta.</div>
+      <div class="field"><label>Tu contraseña</label><input id="fLinkPass" type="password" placeholder="••••••" autocomplete="current-password"></div>
+      <button class="btn" id="btnLink">Vincular mi cuenta</button>
+    </div>
+
+    <button class="btn" id="btnSubmit">Enviar mi registro</button>
+
+    <div class="foot">
+      Al enviar, tu solicitud queda <b>pendiente de aprobación</b>.<br>
+      <a href="index.html">tiketes.com.mx</a>
+    </div>
+  </div>
+
+  <!-- 4) ¡Listo! Pendiente de aprobación -->
+  <div class="screen center" id="scDone">
+    <div class="big-ico ok">✓</div>
+    <h1 id="doneTitle">¡Registro enviado!</h1>
+    <p id="doneMsg"></p>
+    <p>En cuanto te aprueben, abre la app <span class="accent">Tiketes</span> e inicia sesión con tu correo y contraseña.</p>
+    <button class="btn ghost" onclick="location.href='index.html'" style="margin-top:22px">Ir a Tiketes</button>
+  </div>
+</div>
+
+<script>
+// ── Config pública (misma anon key que el resto de la web; RLS protege todo) ──
+var SUPA_URL='https://wwukfbadzhowpvruumrp.supabase.co';
+var SUPA_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3dWtmYmFkemhvd3B2cnV1bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNDk1MjksImV4cCI6MjA5NDcyNTUyOX0.2-cPfqjoEkFkzVcWEvIzQHL4SWbvdJnNlCeUSEyzXk8';
+
+var $=function(id){return document.getElementById(id);};
+function show(id){['scLoading','scInvalid','scForm','scDone'].forEach(function(s){$(s).classList.toggle('show',s===id);});window.scrollTo(0,0);}
+
+// Llama una RPC de Supabase. Devuelve {ok, data} o {ok:false, code, message}.
+function rpc(fn, args){
+  return fetch(SUPA_URL+'/rest/v1/rpc/'+fn,{
+    method:'POST',
+    headers:{apikey:SUPA_ANON,Authorization:'Bearer '+SUPA_ANON,'Content-Type':'application/json'},
+    body:JSON.stringify(args||{})
+  }).then(function(r){
+    return r.json().then(function(body){
+      if(r.ok) return {ok:true, data:body};
+      // PostgREST mete el 'RAISE EXCEPTION xxx' en message
+      var msg=(body&&(body.message||body.error_description||body.error))||'';
+      return {ok:false, code:msg, message:msg};
+    });
+  }).catch(function(){ return {ok:false, code:'NETWORK', message:'Sin conexión.'}; });
+}
+
+// ── Código de invitación desde la URL (?c=CÓDIGO) ──
+var CODE=(new URLSearchParams(location.search).get('c')||'').trim().toUpperCase();
+
+// ── Validación IDÉNTICA a la app ──
+function buildISODate(dd,mm,yy){
+  if(dd.length!==2||mm.length!==2||yy.length!==4) return null;
+  var d=parseInt(dd,10), m=parseInt(mm,10), y=parseInt(yy,10);
+  if(isNaN(d)||isNaN(m)||isNaN(y)) return null;
+  if(m<1||m>12||d<1||d>31||y<1900||y>2100) return null;
+  var dt=new Date(Date.UTC(y,m-1,d));
+  if(dt.getUTCDate()!==d||dt.getUTCMonth()!==m-1) return null;
+  return y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+}
+function digits(s){return (s||'').replace(/\D/g,'');}
+function showErr(m){var e=$('formErr');e.textContent=m;e.classList.add('show');window.scrollTo(0,document.body.scrollHeight);}
+function clearErr(){$('formErr').classList.remove('show');}
+
+// ── Términos (checkbox custom) ──
+var termsOn=false;
+$('termsRow').addEventListener('click',function(){termsOn=!termsOn;$('termsRow').classList.toggle('on',termsOn);});
+
+var STORE_NAME='tu negocio';
+
+// ── Arranque: verifica la invitación ──
+if(!CODE){
+  $('invalidTitle').textContent='Falta el código';
+  $('invalidMsg').textContent='Este enlace no trae un código de invitación. Pídele a tu jefe que te comparta el QR de nuevo.';
+  show('scInvalid');
+}else{
+  rpc('peek_employee_invite',{p_code:CODE}).then(function(r){
+    if(r.ok && r.data){
+      STORE_NAME=r.data.store_name||'tu negocio';
+      $('storeName').textContent=STORE_NAME;
+      if(r.data.name) $('fName').value=r.data.name;
+      if(r.data.role) $('fRole').value=r.data.role;
+      if(r.data.area) $('fArea').value=r.data.area;
+      show('scForm');
+    }else{
+      var c=r.code||'';
+      $('invalidTitle').textContent =
+        c.indexOf('INVITE_EXPIRED')>=0     ? 'La invitación venció' :
+        c.indexOf('INVITE_ALREADY_USED')>=0? 'Invitación ya usada' :
+                                             'Invitación no encontrada';
+      $('invalidMsg').textContent =
+        c.indexOf('INVITE_EXPIRED')>=0     ? 'Este código ya venció. Pídele a tu jefe uno nuevo.' :
+        c.indexOf('INVITE_ALREADY_USED')>=0? 'Alguien ya usó este código. Si fuiste tú, abre la app e inicia sesión.' :
+                                             'No encontramos ese código. Pídele a tu jefe que te comparta el QR de nuevo.';
+      show('scInvalid');
+    }
+  });
+}
+
+// ── Enviar registro (mismos campos + validación que la app) ──
+function collectForm(){
+  return {
+    name: $('fName').value.trim(),
+    email:$('fEmail').value.trim().toLowerCase(),
+    pass: $('fPass').value,
+    role: $('fRole').value.trim(),
+    area: $('fArea').value.trim(),
+    phone:digits($('fPhone').value),
+    personal:$('fPersonal').value.trim(),
+    rfc:  $('fRfc').value.trim().toUpperCase(),
+    curp: $('fCurp').value.trim().toUpperCase(),
+    bD:digits($('fbD').value), bM:digits($('fbM').value), bY:digits($('fbY').value),
+    addr: $('fAddr').value.trim(),
+    emerg:digits($('fEmerg').value)
+  };
+}
+
+function goDone(name){
+  $('doneTitle').textContent='¡Listo'+(name?', '+name.split(' ')[0]:'')+'!';
+  $('doneMsg').innerHTML='Tu solicitud llegó a <span class="accent">'+STORE_NAME.replace(/</g,'&lt;')+'</span>. Espera a que te aprueben para entrar.';
+  show('scDone');
+}
+
+$('btnSubmit').addEventListener('click',function(){
+  clearErr();
+  var f=collectForm();
+  // Validación EXACTA de la app:
+  if(!f.name){ showErr('Tu nombre es obligatorio.'); return; }
+  if(!/^\S+@\S+\.\S+$/.test(f.email)){ showErr('Escribe un correo válido para tu acceso.'); return; }
+  if(f.pass.length<6){ showErr('Tu contraseña debe tener al menos 6 caracteres.'); return; }
+  if(!termsOn){ showErr('Acepta los términos para continuar.'); return; }
+  var hasAnyDate=!!(f.bD||f.bM||f.bY);
+  var iso=hasAnyDate?buildISODate(f.bD,f.bM,f.bY):null;
+  if(hasAnyDate&&!iso){ showErr('La fecha de nacimiento no es válida.'); return; }
+
+  var btn=$('btnSubmit'); btn.disabled=true; btn.textContent='Enviando…';
+  rpc('register_employee_with_password',{
+    p_code:CODE, p_email:f.email, p_password:f.pass, p_name:f.name,
+    p_role:f.role||null, p_area:f.area||null, p_phone:f.phone||null,
+    p_personal_email:f.personal||null, p_rfc:f.rfc||null, p_curp:f.curp||null,
+    p_birthdate:iso, p_address:f.addr||null, p_emergency_phone:f.emerg||null
+  }).then(function(r){
+    btn.disabled=false; btn.textContent='Enviar mi registro';
+    if(r.ok){ goDone(f.name); return; }
+    var c=r.code||'';
+    if(c.indexOf('EMAIL_ALREADY_REGISTERED')>=0){
+      // Empleado que YA tenía cuenta → mostrar panel para vincular sin duplicar
+      $('existingPanel').classList.add('show');
+      $('btnSubmit').style.display='none';
+      $('fLinkPass').focus();
+      showErr('Ese correo ya tiene cuenta. Abajo puedes vincular esta invitación con tu contraseña.');
+      return;
+    }
+    showErr(
+      c.indexOf('INVITE_EXPIRED')>=0     ? 'La invitación venció. Pide una nueva.' :
+      c.indexOf('INVITE_ALREADY_USED')>=0? 'Ese código ya fue usado por otra persona.' :
+      c.indexOf('INVITE_NOT_FOUND')>=0   ? 'No encontramos ese código. Pide uno nuevo.' :
+      c.indexOf('PASSWORD_TOO_SHORT')>=0 ? 'La contraseña debe tener al menos 6 caracteres.' :
+                                           'No pudimos completar tu registro. Intenta de nuevo.'
+    );
+  });
+});
+
+// ── Vincular cuenta existente (empleado ya registrado) ──
+$('btnLink').addEventListener('click',function(){
+  clearErr();
+  var email=$('fEmail').value.trim().toLowerCase();
+  var pass=$('fLinkPass').value;
+  if(!pass){ showErr('Escribe tu contraseña para vincular.'); return; }
+  var b=$('btnLink'); b.disabled=true; b.textContent='Vinculando…';
+  rpc('link_invite_existing_user',{p_code:CODE,p_email:email,p_password:pass}).then(function(r){
+    b.disabled=false; b.textContent='Vincular mi cuenta';
+    if(r.ok){
+      var nm=(r.data&&r.data.name)||$('fName').value.trim();
+      goDone(nm);
+      return;
+    }
+    var c=r.code||'';
+    showErr(
+      c.indexOf('BAD_PASSWORD')>=0        ? 'Contraseña incorrecta. Intenta de nuevo.' :
+      c.indexOf('USER_NOT_FOUND')>=0      ? 'No encontramos una cuenta con ese correo.' :
+      c.indexOf('INVITE_ALREADY_USED')>=0 ? 'Ese código ya fue usado por otra persona.' :
+      c.indexOf('INVITE_EXPIRED')>=0      ? 'La invitación venció. Pide una nueva.' :
+                                            'No pudimos vincular tu cuenta. Intenta de nuevo.'
+    );
+  });
+});
+</script>
+</body>
+</html>
