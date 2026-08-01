@@ -140,6 +140,8 @@ section{margin-top:clamp(48px,7vh,80px)}
         Descargar plantilla de mi negocio
       </button>
       <span class="dl-note">Genera un .xlsx con las columnas y las categorías de tu giro · abre en Excel, Sheets o Numbers</span>
+      <!-- Estado de la firma. Lo llena el script de abajo según haya sesión. -->
+      <span class="dl-note" id="sigNote" style="display:none"></span>
     </div>
   </div>
 
@@ -266,6 +268,7 @@ section{margin-top:clamp(48px,7vh,80px)}
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 (function(){
   // Categorías por giro (mismas etiquetas que la app: constants/categoryPresets.ts).
@@ -288,6 +291,48 @@ section{margin-top:clamp(48px,7vh,80px)}
     ropa:      [['Playera básica talla M',150,80,30,5,'Caballero','pza','','','',''],['Vestido floral talla S',320,'',12,'','Dama','pza','','','','']],
     otro:      [['Producto de ejemplo',50,'',10,'','','pza','','','','']]
   };
+  // ── Firma de la plantilla ────────────────────────────────────────────────
+  // Token HMAC emitido por el servidor (`issue_import_template_token`), atado a
+  // ESTE usuario y con caducidad. Se guarda en una hoja OCULTA `_tiketes`, celda
+  // A1; la app lo lee de ahí y jamás por el nombre del archivo (renombrarlo es
+  // trivial). Si no hay sesión se descarga igual, sin firma: el guardia de
+  // verdad es el límite de plan en el servidor, no esta firma.
+  var SUPABASE_URL  = 'https://wwukfbadzhowpvruumrp.supabase.co';
+  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3dWtmYmFkemhvd3B2cnV1bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNDk1MjksImV4cCI6MjA5NDcyNTUyOX0.2-cPfqjoEkFkzVcWEvIzQHL4SWbvdJnNlCeUSEyzXk8';
+  var sb = (window.supabase && window.supabase.createClient)
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON)
+    : null;
+
+  var templateToken = null;
+  var noteEl = document.getElementById('sigNote');
+
+  function setNote(html){
+    if (!noteEl) return;
+    noteEl.innerHTML = html;
+    noteEl.style.display = 'block';
+  }
+
+  function loadToken(){
+    if (!sb) return;
+    sb.auth.getSession().then(function(res){
+      var session = res && res.data && res.data.session;
+      if (!session) {
+        setNote('Sin firmar · <a href="login.html" style="color:var(--gold)">inicia sesión</a> para que tu plantilla venga firmada a tu nombre');
+        return;
+      }
+      return sb.rpc('issue_import_template_token', { p_days: 90 }).then(function(r){
+        if (r.error || !r.data) {
+          // No bloqueamos la descarga por esto: una plantilla sin firma se
+          // importa igual. Solo dejamos de prometer algo que no pasó.
+          setNote('No pudimos firmar la plantilla, pero puedes descargarla y usarla igual');
+          return;
+        }
+        templateToken = r.data;
+        setNote('✓ Plantilla firmada a tu nombre · válida 90 días');
+      });
+    }).catch(function(){ /* sin sesión utilizable: se descarga sin firma */ });
+  }
+
   function build(biz){
     var wb = XLSX.utils.book_new();
     var rows = [HEADERS];
@@ -302,6 +347,22 @@ section{margin-top:clamp(48px,7vh,80px)}
     if (cats.length) { cats.forEach(function(c){ catRows.push([c]); }); }
     else { catRows.push(['Tu giro es «Otro»: deja la columna categoria vacía y crea tus categorías dentro de la app.']); }
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(catRows), 'Categorías');
+
+    if (templateToken) {
+      XLSX.utils.book_append_sheet(
+        wb,
+        XLSX.utils.aoa_to_sheet([[templateToken], ['No borres esta hoja: identifica tu plantilla oficial de Tiketes.']]),
+        '_tiketes'
+      );
+      // Oculta la hoja. `Hidden: 1` = oculta normal (el usuario puede mostrarla
+      // desde Excel). No usamos 2 (muy oculta) a propósito: esto no es un
+      // secreto, es una marca de origen — y esconderlo "a la fuerza" hace que
+      // Excel marque el archivo como sospechoso en algunas versiones.
+      wb.Workbook = wb.Workbook || {};
+      wb.Workbook.Sheets = wb.SheetNames.map(function(n){
+        return { name: n, Hidden: n === '_tiketes' ? 1 : 0 };
+      });
+    }
     return wb;
   }
   var btn = document.getElementById('dlBtn');
@@ -324,6 +385,7 @@ section{margin-top:clamp(48px,7vh,80px)}
   var selEl = document.getElementById('biz');
   if (selEl) selEl.addEventListener('change', renderChips);
   renderChips();
+  loadToken();
 })();
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3535288e08fe4b08ac9c4b4633385ee7"}'></script>
