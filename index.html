@@ -544,6 +544,42 @@ body {
 @media (max-width: 620px)  { .tour-grid { grid-template-columns: 1fr; max-width: 340px; margin-inline: auto; } }
 
 .tour-item { display: flex; flex-direction: column; }
+
+/* ── Acceso: dueño vs. empleado ────────────────────────────────────────────
+   Fondo `--onyx-2` para alternar con la sección de arriba (`--onyx`), que es el
+   ritmo que ya sigue la página. El padding horizontal va explícito —como en
+   `.features-section`— para que en móvil el título no quede pegado al borde.
+   Rejilla de DOS, no la de tres de `.tour-grid`: con dos tarjetas esa dejaría
+   un hueco a la derecha que se lee como un error de maquetado. Se limita el
+   ancho para que las capturas no crezcan tanto que el texto quede perdido. */
+.access-section {
+  background: var(--onyx-2);
+  border-top: 1px solid var(--rule-dark);
+  padding: clamp(72px, 11vh, 130px) clamp(24px, 5vw, 80px);
+}
+.access-section .s-h2   { color: #fff; }
+.access-section .s-lead { color: rgba(255,255,255,.44); }
+.access-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: clamp(22px, 4vw, 56px);
+  margin-top: clamp(40px, 6vh, 68px);
+  max-width: 860px; margin-inline: auto;
+}
+@media (max-width: 620px) { .access-grid { grid-template-columns: 1fr; max-width: 340px; } }
+
+.access-item { display: flex; flex-direction: column; }
+/* Etiqueta de quién entra por ahí. Es lo que evita que las dos capturas se vean
+   como "la misma pantalla repetida": son dos accesos distintos. */
+.access-who {
+  display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+  margin-bottom: 14px; padding: 6px 13px; border-radius: 999px;
+  font-size: 11.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.72);
+}
+.access-item.is-owner .access-who { color: var(--gold, #C9A96E); border-color: rgba(201,169,110,.34); background: rgba(201,169,110,.08); }
+.access-item.is-staff .access-who { color: #A78BFA; border-color: rgba(139,112,255,.34); background: rgba(139,112,255,.09); }
+.access-who i { font-style: normal; font-size: 13px; }
 .tour-t {
   font-family: var(--font-display); font-weight: 700;
   font-size: 17px; color: #fff; letter-spacing: -.02em;
@@ -1116,6 +1152,46 @@ footer {
         <div class="tour-shot"><img src="screens/img/02-perfil-logros.jpg" alt="Perfil con calificación de clientes, logros, nivel y experiencia" loading="lazy" width="720" height="1600"></div>
         <h3 class="tour-t">Vender, pero con logros</h3>
         <p class="tour-d">Tu primera venta, las 100, los $1,000. Cada venta suma XP y sube tu nivel. Se desbloquean solos.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── Acceso: dueño vs. empleado ────────────────────────────────────────────
+     Va DESPUÉS del recorrido y ANTES de los planes a propósito: los planes se
+     venden por número de usuarios ("Dueño + 1 empleado", "Dueño + equipo"), así
+     que conviene que justo antes se haya visto que cada quien entra con su
+     propio acceso. También le pone imagen a la promesa "Tu equipo, sin sustos"
+     que ya estaba en features sin nada que la respaldara. -->
+<section class="access-section">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="s-eyebrow">Cada quien lo suyo</span>
+      <h2 class="s-h2 rv">Dos formas<br>de entrar.</h2>
+      <p class="s-lead rv rv-d1">Tú entras como dueño y ves todo. Tu cajero entra con su propio acceso y solo ve lo que le toca.</p>
+    </div>
+
+    <div class="access-grid">
+      <article class="access-item is-owner rv">
+        <span class="access-who"><i>🏪</i> Dueño</span>
+        <div class="tour-shot">
+          <img src="screens/img/14-login-dueno.jpg"
+               alt="Pantalla de inicio de sesión del dueño, con acceso por Google o correo"
+               loading="lazy" decoding="async" width="720" height="1600">
+        </div>
+        <h3 class="tour-t">Entras y ya</h3>
+        <p class="tour-d">Con tu Google o tu correo. Nada de configurar servidores ni licencias: abres la app y tu negocio está ahí.</p>
+      </article>
+
+      <article class="access-item is-staff rv rv-d1">
+        <span class="access-who"><i>👥</i> Empleado</span>
+        <div class="tour-shot">
+          <img src="screens/img/15-login-empleado.jpg"
+               alt="Pantalla de acceso de empleado, con opción de escanear la invitación por QR"
+               loading="lazy" decoding="async" width="720" height="1600">
+        </div>
+        <h3 class="tour-t">Tu cajero, con su propia cuenta</h3>
+        <p class="tour-d">Le escaneas un QR y queda dentro. Tú lo apruebas, y si se va, le quitas el acceso sin tocar tu contraseña.</p>
       </article>
     </div>
   </div>
