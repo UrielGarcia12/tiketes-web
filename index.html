@@ -241,6 +241,57 @@ body {
   color: rgba(255,255,255,.24); letter-spacing: .02em;
 }
 
+/* ── Hero: ticket impreso ⇄ digital ────────────────────────────────────────
+   Los dos estados se apilan en LA MISMA celda de grid. Con grid y no con
+   `position:absolute` porque así el contenedor sigue midiéndose contra el más
+   alto y ambos quedan centrados uno sobre otro: no hay que replicar a mano los
+   `margin-left:-14%` ni el `margin-bottom` enorme que la impresora ya trae, ni
+   se mueve el hero al cambiar.
+
+   Se hace con CSS y no con JS: un setInterval seguiría corriendo con la pestaña
+   en segundo plano y habría que limpiarlo; la animación CSS la pausa el
+   navegador solo. */
+.hero-swap { display: grid; }
+.hero-swap > .hero-state {
+  grid-area: 1 / 1;
+  display: flex; justify-content: center;
+  animation: heroTicketCycle 20s ease-in-out infinite;
+  will-change: opacity;
+}
+/* Delay NEGATIVO, no positivo: con uno positivo el estado digital se quedaría
+   pintado en su fotograma 0% (visible) durante los primeros 10 s y se verían
+   los dos encimados. Con -10s la animación arranca ya avanzada a la mitad del
+   ciclo, o sea invisible, que es justo donde debe empezar. */
+.hero-swap > .hero-state.is-digital { animation-delay: -10s; }
+
+/* La opacidad del ciclo se aplica AQUÍ, en el envoltorio, y no en `.printer`:
+   la impresora tiene su propia animación de entrada (`printerIn`) y pisarla
+   rompería la aparición inicial. */
+@keyframes heroTicketCycle {
+  0%,  45%  { opacity: 1; }
+  50%, 95%  { opacity: 0; }
+  100%      { opacity: 1; }
+}
+
+.hero-digital {
+  width: clamp(180px, 21vw, 250px);   /* mismo ancho que la impresora */
+  height: auto; display: block;
+  border-radius: 14px;
+  transform: rotate(2.4deg);          /* misma inclinación, para que no “salte” */
+  filter: drop-shadow(0 40px 70px rgba(0,0,0,.62));
+  margin-left: -14%;
+  margin-bottom: clamp(120px, 27vh, 280px);
+}
+@media (max-width: 900px) {
+  .hero-digital { margin-left: 0; margin-bottom: 0; width: clamp(150px, 40vw, 200px); }
+}
+
+/* Sin movimiento: se queda el impreso, que es el estado inicial. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-swap > .hero-state { animation: none; }
+  .hero-swap > .hero-state.is-digital { opacity: 0; }
+}
+
 .printer {
   position: relative; z-index: 3;
   width: clamp(180px, 21vw, 250px);
@@ -439,111 +490,6 @@ body {
   transition: transform 400ms var(--ease-out), border-color 400ms, box-shadow 400ms;
 }
 .flow-shot img, .tour-shot img { width: 100%; height: auto; display: block; }
-
-/* ── Ticket impreso ⇄ digital ──────────────────────────────────────────────
-   Los dos tickets reales, alternándose cada 10 s.
-
-   Se hace con CSS y no con JS a propósito: un setInterval seguiría corriendo
-   con la pestaña en segundo plano y habría que limpiarlo; una animación CSS la
-   pausa el navegador solo y no cuesta nada.
-
-   LA POSICIÓN NO SE MUEVE: el contenedor fija su relación de aspecto y las dos
-   imágenes van absolutas, centradas y con `object-fit: contain`. Las dos tienen
-   proporciones distintas (0.42 el impreso, 0.45 el digital), así que sin esto
-   el bloque daría un salto en cada cambio y arrastraría el scroll de la página. */
-.ticket-swap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 624 / 1398;   /* el más ancho de los dos manda: nadie se recorta */
-  background: #fff;
-}
-.ticket-swap img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: contain;
-  object-position: center;
-  /* `will-change` mantiene cada capa en su propia textura: el fundido queda a
-     cargo del compositor y no repinta la página en cada frame. */
-  will-change: opacity, transform;
-  animation: ticketSwap 20s var(--ease-out, ease) infinite;
-}
-/* El impreso empieza visible; el digital entra 10 s después. */
-.ticket-swap img.is-digital { animation-delay: 10s; }
-
-@keyframes ticketSwap {
-  0%   { opacity: 0; transform: scale(1.015); }
-  4%   { opacity: 1; transform: scale(1); }      /* fundido de entrada (~0.8 s) */
-  46%  { opacity: 1; transform: scale(1); }      /* ~9 s en pantalla            */
-  50%  { opacity: 0; transform: scale(1.015); }  /* fundido de salida           */
-  100% { opacity: 0; transform: scale(1.015); }
-}
-
-/* Etiqueta de cuál se está viendo. Sin esto la animación se lee como un glitch;
-   con esto queda claro que son DOS formatos del mismo ticket. */
-.ticket-tag {
-  position: absolute; left: 12px; bottom: 12px; z-index: 3;
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 7px 12px; border-radius: 999px;
-  background: rgba(7,7,15,.72); backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,.14);
-  font-size: 11.5px; font-weight: 700; letter-spacing: .04em;
-  color: #fff; line-height: 1;
-  animation: ticketSwap 20s var(--ease-out, ease) infinite;
-}
-.ticket-tag.is-digital { animation-delay: 10s; }
-.ticket-tag b { font-weight: 800; color: var(--gold, #C9A96E); }
-
-/* Quien pidió menos movimiento ve el ticket digital fijo, sin parpadeo. */
-@media (prefers-reduced-motion: reduce) {
-  .ticket-swap img, .ticket-tag { animation: none; }
-  .ticket-swap img.is-printed, .ticket-tag.is-printed { opacity: 0; }
-  .ticket-swap img.is-digital, .ticket-tag.is-digital { opacity: 1; transform: none; }
-}
-.flow-step:hover .flow-shot,
-.tour-item:hover .tour-shot {
-  transform: translateY(-8px);
-  border-color: rgba(107,75,255,.38);
-  box-shadow: 0 40px 74px rgba(0,0,0,.66), 0 0 50px rgba(107,75,255,.12);
-}
-.flow-txt { padding-top: 18px; }
-
-.flow-n {
-  display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;
-}
-.flow-n i {
-  font-style: normal; font-family: var(--font-mono);
-  font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase;
-  color: rgba(255,255,255,.34);
-}
-.flow-n b {
-  font-family: var(--font-hero);
-  font-size: clamp(42px, 4vw, 58px); font-weight: 800;
-  line-height: .78; letter-spacing: -.03em; color: var(--gold);
-  transition: color 300ms var(--ease-out);
-}
-.flow-step:hover .flow-n b { color: var(--gold-light); }
-.flow-step h3 {
-  font-family: var(--font-display); font-weight: 700;
-  font-size: 15.5px; color: #fff; letter-spacing: -.02em; margin-bottom: 6px;
-}
-.flow-step p { font-size: 12.5px; line-height: 1.6; color: rgba(255,255,255,.42); }
-
-.tour-section {
-  background: var(--onyx);
-  border-top: 1px solid var(--rule-dark);
-  padding: clamp(72px, 11vh, 130px) 0;
-}
-.tour-section .s-h2   { color: #fff; }
-.tour-section .s-lead { color: rgba(255,255,255,.44); }
-.tour-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: clamp(20px, 3vw, 44px);
-  margin-top: clamp(40px, 6vh, 68px);
-}
-@media (max-width: 1000px) { .tour-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 620px)  { .tour-grid { grid-template-columns: 1fr; max-width: 340px; margin-inline: auto; } }
-
-.tour-item { display: flex; flex-direction: column; }
 
 /* ── Acceso: dueño vs. empleado ────────────────────────────────────────────
    Fondo `--onyx-2` para alternar con la sección de arriba (`--onyx`), que es el
@@ -933,20 +879,32 @@ footer {
     <p class="hero-caption an an-4">Gratis para siempre en el plan básico. Sin contratos.</p>
   </div>
 
+  <!-- El hero alterna los DOS formatos del mismo ticket cada 10 s: el impreso
+       saliendo de la térmica y el digital que ve el cliente en su teléfono.
+       Es el mensaje del producto en una imagen: imprimes o mandas el digital. -->
   <div class="hero-visual">
-    <div class="printer" aria-hidden="true">
-      <div class="pr-slot"></div>
-      <div class="pr-paper">
-        <div class="pr-store">ABARROTES DOÑA MARI</div>
-        <div class="pr-meta">Venta #1042 · 14:35</div>
-        <hr class="pr-sep">
-        <div class="pr-row"><span>Coca Cola 600ml</span><span>$36.00</span></div>
-        <div class="pr-row"><span>Jamón 250 g</span><span>$30.00</span></div>
-        <div class="pr-row"><span>Sabritas</span><span>$17.00</span></div>
-        <hr class="pr-sep">
-        <div class="pr-tot"><span>TOTAL</span><span>$83.00</span></div>
-        <div class="pr-tag">EFECTIVO</div>
-        <div class="pr-brand">VÍA TIKETES</div>
+    <div class="hero-swap">
+      <div class="hero-state is-printed">
+        <div class="printer" aria-hidden="true">
+          <div class="pr-slot"></div>
+          <div class="pr-paper">
+            <div class="pr-store">ABARROTES DOÑA MARI</div>
+            <div class="pr-meta">Venta #1042 · 14:35</div>
+            <hr class="pr-sep">
+            <div class="pr-row"><span>Coca Cola 600ml</span><span>$36.00</span></div>
+            <div class="pr-row"><span>Jamón 250 g</span><span>$30.00</span></div>
+            <div class="pr-row"><span>Sabritas</span><span>$17.00</span></div>
+            <hr class="pr-sep">
+            <div class="pr-tot"><span>TOTAL</span><span>$83.00</span></div>
+            <div class="pr-tag">EFECTIVO</div>
+            <div class="pr-brand">VÍA TIKETES</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-state is-digital" aria-hidden="true">
+        <img class="hero-digital" src="screens/img/ticket-digital.png"
+             alt="" loading="eager" decoding="async" width="624" height="1398">
       </div>
     </div>
   </div>
@@ -1081,22 +1039,7 @@ footer {
         <p>Tocas $50, $100 o $200 y te dice cuánto devolver. Sin cuentas de cabeza, sin errores.</p></div>
       </li>
       <li class="flow-step rv">
-        <div class="flow-shot">
-          <div class="ticket-swap">
-            <!-- Tickets REALES generados por la app (misma venta, los dos
-                 formatos). Se alternan cada 10 s: primero el impreso, luego el
-                 digital. `decoding="async"` evita que el navegador bloquee el
-                 pintado mientras decodifica la segunda imagen. -->
-            <img class="is-printed" src="screens/img/ticket-impreso.png"
-                 alt="Ticket impreso en papel térmico de 80 mm de Abarrotes Esperanza"
-                 loading="lazy" decoding="async" width="682" height="1622">
-            <img class="is-digital" src="screens/img/ticket-digital.png"
-                 alt="Ticket digital que el cliente ve en su teléfono"
-                 loading="lazy" decoding="async" width="624" height="1398">
-            <span class="ticket-tag is-printed">Ticket <b>impreso</b></span>
-            <span class="ticket-tag is-digital">Ticket <b>digital</b></span>
-          </div>
-        </div>
+        <div class="flow-shot"><img src="screens/img/09-vista-ticket.jpg" alt="Vista del ticket en la app: QR digital, imprimir, compartir y guardar" loading="lazy" width="720" height="1600"></div>
         <div class="flow-txt"><span class="flow-n"><i>Paso</i><b>04</b></span><h3>Le das su ticket</h3>
         <p>El mismo ticket en dos formatos: impreso en tu térmica o digital en su teléfono por QR o WhatsApp. Como el cliente prefiera.</p></div>
       </li>
