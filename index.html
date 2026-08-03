@@ -439,6 +439,66 @@ body {
   transition: transform 400ms var(--ease-out), border-color 400ms, box-shadow 400ms;
 }
 .flow-shot img, .tour-shot img { width: 100%; height: auto; display: block; }
+
+/* ── Ticket impreso ⇄ digital ──────────────────────────────────────────────
+   Los dos tickets reales, alternándose cada 10 s.
+
+   Se hace con CSS y no con JS a propósito: un setInterval seguiría corriendo
+   con la pestaña en segundo plano y habría que limpiarlo; una animación CSS la
+   pausa el navegador solo y no cuesta nada.
+
+   LA POSICIÓN NO SE MUEVE: el contenedor fija su relación de aspecto y las dos
+   imágenes van absolutas, centradas y con `object-fit: contain`. Las dos tienen
+   proporciones distintas (0.42 el impreso, 0.45 el digital), así que sin esto
+   el bloque daría un salto en cada cambio y arrastraría el scroll de la página. */
+.ticket-swap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 624 / 1398;   /* el más ancho de los dos manda: nadie se recorta */
+  background: #fff;
+}
+.ticket-swap img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  object-position: center;
+  /* `will-change` mantiene cada capa en su propia textura: el fundido queda a
+     cargo del compositor y no repinta la página en cada frame. */
+  will-change: opacity, transform;
+  animation: ticketSwap 20s var(--ease-out, ease) infinite;
+}
+/* El impreso empieza visible; el digital entra 10 s después. */
+.ticket-swap img.is-digital { animation-delay: 10s; }
+
+@keyframes ticketSwap {
+  0%   { opacity: 0; transform: scale(1.015); }
+  4%   { opacity: 1; transform: scale(1); }      /* fundido de entrada (~0.8 s) */
+  46%  { opacity: 1; transform: scale(1); }      /* ~9 s en pantalla            */
+  50%  { opacity: 0; transform: scale(1.015); }  /* fundido de salida           */
+  100% { opacity: 0; transform: scale(1.015); }
+}
+
+/* Etiqueta de cuál se está viendo. Sin esto la animación se lee como un glitch;
+   con esto queda claro que son DOS formatos del mismo ticket. */
+.ticket-tag {
+  position: absolute; left: 12px; bottom: 12px; z-index: 3;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 12px; border-radius: 999px;
+  background: rgba(7,7,15,.72); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.14);
+  font-size: 11.5px; font-weight: 700; letter-spacing: .04em;
+  color: #fff; line-height: 1;
+  animation: ticketSwap 20s var(--ease-out, ease) infinite;
+}
+.ticket-tag.is-digital { animation-delay: 10s; }
+.ticket-tag b { font-weight: 800; color: var(--gold, #C9A96E); }
+
+/* Quien pidió menos movimiento ve el ticket digital fijo, sin parpadeo. */
+@media (prefers-reduced-motion: reduce) {
+  .ticket-swap img, .ticket-tag { animation: none; }
+  .ticket-swap img.is-printed, .ticket-tag.is-printed { opacity: 0; }
+  .ticket-swap img.is-digital, .ticket-tag.is-digital { opacity: 1; transform: none; }
+}
 .flow-step:hover .flow-shot,
 .tour-item:hover .tour-shot {
   transform: translateY(-8px);
@@ -985,9 +1045,24 @@ footer {
         <p>Tocas $50, $100 o $200 y te dice cuánto devolver. Sin cuentas de cabeza, sin errores.</p></div>
       </li>
       <li class="flow-step rv">
-        <div class="flow-shot"><img src="screens/img/09-vista-ticket.jpg" alt="Vista del ticket con QR digital, imprimir, compartir y guardar" loading="lazy" width="540" height="1200"></div>
+        <div class="flow-shot">
+          <div class="ticket-swap">
+            <!-- Tickets REALES generados por la app (misma venta, los dos
+                 formatos). Se alternan cada 10 s: primero el impreso, luego el
+                 digital. `decoding="async"` evita que el navegador bloquee el
+                 pintado mientras decodifica la segunda imagen. -->
+            <img class="is-printed" src="screens/img/ticket-impreso.png"
+                 alt="Ticket impreso en papel térmico de 80 mm de Abarrotes Esperanza"
+                 loading="lazy" decoding="async" width="682" height="1622">
+            <img class="is-digital" src="screens/img/ticket-digital.png"
+                 alt="Ticket digital que el cliente ve en su teléfono"
+                 loading="lazy" decoding="async" width="624" height="1398">
+            <span class="ticket-tag is-printed">Ticket <b>impreso</b></span>
+            <span class="ticket-tag is-digital">Ticket <b>digital</b></span>
+          </div>
+        </div>
         <div class="flow-txt"><span class="flow-n"><i>Paso</i><b>04</b></span><h3>Le das su ticket</h3>
-        <p>Un QR para que lo vea en su teléfono, impreso en tu térmica, o por WhatsApp. Como el cliente prefiera.</p></div>
+        <p>El mismo ticket en dos formatos: impreso en tu térmica o digital en su teléfono por QR o WhatsApp. Como el cliente prefiera.</p></div>
       </li>
       <li class="flow-step rv rv-d1">
         <div class="flow-shot"><img src="screens/img/10-venta-completada.jpg" alt="Venta completada con confirmación y experiencia ganada" loading="lazy" width="540" height="1200"></div>
@@ -1038,7 +1113,7 @@ footer {
       </article>
 
       <article class="tour-item rv rv-d2">
-        <div class="tour-shot"><img src="screens/img/02-perfil-logros.jpg" alt="Perfil con logros, nivel y experiencia" loading="lazy" width="540" height="1200"></div>
+        <div class="tour-shot"><img src="screens/img/02-perfil-logros.jpg" alt="Perfil con calificación de clientes, logros, nivel y experiencia" loading="lazy" width="720" height="1600"></div>
         <h3 class="tour-t">Vender, pero con logros</h3>
         <p class="tour-d">Tu primera venta, las 100, los $1,000. Cada venta suma XP y sube tu nivel. Se desbloquean solos.</p>
       </article>

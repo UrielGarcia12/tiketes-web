@@ -321,10 +321,38 @@ function renderPaper(){
       +'<div class="changebox"><span class="cl">CAMBIO</span><span class="ca">'+fmt(d.ca||0)+'</span></div>';
   }
 
+  // ── Marca de agua ─────────────────────────────────────────────────────────
+  // Antes SIEMPRE se pintaban 14 líneas diagonales fijas, aunque en el editor
+  // se hubiera elegido otro estilo, texto, opacidad o rotación: el recibo
+  // digital no se parecía al ticket impreso ni a la pantalla de diseño.
+  // Ahora se respeta `d.wc` (la config que viaja en el QR). Los QR viejos no la
+  // traen, así que sin `wc` se conserva EXACTAMENTE el aspecto anterior — un
+  // ticket impreso hace semanas no debe cambiar de golpe.
   var wm='';
   if(d.wm){
-    for(var i=0;i<14;i++){wm+='<div class="wmline" style="top:'+(24+i*64)+'px">TIKETES · TIKETES · TIKETES · TIKETES</div>';}
-    wm='<div class="wmwrap">'+wm+'</div>';
+    var c=d.wc;
+    if(c && c.s && c.s!=='off'){
+      var txt=esc(String(c.t||'TIKETES'));
+      var op =Math.max(0,Math.min(0.4,Number(c.o)||0.06));
+      var rot=Math.max(-45,Math.min(45,Number(c.r)||0));
+      var sz =Math.max(8,Math.min(80,Number(c.z)||28));
+      var base='font-weight:800;color:#0F0F28;letter-spacing:2px;white-space:nowrap;text-align:center;';
+      if(c.s==='single'){
+        wm='<div class="wmwrap" style="opacity:'+op+';display:flex;align-items:center;justify-content:center">'
+          +'<div style="'+base+'font-size:'+sz+'px;transform:rotate('+rot+'deg)">'+txt+'</div></div>';
+      }else if(c.s==='triple'){
+        var t3='';
+        for(var k=0;k<3;k++){t3+='<div style="'+base+'font-size:'+Math.round(sz*0.7)+'px;transform:rotate('+rot+'deg)">'+txt+'</div>';}
+        wm='<div class="wmwrap" style="opacity:'+op+';display:flex;flex-direction:column;justify-content:space-around;padding:30px 0">'+t3+'</div>';
+      }else{ // tiled
+        var tt='';
+        for(var m=0;m<12;m++){tt+='<div style="'+base+'font-size:12px;width:33%;margin:12px 0">'+txt+'</div>';}
+        wm='<div class="wmwrap" style="opacity:'+op+';display:flex;flex-wrap:wrap;transform:rotate('+rot+'deg)">'+tt+'</div>';
+      }
+    }else{
+      for(var i=0;i<14;i++){wm+='<div class="wmline" style="top:'+(24+i*64)+'px">TIKETES · TIKETES · TIKETES · TIKETES</div>';}
+      wm='<div class="wmwrap">'+wm+'</div>';
+    }
   }
 
   var thanks = d.cr ? 'Te esperamos para liquidar' : esc(d.fo||'¡Gracias por tu compra!');
