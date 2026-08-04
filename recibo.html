@@ -79,6 +79,14 @@ body{
 .paper .social{text-align:center;font-size:11.5px;color:#9a9aac;margin-top:4px;font-weight:600;}
 .paper .legal{text-align:center;font-size:10px;color:#a0a0b0;margin-top:10px;padding-top:8px;border-top:1px dashed #E3E3EC;line-height:1.4;}
 .paper .brand{text-align:center;font-size:10px;color:#b0b0be;margin-top:8px;letter-spacing:1.5px;font-weight:600;}
+/* Bloques del disenador que antes no existian en el recibo digital. Usan la
+   tipografia de la tarjeta para que no se sientan pegados de otro diseno. */
+.paper .freetext{text-align:center;font-size:12.5px;color:#4a4a5c;line-height:1.5;margin-top:10px;white-space:pre-wrap;}
+.paper .qrwrap{text-align:center;margin:14px 0 4px;}
+.paper .qrimg{display:inline-block;border-radius:8px;}
+.paper .bcwrap{text-align:center;margin:14px 0 4px;}
+.paper .bcimg{max-width:82%;height:auto;display:inline-block;}
+.paper .bctxt{font-size:10px;letter-spacing:2px;color:#9a9aac;margin-top:3px;}
 .paper .wmwrap{position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;pointer-events:none;z-index:0;}
 .paper .wmline{position:absolute;left:-30px;transform:rotate(-20deg);font-size:15px;font-weight:800;color:rgba(15,15,40,0.045);white-space:nowrap;letter-spacing:3px;}
 .paper .content{position:relative;z-index:1;}
@@ -205,7 +213,13 @@ function mergeBranding(b){
   var wf=canHide?(pick('web_footer')!==false):true;
   d.wf=wf?1:0;
   d.cf=(canHide&&pick('custom_footer'))?String(pick('custom_footer')).slice(0,60):undefined;
-  d.fr=canHide?undefined:1;                // free → branding Tiketes forzado
+  d.fr=canHide?undefined:1;                // free -> branding Tiketes forzado
+  // LAYOUT DEL DISENADOR. `get_store_branding` ya devolvia `ts` completo -que
+  // incluye `layout`- pero esta pagina lo IGNORABA y armaba el recibo en un
+  // orden fijo cableado aqui. Por eso reordenar bloques o agregar un texto
+  // libre en el editor no se reflejaba en el recibo digital.
+  var lay = (dig.layout || ts.layout);
+  if (lay && Array.isArray(lay.elements)) d.el = lay.elements;
 }
 
 // Trae el branding actual (con timeout para no colgar el render si hay red lenta).
@@ -361,32 +375,93 @@ function renderPaper(){
   var hb = new Set((d.hb||'').split(',').filter(Boolean));
   var show = function(t){ return !hb.has(t); };
 
+  // ---- Bloques, en el ORDEN que definio el dueno en el disenador -----------
+  // Cada tipo se pinta con el ESTILO del recibo digital (tarjetas, caja verde
+  // del cambio), no con el del papel termico: es el mismo contenido y el mismo
+  // orden, adaptado al medio. Lo que se unifica es la CONFIGURACION, no los
+  // pixeles -si el recibo digital se viera como un ticket de 80mm en blanco y
+  // negro, seria un paso atras.
+  var B = {
+    logo: function(){
+      return (d.slg
+        ? '<img class="tlogo" src="'+esc(d.slg)+'"/>'
+        : (d.stl===0 ? '' : '<img class="tlogo" src="assets/logo-para-tickets.png"/>'))
+        + '<div class="headrow"><div class="storebox">'
+        +   '<div class="store">'+esc(d.s||'Tienda')+'</div>'
+        + '</div></div>';
+    },
+    slogan:  function(){ return d.h  ? '<div class="slogan">'+esc(d.h)+'</div>' : ''; },
+    address: function(){ return d.ad ? '<div class="addr">'+esc(d.ad)+'</div>' : ''; },
+    phone:   function(){ return d.ph ? '<div class="addr">Tel: '+esc(d.ph)+'</div>' : ''; },
+    meta:    function(){
+      return '<div class="headrow"><div class="storebox"></div>'
+        + '<div class="folio"><div class="fl">Venta</div><div class="fn">#'+esc(d.f)+'</div></div></div>'
+        + ((d.cn&&!d.cr)?'<div class="cust">Cliente: '+esc(d.cn)+'</div>':'');
+    },
+    divider:  function(){ return '<div class="sep"></div>'; },
+    items:    function(){ return '<div class="items">'+itemsHtml+'</div>'; },
+    subtotal: function(){ return subs; },
+    total:    function(){ return '<div class="totalrow"><span class="tl">TOTAL</span><span class="ta">'+fmt(d.T)+'</span></div>'; },
+    pay:      function(){ return paytag + (payBlock ? '<div class="thinrule"></div>'+payBlock : ''); },
+    change:   function(){ return ''; },   // ya sale dentro de `pay`, no se duplica
+    cashier:  function(){ return d.cj ? '<div class="foot">Le atendio: '+esc(d.cj)+'</div>' : ''; },
+    thanks:   function(el){
+      var t = (el && el.content && el.content.trim()) ? el.content.trim() : thanks;
+      return '<div class="foot" style="margin-top:14px">'+esc(d.d)+' · '+esc(d.t)+' · '
+        + items.length+' '+(items.length===1?'producto':'productos')+'</div>'
+        + '<div class="thanks">'+esc(t)+'</div>';
+    },
+    social:   function(el){
+      var t = (el && el.content && el.content.trim()) ? el.content.trim() : d.so;
+      return t ? '<div class="social">'+esc(t)+'</div>' : '';
+    },
+    legal:    function(el){
+      var t = (el && el.content && el.content.trim()) ? el.content.trim() : d.lg;
+      return t ? '<div class="legal">'+esc(t).replace(/\n/g,'<br/>')+'</div>' : '';
+    },
+    // Bloques que antes no existian en NINGUN lado fuera del lienzo del editor.
+    text: function(el){
+      var t = (el && el.content) ? el.content.trim() : '';
+      return t ? '<div class="freetext">'+esc(t).replace(/\n/g,'<br/>')+'</div>' : '';
+    },
+    qr: function(el){
+      var data = (el && el.content && el.content.trim()) ? el.content.trim() : (location.href);
+      var px = Math.max(80, Math.min(240, ((el&&el.size)||40) * 4));
+      return '<div class="qrwrap"><img class="qrimg" style="width:'+px+'px;height:'+px+'px" '
+        + 'src="https://api.qrserver.com/v1/create-qr-code/?size='+px+'x'+px+'&margin=0&data='
+        + encodeURIComponent(data)+'"/></div>';
+    },
+    barcode: function(el){
+      var t = (el && el.content) ? el.content.trim() : '';
+      if(!t) return '';
+      return '<div class="bcwrap"><img class="bcimg" src="https://barcodeapi.org/api/128/'
+        + encodeURIComponent(t)+'"/><div class="bctxt">'+esc(t)+'</div></div>';
+    }
+  };
+
+  // Orden por defecto para recibos VIEJOS (QR impresos antes de que el layout
+  // viajara): se conserva exactamente el orden que tenia esta pagina.
+  var ORDEN_DEFECTO = [
+    {type:'logo'},{type:'slogan'},{type:'address'},{type:'phone'},{type:'meta'},
+    {type:'items'},{type:'divider'},{type:'subtotal'},{type:'total'},{type:'pay'},
+    {type:'thanks'},{type:'social'},{type:'legal'}
+  ];
+  var elementos = (d.el && d.el.length) ? d.el : ORDEN_DEFECTO;
+
+  var cuerpo = '';
+  for (var bi = 0; bi < elementos.length; bi++) {
+    var el = elementos[bi];
+    if (!el || el.visible === false) continue;   // oculto en el disenador
+    if (!show(el.type)) continue;                // oculto por el plan / `hb`
+    var fn = B[el.type];
+    if (fn) cuerpo += fn(el);
+  }
+
   var html='<div class="paper-outer" id="paperOuter"><div class="paper" id="paper">'
     + wm
     + '<div class="content">'
-    + (show('logo') ? (d.slg
-        ? '<img class="tlogo" src="'+esc(d.slg)+'"/>'
-        : (d.stl===0 ? '' : '<img class="tlogo" src="assets/logo-para-tickets.png"/>')) : '')
-    + '<div class="headrow">'
-    +   '<div class="storebox">'
-    +     (show('logo')?'<div class="store">'+esc(d.s||'Tienda')+'</div>':'')
-    +     ((d.h&&show('slogan'))?'<div class="slogan">'+esc(d.h)+'</div>':'')
-    +     ((d.ad&&show('address'))?'<div class="addr">'+esc(d.ad)+'</div>':'')
-    +     ((d.ph&&show('phone'))?'<div class="addr">Tel: '+esc(d.ph)+'</div>':'')
-    +   '</div>'
-    +   (show('meta')?'<div class="folio"><div class="fl">Venta</div><div class="fn">#'+esc(d.f)+'</div></div>':'')
-    + '</div>'
-    + ((d.cn&&!d.cr)?'<div class="cust">Cliente: '+esc(d.cn)+'</div>':'')
-    + (show('items')?'<div class="items">'+itemsHtml+'</div>':'')
-    + '<div class="sep"></div>'
-    + (show('subtotal')?subs:'')
-    + (show('total')?'<div class="totalrow"><span class="tl">TOTAL</span><span class="ta">'+fmt(d.T)+'</span></div>':'')
-    + (show('pay')?(paytag + (payBlock ? '<div class="thinrule"></div>'+payBlock : '')) : '')
-    + (show('meta')?'<div class="foot" style="margin-top:14px">'+esc(d.d)+' · '+esc(d.t)+' · '+items.length+' '+(items.length===1?'producto':'productos')+'</div>':'')
-    + (show('thanks')?'<div class="thanks">'+thanks+'</div>':'')
-    + ((d.so&&show('social'))?'<div class="social">'+esc(d.so)+'</div>':'')
+    + cuerpo
     + (d.qj?'<div class="foot" style="margin-top:6px">Quejas y aclaraciones: <strong>'+esc(d.qj)+'</strong></div>':'')
-    + ((d.lg&&show('legal'))?'<div class="legal">'+esc(d.lg).replace(/\n/g,'<br/>')+'</div>':'')
     + ((d.wf===1||d.fr)?'<div class="foot" style="margin-top:8px">'+esc(d.cf||'Visita tiketes.com.mx')+'</div>':'')
     + (d.wm?'<div class="brand">VÍA TIKETES</div>':'')
     + '</div></div></div>';
