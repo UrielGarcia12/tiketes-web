@@ -289,15 +289,33 @@ function renderRating(){
   });
 }
 
+// Unidades de venta. Espejo de `src/lib/units.ts` en la app: si allá se
+// agrega una unidad, hay que agregarla aquí tambien o el recibo digital
+// mostrara "1x" donde el papel muestra "1.5 L".
+//
+// Antes esto solo reconocia 'kg', asi que de las siete unidades que el dueno
+// puede elegir, seis perdian su medida al llegar al recibo web.
+var UNIDADES = {
+  kg: { short:'kg', dec:3, sub:{ short:'g',  factor:1000 } },
+  g:  { short:'g',  dec:0 },
+  L:  { short:'L',  dec:3, sub:{ short:'ml', factor:1000 } },
+  ml: { short:'ml', dec:0 },
+  m:  { short:'m',  dec:2, sub:{ short:'cm', factor:100 } },
+  cm: { short:'cm', dec:0 }
+};
+function unidadDe(it){ return UNIDADES[it && it.u] || null; }
+
 function qtyLabel(it){
-  if(it.u==='kg'){
-    var q=Number(it.q||0);
-    if(q>=1){return q.toFixed(q%1===0?0:3)+' kg';}
-    return Math.round(q*1000)+' g';
-  }
-  return (it.q)+'×';
+  var u=unidadDe(it);
+  if(!u) return (it.q)+'×';
+  var q=Number(it.q||0);
+  if(u.sub && q>0 && q<1) return Math.round(q*u.sub.factor)+' '+u.sub.short;
+  return (q%1===0 ? q.toFixed(0) : q.toFixed(u.dec))+' '+u.short;
 }
-function priceLabel(it){return it.u==='kg'?('$'+Number(it.p||0).toFixed(2)+'/kg'):('$'+Number(it.p||0).toFixed(2));}
+function priceLabel(it){
+  var u=unidadDe(it), p=Number(it.p||0).toFixed(2);
+  return u ? ('$'+p+'/'+u.short) : ('$'+p);
+}
 
 function payLabel(pm){
   if(pm==='efectivo')return 'EFECTIVO';
@@ -307,7 +325,7 @@ function payLabel(pm){
 }
 
 function midLabel(it){
-  if(it.u==='kg') return qtyLabel(it);
+  if(unidadDe(it)) return qtyLabel(it);
   return Number(it.q)>1 ? (it.q+'×$'+Number(it.p||0).toFixed(0)) : '1×';
 }
 function renderPaper(){
