@@ -118,23 +118,94 @@ section{margin-top:clamp(48px,7vh,80px)}
     <h1>Sube cientos de<br><em>productos</em> de una vez</h1>
     <p>Llena una hoja de Excel y súbela en la app. Tu inventario entra completo, sin escanear producto por producto.</p>
     <style>
-      .dl-label{display:block;font-size:13px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:8px}
-      .dl-select{width:100%;max-width:420px;margin:0 auto 14px;display:block;appearance:none;-webkit-appearance:none;
-        background:rgba(255,255,255,.06) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A88EFF' stroke-width='2.5'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 16px center;
-        border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:13px 40px 13px 16px;color:#fff;font-size:15px;font-family:inherit;cursor:pointer}
-      .dl-select option{color:#111;background:#fff}
+      .dl-label{display:block;font-size:13px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:12px}
+
+      /* Selector de giro: rejilla de tarjetas en vez del <select> nativo.
+         El nativo se veía como un formulario de trámite y usaba emojis, que
+         se pintan distinto en cada sistema y rompen la identidad. */
+      .biz-grid{
+        display:grid;gap:10px;max-width:560px;margin:0 auto 18px;
+        grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      }
+      .biz-opt{
+        position:relative;display:flex;align-items:center;gap:11px;
+        padding:13px 14px;border-radius:14px;text-align:left;
+        background:rgba(255,255,255,.04);
+        border:1px solid rgba(255,255,255,.10);
+        color:#fff;font-family:inherit;cursor:pointer;
+        transition:background .18s ease,border-color .18s ease,transform .18s ease;
+      }
+      .biz-opt:hover{background:rgba(255,255,255,.07);border-color:rgba(168,142,255,.45)}
+      .biz-opt:active{transform:scale(.985)}
+      .biz-opt:focus-visible{outline:2px solid #A88EFF;outline-offset:2px}
+      .biz-ico{
+        flex:0 0 34px;width:34px;height:34px;border-radius:10px;
+        display:flex;align-items:center;justify-content:center;
+        background:rgba(107,75,255,.16);
+        transition:background .18s ease;
+      }
+      .biz-ico svg{width:17px;height:17px;fill:none;stroke:#A88EFF;stroke-width:2;
+        stroke-linecap:round;stroke-linejoin:round;transition:stroke .18s ease}
+      .biz-txt{min-width:0}
+      .biz-name{display:block;font-size:13.5px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+      .biz-sub{display:block;font-size:11px;color:rgba(255,255,255,.45);margin-top:2px;line-height:1.3}
+
+      /* Seleccionado */
+      .biz-opt[aria-pressed="true"]{
+        background:linear-gradient(135deg,rgba(107,75,255,.22),rgba(69,36,214,.14));
+        border-color:rgba(168,142,255,.75);
+      }
+      .biz-opt[aria-pressed="true"] .biz-ico{background:rgba(168,142,255,.28)}
+      .biz-opt[aria-pressed="true"] .biz-ico svg{stroke:#fff}
+      .biz-opt[aria-pressed="true"]::after{
+        content:'';position:absolute;top:9px;right:9px;width:7px;height:7px;
+        border-radius:50%;background:#A88EFF;box-shadow:0 0 0 3px rgba(168,142,255,.20);
+      }
+      @media (prefers-reduced-motion:reduce){.biz-opt{transition:none}}
+
       .dl-btn{cursor:pointer;border:0;font-family:inherit}
     </style>
     <div class="dl">
-      <label class="dl-label" for="biz">Elige tu tipo de negocio — la plantilla trae tus categorías:</label>
-      <select id="biz" class="dl-select">
-        <option value="tienda">🛒 Tienda — abarrotes, miscelánea, papelería</option>
-        <option value="farmacia">💊 Farmacia</option>
-        <option value="belleza">💄 Belleza — cosméticos, estética</option>
-        <option value="ferreteria">🔧 Ferretería</option>
-        <option value="ropa">👕 Ropa / Calzado</option>
-        <option value="otro">📦 Otro — creo mis categorías en la app</option>
-      </select>
+      <span class="dl-label" id="bizLabel">Elige tu tipo de negocio — la plantilla trae tus categorías:</span>
+
+      <!--
+        El valor sigue viviendo en un input con id="biz", así que todo el JS de
+        abajo (`sel.value`, el listener de 'change') funciona sin cambios.
+        Las tarjetas solo escriben ahí y disparan el evento.
+      -->
+      <input type="hidden" id="biz" value="tienda">
+
+      <div class="biz-grid" role="group" aria-labelledby="bizLabel">
+        <button type="button" class="biz-opt" data-biz="tienda" aria-pressed="true">
+          <span class="biz-ico"><svg viewBox="0 0 24 24"><path d="M3 9h18l-1.5 10.5a2 2 0 0 1-2 1.5H6.5a2 2 0 0 1-2-1.5L3 9Z"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/></svg></span>
+          <span class="biz-txt"><span class="biz-name">Tienda</span><span class="biz-sub">Abarrotes, miscelánea, papelería</span></span>
+        </button>
+
+        <button type="button" class="biz-opt" data-biz="farmacia" aria-pressed="false">
+          <span class="biz-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></span>
+          <span class="biz-txt"><span class="biz-name">Farmacia</span><span class="biz-sub">Medicamentos y cuidado personal</span></span>
+        </button>
+
+        <button type="button" class="biz-opt" data-biz="belleza" aria-pressed="false">
+          <span class="biz-ico"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z"/><path d="M18 16.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z"/></svg></span>
+          <span class="biz-txt"><span class="biz-name">Belleza</span><span class="biz-sub">Cosméticos y estética</span></span>
+        </button>
+
+        <button type="button" class="biz-opt" data-biz="ferreteria" aria-pressed="false">
+          <span class="biz-ico"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 5.3 5.3l-8.4 8.4a2.4 2.4 0 0 1-3.4-3.4l8.4-8.4Z"/><path d="M14.7 6.3 17.5 3.5"/></svg></span>
+          <span class="biz-txt"><span class="biz-name">Ferretería</span><span class="biz-sub">Herramienta y materiales</span></span>
+        </button>
+
+        <button type="button" class="biz-opt" data-biz="ropa" aria-pressed="false">
+          <span class="biz-ico"><svg viewBox="0 0 24 24"><path d="M9 3 5 5.5 3.5 10 6 11v10h12V11l2.5-1L19 5.5 15 3a3 3 0 0 1-6 0Z"/></svg></span>
+          <span class="biz-txt"><span class="biz-name">Ropa y calzado</span><span class="biz-sub">Boutiques y zapaterías</span></span>
+        </button>
+
+        <button type="button" class="biz-opt" data-biz="otro" aria-pressed="false">
+          <span class="biz-ico"><svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></span>
+          <span class="biz-txt"><span class="biz-name">Otro giro</span><span class="biz-sub">Creo mis categorías en la app</span></span>
+        </button>
+      </div>
       <button class="dl-btn" id="dlBtn" type="button">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Descargar plantilla de mi negocio
@@ -384,6 +455,23 @@ section{margin-top:clamp(48px,7vh,80px)}
   }
   var selEl = document.getElementById('biz');
   if (selEl) selEl.addEventListener('change', renderChips);
+
+  // Las tarjetas de giro solo escriben en el input oculto y disparan 'change'.
+  // Así el resto del script —la descarga y los chips de categorías— sigue
+  // leyendo `sel.value` igual que cuando esto era un <select> nativo.
+  var opciones = document.querySelectorAll('.biz-opt');
+  Array.prototype.forEach.call(opciones, function (btn) {
+    btn.addEventListener('click', function () {
+      Array.prototype.forEach.call(opciones, function (o) {
+        o.setAttribute('aria-pressed', String(o === btn));
+      });
+      if (selEl) {
+        selEl.value = btn.getAttribute('data-biz');
+        selEl.dispatchEvent(new Event('change'));
+      }
+    });
+  });
+
   renderChips();
   loadToken();
 })();
